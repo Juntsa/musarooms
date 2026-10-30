@@ -100,8 +100,8 @@ h1 span{color:var(--amber)}
 .oikea{right:-1px;transform-origin:right center;background-image:var(--oik)}
 .vasen::after{right:6px}
 .oikea::after{left:6px}
-/* leikkihuoneen ovessa on messinkikahvat jo maalattuna */
-.lapset .luukku::after{display:none}
+/* leikkihuoneessa on messinkikahvat ja technossa salvat jo kuvassa */
+.lapset .luukku::after,.techno .luukku::after{display:none}
 
 /* avautuminen */
 @media (hover:hover){
@@ -136,25 +136,20 @@ h1 span{color:var(--amber)}
   --hehku:radial-gradient(130% 95% at 50% 100%,#fff0c4 0%,#e8536a 46%,#45101e 100%);
 }
 .techno{
-  --vas:url("luukut/puu-vasen.jpg");
-  --oik:url("luukut/puu-oikea.jpg");
-  --hehku:radial-gradient(130% 95% at 50% 100%,#52f7c0 0%,#1b6f8c 44%,#06161c 100%);
+  --kehys:#3b4048;              /* laukun alumiini, ei puukehystä */
+  --vas:url("luukut/techno-vasen.jpg");
+  --oik:url("luukut/techno-oikea.jpg");
+  --hehku:radial-gradient(130% 95% at 50% 100%,#ff2fd0 0%,#5a1a86 42%,#070512 100%);
 }
-/* tyhjät luukut eivät saa näyttää identtisiltä vierekkäin: eri puulaadut,
-   ei värisuodinta — vihertävä sävy saisi laudan näyttämään homeiselta */
-.techno .vasen,.techno .oikea{filter:saturate(.34) brightness(.74)}   /* harmaantunut */
-@media (hover:none){
-  .techno .vasen{filter:saturate(.34) brightness(.58)}
-  .techno .oikea{filter:saturate(.34) brightness(.65)}
-}
+/* lentolaukun luukuissa on omat valonsa, ne eivät kaipaa suodinta */
 
 /* ---- vielä suljettu huone --------------------------------------------- */
 .huone.kiinni{cursor:default}
 .huone.kiinni .sisus{filter:saturate(.3) brightness(.42)}
 .kyltti{
-  /* alas: maalatuissa ovissa kyltti peittäisi keskeltä juuri sen aiheen,
-     jonka takia ovi ylipäätään maalattiin */
-  position:absolute;left:50%;top:76%;z-index:3;
+  /* ylös: keskellä tai alhaalla kyltti peittäisi juuri sen aiheen, jonka
+     takia ovi ylipäätään maalattiin */
+  position:absolute;left:50%;top:10%;z-index:3;
   transform:translate(-50%,-50%) rotate(-5deg);
   padding:7px 14px;border-radius:2px;
   background:#efe0c0;color:#4a2c18;
@@ -222,7 +217,7 @@ footer a{color:#8a7a66}
     <div class="huone techno kiinni">
       <div class="sisus">
         <b>Gym</b>
-        <span>Techno ja house<br>oma laitteensa</span>
+        <span>DJ-setti lentolaukussa<br>soitin rakenteilla</span>
       </div>
       <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
       <span class="kyltti">Tulossa</span>
