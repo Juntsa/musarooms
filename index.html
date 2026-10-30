@@ -100,6 +100,8 @@ h1 span{color:var(--amber)}
 .oikea{right:-1px;transform-origin:right center;background-image:var(--oik)}
 .vasen::after{right:6px}
 .oikea::after{left:6px}
+/* leikkihuoneen ovessa on messinkikahvat jo maalattuna */
+.lapset .luukku::after{display:none}
 
 /* avautuminen */
 @media (hover:hover){
@@ -118,15 +120,20 @@ h1 span{color:var(--amber)}
   --oik:url("luukut/jukebox-oikea.jpg");
   --hehku:radial-gradient(130% 95% at 50% 100%,#ffb23a 0%,#c4371f 44%,#2a0e09 100%);
 }
+.country{
+  --vas:url("luukut/country-vasen.jpg");
+  --oik:url("luukut/country-oikea.jpg");
+  --hehku:radial-gradient(130% 95% at 50% 100%,#ffcb6a 0%,#a85a1e 44%,#2a1408 100%);
+}
 .yo{
   --vas:url("luukut/puu-vasen.jpg");
   --oik:url("luukut/puu-oikea.jpg");
   --hehku:radial-gradient(130% 95% at 50% 100%,#ffcf74 0%,#8a4a12 44%,#150b05 100%);
 }
 .lapset{
-  --vas:url("luukut/puu-vasen.jpg");
-  --oik:url("luukut/puu-oikea.jpg");
-  --hehku:radial-gradient(130% 95% at 50% 100%,#ffe9a8 0%,#e8536a 46%,#45101e 100%);
+  --vas:url("luukut/mansikkakyla-vasen.jpg");
+  --oik:url("luukut/mansikkakyla-oikea.jpg");
+  --hehku:radial-gradient(130% 95% at 50% 100%,#fff0c4 0%,#e8536a 46%,#45101e 100%);
 }
 .techno{
   --vas:url("luukut/puu-vasen.jpg");
@@ -135,11 +142,8 @@ h1 span{color:var(--amber)}
 }
 /* tyhjät luukut eivät saa näyttää identtisiltä vierekkäin: eri puulaadut,
    ei värisuodinta — vihertävä sävy saisi laudan näyttämään homeiselta */
-.lapset .vasen,.lapset .oikea{filter:saturate(.74) brightness(1.1)}   /* auringon haalistama */
 .techno .vasen,.techno .oikea{filter:saturate(.34) brightness(.74)}   /* harmaantunut */
 @media (hover:none){
-  .lapset .vasen{filter:saturate(.74) brightness(.86)}
-  .lapset .oikea{filter:saturate(.74) brightness(.97)}
   .techno .vasen{filter:saturate(.34) brightness(.58)}
   .techno .oikea{filter:saturate(.34) brightness(.65)}
 }
@@ -148,7 +152,9 @@ h1 span{color:var(--amber)}
 .huone.kiinni{cursor:default}
 .huone.kiinni .sisus{filter:saturate(.3) brightness(.42)}
 .kyltti{
-  position:absolute;left:50%;top:34%;z-index:3;   /* kahvojen yläpuolelle */
+  /* alas: maalatuissa ovissa kyltti peittäisi keskeltä juuri sen aiheen,
+     jonka takia ovi ylipäätään maalattiin */
+  position:absolute;left:50%;top:76%;z-index:3;
   transform:translate(-50%,-50%) rotate(-5deg);
   padding:7px 14px;border-radius:2px;
   background:#efe0c0;color:#4a2c18;
@@ -187,6 +193,15 @@ footer a{color:#8a7a66}
       <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
     </a>
 
+    <div class="huone country kiinni">
+      <div class="sisus">
+        <b>Country</b>
+        <span>Kitara ja nauhamikki<br>soitin rakenteilla</span>
+      </div>
+      <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
+      <span class="kyltti">Tulossa</span>
+    </div>
+
     <div class="huone yo kiinni">
       <div class="sisus">
         <b>Yö ja balladit</b>
@@ -196,14 +211,13 @@ footer a{color:#8a7a66}
       <span class="kyltti">Tulossa</span>
     </div>
 
-    <div class="huone lapset kiinni">
+    <a class="huone lapset" href="https://mansikkakyla.fi/" rel="noopener">
       <div class="sisus">
-        <b>Lasten huone</b>
-        <span>Mansikkakylän laulut<br>ja karaoke</span>
+        <b>Leikkihuone</b>
+        <span>Mansikkakylän laulut<br>ja sadut — mansikkakyla.fi</span>
       </div>
       <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
-      <span class="kyltti">Tulossa</span>
-    </div>
+    </a>
 
     <div class="huone techno kiinni">
       <div class="sisus">
