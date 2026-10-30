@@ -4,41 +4,219 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Musa Rooms</title>
+<meta name="description" content="Musa Rooms — huoneita, joissa kussakin on oma soitin ja omat biisit.">
+<meta name="theme-color" content="#0a0908">
 <style>
-:root{--bg:#0a0908;--txt:#e8ded0;--dim:#9a8b78;--amber:#ff9a1f;--puna:#A52B25}
+:root{
+  --bg:#0a0908; --txt:#e8ded0; --dim:#9a8b78; --amber:#ff9a1f;
+  --kehys:#3b2c1d;
+}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%}
-body{background:radial-gradient(1100px 650px at 50% -8%,#241a12 0%,transparent 62%),var(--bg);
-  color:var(--txt);font:16px/1.6 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
-  -webkit-font-smoothing:antialiased;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;padding:40px 16px;text-align:center}
-h1{font:600 clamp(28px,6vw,46px)/1.1 "Arial Narrow",Arial,sans-serif;
-  letter-spacing:.04em;margin:0 0 6px}
+body{
+  background:
+    radial-gradient(1200px 720px at 50% -12%,#2a1d13 0%,transparent 62%),
+    var(--bg);
+  color:var(--txt);
+  font:16px/1.6 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  display:flex;flex-direction:column;align-items:center;
+  padding:46px 16px 60px;
+}
+
+h1{
+  font:600 clamp(30px,7vw,52px)/1 "Arial Narrow","Helvetica Neue",Arial,sans-serif;
+  letter-spacing:.14em;margin:0 0 10px;text-align:center;
+}
 h1 span{color:var(--amber)}
-.ala{color:var(--dim);font-size:14px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 38px}
-.huoneet{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;max-width:760px}
-a.huone{display:block;width:240px;padding:22px 18px;border-radius:14px;text-decoration:none;
-  color:var(--txt);background:#171310;border:1px solid #2e2419;transition:border-color .15s,transform .15s}
-a.huone:hover{border-color:#8a6c3e;transform:translateY(-2px)}
-a.huone b{display:block;font:600 19px/1.2 "Arial Narrow",Arial,sans-serif;letter-spacing:.05em;
-  color:#ffe9c4;margin-bottom:5px}
-a.huone span{color:var(--dim);font-size:13px;line-height:1.5}
-.tulossa{width:240px;padding:22px 18px;border-radius:14px;border:1px dashed #2e2419;
-  color:#6f6253;font-size:13px;display:flex;align-items:center;justify-content:center}
-footer{margin-top:46px;color:#6f6253;font-size:12px}
+.ala{
+  color:var(--dim);font-size:12px;letter-spacing:.3em;text-transform:uppercase;
+  margin:0 0 46px;text-align:center;
+}
+
+/* ---- käytävä ---------------------------------------------------------- */
+.kaytava{
+  display:grid;gap:30px 26px;width:100%;max-width:1060px;
+  grid-template-columns:repeat(auto-fit,minmax(228px,1fr));
+}
+
+/* ---- yksi ovi --------------------------------------------------------- */
+.huone{
+  position:relative;display:block;text-decoration:none;color:inherit;
+  aspect-ratio:3/4;border-radius:7px;overflow:hidden;
+  background:#0d0b09;
+  border:3px solid var(--kehys);
+  box-shadow:0 14px 34px rgba(0,0,0,.62), inset 0 0 0 1px rgba(0,0,0,.8);
+  perspective:1000px;
+  transition:border-color .22s, transform .22s, box-shadow .22s;
+}
+.huone:hover,.huone:focus-visible{
+  border-color:#7d5c31;transform:translateY(-4px);
+  box-shadow:0 20px 44px rgba(0,0,0,.7), inset 0 0 0 1px rgba(0,0,0,.8);
+}
+.huone:focus-visible{outline:2px solid var(--amber);outline-offset:4px}
+
+/* sisus: huoneen oma valo, paljastuu kun luukut aukeavat */
+.sisus{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-end;
+  padding:0 15px 20px;text-align:center;
+  background:var(--hehku);
+}
+.sisus::before{            /* lattialle lankeava valo */
+  content:"";position:absolute;left:12%;right:12%;bottom:0;height:34%;
+  background:radial-gradient(60% 100% at 50% 100%,rgba(255,255,255,.22),transparent 70%);
+}
+.sisus b{
+  position:relative;display:block;
+  font:600 20px/1.15 "Arial Narrow","Helvetica Neue",Arial,sans-serif;
+  letter-spacing:.11em;text-transform:uppercase;color:#fff6e8;
+  text-shadow:0 2px 16px rgba(0,0,0,.85);
+}
+.sisus span{
+  position:relative;display:block;margin-top:5px;
+  font-size:12.5px;line-height:1.45;
+  color:rgba(255,246,233,.82);text-shadow:0 1px 9px rgba(0,0,0,.95);
+}
+
+/* ---- luukkupari ------------------------------------------------------- */
+.luukut{position:absolute;inset:0;pointer-events:none;transform-style:preserve-3d}
+.luukku{
+  /* yli reunojen: muuten murtoluvun levyisellä ovella jää hiusviiva, josta
+     huoneen hehku vuotaa ulos suljetunkin luukun alta */
+  position:absolute;top:-1px;bottom:-1px;width:calc(50% + 1px);
+  /* levennys menee ulkoreunaan, jotta sauma pysyy täsmälleen keskellä */
+  background-size:100% 100%;background-repeat:no-repeat;
+  backface-visibility:hidden;
+  transition:transform .6s cubic-bezier(.32,.86,.3,1), filter .6s;
+}
+.luukku::after{                 /* kahva */
+  content:"";position:absolute;top:50%;width:7px;height:32px;
+  margin-top:-16px;border-radius:4px;
+  background:linear-gradient(90deg,#6d7479,#e4eaee 42%,#5d646a);
+  box-shadow:0 1px 5px rgba(0,0,0,.8);
+}
+.vasen{left:-1px;transform-origin:left center;background-image:var(--vas)}
+.oikea{right:-1px;transform-origin:right center;background-image:var(--oik)}
+.vasen::after{right:6px}
+.oikea::after{left:6px}
+
+/* avautuminen */
+@media (hover:hover){
+  .huone:hover .vasen,.huone:focus-visible .vasen{transform:rotateY(-82deg);filter:brightness(.52)}
+  .huone:hover .oikea,.huone:focus-visible .oikea{transform:rotateY(82deg);filter:brightness(.72)}
+}
+/* kosketusnäytöllä ei ole hoveria: luukut ovat valmiiksi raollaan */
+@media (hover:none){
+  .vasen{transform:rotateY(-26deg);filter:brightness(.78)}
+  .oikea{transform:rotateY(26deg);filter:brightness(.88)}
+}
+
+/* ---- huoneiden luukut ja sisävalot ------------------------------------ */
+.fifties{
+  --vas:url("luukut/jukebox-vasen.jpg");
+  --oik:url("luukut/jukebox-oikea.jpg");
+  --hehku:radial-gradient(130% 95% at 50% 100%,#ffb23a 0%,#c4371f 44%,#2a0e09 100%);
+}
+.yo{
+  --vas:url("luukut/puu-vasen.jpg");
+  --oik:url("luukut/puu-oikea.jpg");
+  --hehku:radial-gradient(130% 95% at 50% 100%,#ffcf74 0%,#8a4a12 44%,#150b05 100%);
+}
+.lapset{
+  --vas:url("luukut/puu-vasen.jpg");
+  --oik:url("luukut/puu-oikea.jpg");
+  --hehku:radial-gradient(130% 95% at 50% 100%,#ffe9a8 0%,#e8536a 46%,#45101e 100%);
+}
+.techno{
+  --vas:url("luukut/puu-vasen.jpg");
+  --oik:url("luukut/puu-oikea.jpg");
+  --hehku:radial-gradient(130% 95% at 50% 100%,#52f7c0 0%,#1b6f8c 44%,#06161c 100%);
+}
+/* tyhjät luukut eivät saa näyttää identtisiltä vierekkäin: eri puulaadut,
+   ei värisuodinta — vihertävä sävy saisi laudan näyttämään homeiselta */
+.lapset .vasen,.lapset .oikea{filter:saturate(.74) brightness(1.1)}   /* auringon haalistama */
+.techno .vasen,.techno .oikea{filter:saturate(.34) brightness(.74)}   /* harmaantunut */
+@media (hover:none){
+  .lapset .vasen{filter:saturate(.74) brightness(.86)}
+  .lapset .oikea{filter:saturate(.74) brightness(.97)}
+  .techno .vasen{filter:saturate(.34) brightness(.58)}
+  .techno .oikea{filter:saturate(.34) brightness(.65)}
+}
+
+/* ---- vielä suljettu huone --------------------------------------------- */
+.huone.kiinni{cursor:default}
+.huone.kiinni .sisus{filter:saturate(.3) brightness(.42)}
+.kyltti{
+  position:absolute;left:50%;top:34%;z-index:3;   /* kahvojen yläpuolelle */
+  transform:translate(-50%,-50%) rotate(-5deg);
+  padding:7px 14px;border-radius:2px;
+  background:#efe0c0;color:#4a2c18;
+  font:600 11px/1 "Arial Narrow",Arial,sans-serif;letter-spacing:.22em;
+  text-transform:uppercase;
+  box-shadow:0 5px 16px rgba(0,0,0,.7);
+}
+.kyltti::before,.kyltti::after{      /* naulat */
+  content:"";position:absolute;top:50%;width:4px;height:4px;margin-top:-2px;
+  border-radius:50%;background:#8d7a60;
+}
+.kyltti::before{left:5px}
+.kyltti::after{right:5px}
+
+footer{margin-top:56px;color:#6f6253;font-size:12px;text-align:center}
+footer a{color:#8a7a66}
+
+@media (prefers-reduced-motion:reduce){
+  .luukku{transition:none}
+  .huone{transition:border-color .2s}
+}
 </style>
 </head>
 <body>
+
   <h1>MUSA <span>ROOMS</span></h1>
   <p class="ala">Valitse huone</p>
-  <div class="huoneet">
-    <a class="huone" href="jukebox/">
-      <b>JB-2400</b>
-      <span>Jukeboksi. 50-luvun kaari, kuplaputket ja levynvaihto.<br>
-      KJWhispers — Time Travel to a Hot Summer ja singlejä. 23 raitaa.</span>
+
+  <div class="kaytava">
+
+    <a class="huone fifties" href="jukebox/">
+      <div class="sisus">
+        <b>Fifties</b>
+        <span>JB-2400 jukeboksi<br>KJWhispers — 23 raitaa</span>
+      </div>
+      <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
     </a>
-    <div class="tulossa">Lisää huoneita tulossa</div>
+
+    <div class="huone yo kiinni">
+      <div class="sisus">
+        <b>Yö ja balladit</b>
+        <span>SilverDeck-räkki<br>kelanauhuri ja kasetit</span>
+      </div>
+      <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
+      <span class="kyltti">Tulossa</span>
+    </div>
+
+    <div class="huone lapset kiinni">
+      <div class="sisus">
+        <b>Lasten huone</b>
+        <span>Mansikkakylän laulut<br>ja karaoke</span>
+      </div>
+      <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
+      <span class="kyltti">Tulossa</span>
+    </div>
+
+    <div class="huone techno kiinni">
+      <div class="sisus">
+        <b>Gym</b>
+        <span>Techno ja house<br>oma laitteensa</span>
+      </div>
+      <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
+      <span class="kyltti">Tulossa</span>
+    </div>
+
   </div>
+
   <footer>© 2026 KJWhispers</footer>
+
 </body>
 </html>
