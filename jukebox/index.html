@@ -90,7 +90,26 @@ canvas{touch-action:manipulation}
 .rivi.tyhja .n{background:#2a2219;color:#6f6253}
 .rivi.soi{border-color:var(--amber);background:#241c10}
 .rivi.soi .t b{color:#ffd79a}
+#ohjaus{flex:0 0 auto;display:flex;align-items:center;gap:12px;
+  padding:10px 14px calc(10px + env(safe-area-inset-bottom));
+  background:#15100c;border-top:1px solid #33271b}
+#ohjaus .nuppi{position:relative;width:46px;height:46px;border-radius:50%;
+  background:radial-gradient(circle at 34% 28%,#6a5c4a,#241c13 70%);
+  box-shadow:0 2px 6px rgba(0,0,0,.7),inset 0 0 0 1px #4a3a28;
+  touch-action:none;cursor:ns-resize;flex:0 0 auto}
+#ohjaus .nuppi .osoitin{position:absolute;left:50%;top:5px;width:3px;height:16px;
+  margin-left:-1.5px;border-radius:2px;background:#ffb63f;transform-origin:50% 18px}
+#ohjaus .selite{display:flex;flex-direction:column;line-height:1.25}
+#ohjaus .selite b{color:#e8ded0;font:600 12px/1 "Segoe UI",sans-serif;letter-spacing:.14em;
+  text-transform:uppercase}
+#ohjaus .selite span{color:#ffb63f;font:700 15px/1 "Segoe UI",sans-serif;
+  font-variant-numeric:tabular-nums}
+#ohjaus button{margin-left:auto;min-height:44px}
 #lava{flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;padding:16px}
+/* puhelimessa soitin täyttää koko leveyden: 16 px reunusta on
+   390 px:n näytöllä 8 % kuvasta, ja juuri leveys on se mikä
+   tekee korteista luettavia */
+@media (max-width:760px){#lava{padding:0}}
 canvas{border-radius:4px;box-shadow:0 30px 80px rgba(0,0,0,.75),0 0 0 1px rgba(255,255,255,.05)}
 </style>
 </head>
@@ -113,6 +132,15 @@ canvas{border-radius:4px;box-shadow:0 30px 80px rgba(0,0,0,.75),0 0 0 1px rgba(2
   <span id="tiedot">—</span>
 </div>
 <div id="lava"><canvas id="jb"></canvas></div>
+
+<div id="ohjaus">
+  <div id="aani" class="nuppi" role="slider" tabindex="0"
+       aria-label="Äänenvoimakkuus" aria-valuemin="0" aria-valuemax="100">
+    <span class="osoitin"></span>
+  </div>
+  <div class="selite"><b>Ääni</b><span id="aaniArvo">80 %</span></div>
+  <button id="listaAuki" type="button">Biisilista</button>
+</div>
 
 <div id="paikat" class="piilossa">
   <div class="paikatYla">
@@ -148,6 +176,8 @@ canvas{border-radius:4px;box-shadow:0 30px 80px rgba(0,0,0,.75),0 0 0 1px rgba(2
   <div id="listaRivit"></div>
 </div>
 
+<!-- jaettu iso säädin ja huoneen avaus; puuttuminen ei kaada soitinta -->
+<script src="../soitin.js"></script>
 <script>
 "use strict";
 
@@ -1348,6 +1378,8 @@ const $ = id => document.getElementById(id);
 
 /* Piirtomuunnos talteen, jotta kosketus osataan muuttaa yksiköiksi. */
 let TM = { ox: 0, oy: 0, s: 1 };
+let gain = null;          // voimakkuussolmu, luodaan ääniketjun mukana
+let aaniTaso = 0.8;       // 0..1, ohjauspalkin nupista
 
 function piirra(){
   const val = $('koko').value;
@@ -1362,7 +1394,11 @@ function piirra(){
   /* Näyttökoko lasketaan itse: pelkkä max-height kutistaisi vain toista
      suuntaa ja juuri mittasuhde on tässä se mitä arvioidaan. */
   const lava = $('lava');
-  const mahtuu = Math.min(1, (lava.clientWidth - 32) / kw, (lava.clientHeight - 32) / kh);
+  const ts = getComputedStyle(lava);
+  const reunaX = parseFloat(ts.paddingLeft) + parseFloat(ts.paddingRight);
+  const reunaY = parseFloat(ts.paddingTop) + parseFloat(ts.paddingBottom);
+  const mahtuu = Math.min(1, (lava.clientWidth - reunaX) / kw,
+                             (lava.clientHeight - reunaY) / kh);
   cv.style.width  = Math.round(kw * mahtuu) + 'px';
   cv.style.height = Math.round(kh * mahtuu) + 'px';
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -1403,7 +1439,12 @@ function aanetKayntiinOikeasti(){
   an.fftSize = 2048;
   an.smoothingTimeConstant = 0.72;
   fbuf = new Uint8Array(an.frequencyBinCount);
-  an.connect(ac.destination);
+  /* Voimakkuus omana solmunaan analysaattorin JÄLKEEN: iOS ohittaa
+     elementin volume-arvon, ja analysaattorin edessä säädin hiljentäisi
+     myös valot. Nyt valot elävät vaikka ääni olisi vedetty nollaan. */
+  gain = ac.createGain();
+  gain.gain.value = aaniTaso;
+  an.connect(gain).connect(ac.destination);
   el = new Audio();
   el.preload = 'auto';
   el.addEventListener('ended', () => { S.soi = false; paivitaNapit(); });
@@ -2092,6 +2133,42 @@ $('paikatKiinni').addEventListener('click', () => {
 });
 
 window.addEventListener('resize', () => { clearTimeout(window.__t); window.__t = setTimeout(piirra, 150); });
+
+/* ====================  äänenvoimakkuus  =================================
+   Nuppi on pieni, koska laitteessa se on pieni. Puhelimessa napautus
+   nostaa ison säätimen keskelle; hiirellä nuppia vedetään paikallaan.
+   Mekanismi on jaetussa soitin.js:ssä, joten jokainen tuleva soitin saa
+   saman eleen ilman omaa toteutusta. */
+
+function paivitaAani(){
+  const el2 = $('aani');
+  if (el2) el2.querySelector('.osoitin').style.transform =
+    'rotate(' + (-135 + aaniTaso * 270).toFixed(1) + 'deg)';
+  const a = $('aaniArvo');
+  if (a) a.textContent = Math.round(aaniTaso * 100) + ' %';
+  if (el2) el2.setAttribute('aria-valuenow', Math.round(aaniTaso * 100));
+  if (gain) gain.gain.value = aaniTaso;
+  else if (el) el.volume = aaniTaso;
+}
+
+(function kytkeAani(){
+  paivitaAani();
+  if (!window.Saadin || !$('aani')) return;
+  Saadin.lisaa({
+    id: 'aani', nimi: 'Äänenvoimakkuus', el: $('aani'),
+    min: 0, max: 1, askel: 0.01,
+    lue: () => aaniTaso,
+    aseta: v => { aaniTaso = v; paivitaAani(); },
+    piirra: paivitaAani,
+    muotoile: v => Math.round(v * 100) + ' %'
+  });
+})();
+
+/* Biisilista myös palkista, ei vain kortin napautuksesta. */
+(function kytkeLista(){
+  const b = $('listaAuki');
+  if (b && typeof avaaLista === 'function') b.addEventListener('click', avaaLista);
+})();
 $('valot').classList.add('on');
 /* Jaettavaan tiedostoon leivotut biisit otetaan käyttöön ennen ensimmäistä
    piirtoa, jotta kone näyttää heti täydeltä. */

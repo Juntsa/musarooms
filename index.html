@@ -109,6 +109,10 @@ h1 span{color:var(--amber)}
   .huone:hover .vasen,.huone:focus-visible .vasen{transform:rotateY(-82deg);filter:brightness(.52)}
   .huone:hover .oikea,.huone:focus-visible .oikea{transform:rotateY(82deg);filter:brightness(.72)}
 }
+/* avattu huone: luukut auki myös kosketusnäytöllä, jossa hoveria ei ole */
+.huone.auki .vasen{transform:rotateY(-84deg);filter:brightness(.5)}
+.huone.auki .oikea{transform:rotateY(84deg);filter:brightness(.7)}
+
 /* kosketusnäytöllä ei ole hoveria: luukut ovat valmiiksi raollaan */
 @media (hover:none){
   .vasen{transform:rotateY(-26deg);filter:brightness(.78)}
@@ -188,7 +192,7 @@ footer a{color:#8a7a66}
 
   <div class="kaytava">
 
-    <a class="huone fifties" href="jukebox/">
+    <a class="huone fifties" href="jukebox/" data-soitin>
       <div class="sisus">
         <b>Fifties</b>
         <span>JB-2400 jukeboksi<br>KJWhispers — 23 raitaa</span>
@@ -243,6 +247,13 @@ footer a{color:#8a7a66}
   </div>
 
   <footer>© 2026 KJWhispers</footer>
+
+  <script src="soitin.js"></script>
+  <script>
+    /* Ovet, joiden takana on soitin, avataan paikan päällä. Linkki jää
+       ennalleen, joten ilman JS:ää ovi vie soittimeen tavallisena sivuna. */
+    if (window.Huone) Huone.kytke();
+  </script>
 
 </body>
 </html>
