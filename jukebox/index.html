@@ -61,6 +61,35 @@ canvas{touch-action:manipulation}
   font:600 15px/1 "Segoe UI",sans-serif;padding:2px 4px}
 .solu .x:hover{color:#ff6b6b}
 .solu.tyhja .x{visibility:hidden}
+
+/* --- Valintalista: kortit ovat puhelimessa noin 38 px leveitä, eikä nimeä
+   voi lukea. Lista on se paperi jota pidetään koneen vieressä kädessä. --- */
+#lista{position:fixed;inset:0;z-index:30;background:#0d0b09;
+  display:flex;flex-direction:column}
+#lista.piilossa{display:none}
+.listaYla{flex:0 0 auto;display:flex;align-items:center;gap:12px;
+  padding:14px 16px;border-bottom:1px solid var(--line);background:#141210}
+.listaYla b{color:var(--amber);font:600 14px/1 "Segoe UI",sans-serif;letter-spacing:.1em}
+.listaYla span{color:var(--dim);font-size:12px}
+.listaYla button{margin-left:auto}
+#listaRivit{flex:1 1 auto;overflow:auto;padding:8px 10px 24px;
+  -webkit-overflow-scrolling:touch}
+.rivi{display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  padding:11px 12px;margin:0 0 6px;border-radius:9px;cursor:pointer;
+  border:1px solid #2a2219;background:#17130f;color:var(--txt);min-height:52px}
+.rivi:hover{border-color:#8a6c3e}
+.rivi .n{flex:0 0 32px;text-align:center;border-radius:5px;padding:6px 0;
+  font:600 14px/1 "Segoe UI",sans-serif;background:#6E1A17;color:#ffd79a}
+.rivi.hunaja .n{background:#8a5a14;color:#fff0d0}
+.rivi .t{flex:1;min-width:0}
+.rivi .t b{display:block;font:600 15px/1.25 "Segoe UI",sans-serif;color:#f4e5c7;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rivi .t span{display:block;font-size:12px;color:var(--dim);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rivi.tyhja{opacity:.4;cursor:default;border-style:dashed}
+.rivi.tyhja .n{background:#2a2219;color:#6f6253}
+.rivi.soi{border-color:var(--amber);background:#241c10}
+.rivi.soi .t b{color:#ffd79a}
 #lava{flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;padding:16px}
 canvas{border-radius:4px;box-shadow:0 30px 80px rgba(0,0,0,.75),0 0 0 1px rgba(255,255,255,.05)}
 </style>
@@ -109,6 +138,15 @@ canvas{border-radius:4px;box-shadow:0 30px 80px rgba(0,0,0,.75),0 0 0 1px rgba(2
   <div id="ruudukko"></div>
 </div>
 <input type="file" id="soluTiedosto" accept="audio/*,.mp3,.wav,.m4a,.ogg,.flac" style="display:none">
+
+<div id="lista" class="piilossa">
+  <div class="listaYla">
+    <b>VALITSE</b>
+    <span>napauta nimeä</span>
+    <button id="listaKiinni">Sulje</button>
+  </div>
+  <div id="listaRivit"></div>
+</div>
 
 <script>
 "use strict";
@@ -1512,6 +1550,51 @@ cv.addEventListener('pointerdown', e => {
   e.preventDefault();
   if (poistoTila) poistaPaikka(o.n);
   else if (o.tyyppi === 'nappi') valitse(o.n);
+  else avaaLista();                 // kortin napautus: nimet luettavassa koossa
+});
+
+/* ====================  valintalista  ====================================
+   Kortti on kapealla näytöllä noin 38 pikseliä leveä, eikä biisin nimeä voi
+   lukea siitä. Napit toimivat silti, mutta niitä painettaisiin sokkona.
+   Lista on sama 24 paikkaa luettavassa koossa.                           */
+
+function avaaLista(){
+  paivitaLista();
+  $('lista').classList.remove('piilossa');
+}
+function suljeLista(){ $('lista').classList.add('piilossa'); }
+
+function paivitaLista(){
+  const r = $('listaRivit');
+  r.textContent = '';
+  for (let n = 0; n < PAIKKOJA; n++){
+    const b = BIISIT[n];
+    const on = !!(b && b.nimi);
+    const d = document.createElement('button');
+    d.type = 'button';
+    d.className = 'rivi' + (on ? '' : ' tyhja') +
+                  (n >= 12 ? ' hunaja' : '') +      /* sama värijako kuin napeissa */
+                  (S.valittu === n ? ' soi' : '');
+    const nro = document.createElement('span');
+    nro.className = 'n'; nro.textContent = String(n + 1);
+    const t = document.createElement('span');
+    t.className = 't';
+    const nimi = document.createElement('b');
+    nimi.textContent = on ? b.nimi : 'tyhjä';
+    const alle = document.createElement('span');
+    alle.textContent = on ? (b.esittaja || '') : '';
+    t.appendChild(nimi); t.appendChild(alle);
+    d.appendChild(nro); d.appendChild(t);
+    if (on) d.addEventListener('click', () => { suljeLista(); valitse(n); });
+    else d.disabled = true;
+    r.appendChild(d);
+  }
+}
+
+$('listaKiinni').addEventListener('click', suljeLista);
+/* Esc sulkee, kuten mikä tahansa päällekkäinen näkymä. */
+window.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !$('lista').classList.contains('piilossa')) suljeLista();
 });
 
 /* ====================  silmukka  ======================================== */
@@ -2024,6 +2107,9 @@ requestAnimationFrame(askel);
    silloin biisit raahataan paneeliin käsin. */
 (function omaSetti(){
   if (window.JB_UPOTETUT) return;
+  /* file:// ei salli fetchiä lainkaan, ja yritys jättäisi konsoliin virheen.
+     Paikallisena tiedostona biisit raahataan paneeliin käsin. */
+  if (location.protocol === 'file:') return;
   fetch('setti.json', { cache: 'no-cache' })
     .then(r => r.ok ? r.json() : null)
     .then(d => {
