@@ -1,0 +1,176 @@
+{
+  "nimi": "KJWHISPERS  ·  FIFTIES SELECTIONS",
+  "laite": "KJWhispers JB-2400",
+  "paikkoja": 24,
+  "ohje": "Paikat 1-24. Tyhjä nimi jättää paikan tyhjäksi. aani on osoite soittimen kansiosta katsottuna.",
+  "paikat": [
+    {
+      "paikka": 1,
+      "nimi": "Golden Flame",
+      "esittaja": "Dance Mix",
+      "tiedosto": "",
+      "aani": "../biisit/01-golden-flame-dance-mix.mp3"
+    },
+    {
+      "paikka": 2,
+      "nimi": "Golden Flame",
+      "esittaja": "Radio Edit",
+      "tiedosto": "",
+      "aani": "../biisit/02-golden-flame-radio-edit.mp3"
+    },
+    {
+      "paikka": 3,
+      "nimi": "Golden Summer Love",
+      "esittaja": "Sunset Version",
+      "tiedosto": "",
+      "aani": "../biisit/03-golden-summer-love-sunset.mp3"
+    },
+    {
+      "paikka": 4,
+      "nimi": "Hot Summer Love",
+      "esittaja": "Classic Mix",
+      "tiedosto": "",
+      "aani": "../biisit/04-hot-summer-love-classic-mix.mp3"
+    },
+    {
+      "paikka": 5,
+      "nimi": "Hot Summer Love",
+      "esittaja": "Doo-Wop Version",
+      "tiedosto": "",
+      "aani": "../biisit/05-hot-summer-love-doo-wop.mp3"
+    },
+    {
+      "paikka": 6,
+      "nimi": "Hot Summer Love",
+      "esittaja": "Rockabilly Pop",
+      "tiedosto": "",
+      "aani": "../biisit/06-hot-summer-love-rockabilly-pop.mp3"
+    },
+    {
+      "paikka": 7,
+      "nimi": "Hot Summer Love",
+      "esittaja": "Rockabilly Version",
+      "tiedosto": "",
+      "aani": "../biisit/07-hot-summer-love-rockabilly.mp3"
+    },
+    {
+      "paikka": 8,
+      "nimi": "Hot Summer Love",
+      "esittaja": "Sax Night Version",
+      "tiedosto": "",
+      "aani": "../biisit/08-hot-summer-love-sax-night.mp3"
+    },
+    {
+      "paikka": 9,
+      "nimi": "Hot Summer Love",
+      "esittaja": "Drama Version",
+      "tiedosto": "",
+      "aani": "../biisit/09-hot-summer-love-drama.mp3"
+    },
+    {
+      "paikka": 10,
+      "nimi": "Hot Summer Love",
+      "esittaja": "Classic 1950s Doo-Wop",
+      "tiedosto": "",
+      "aani": "../biisit/10-hot-summer-love-classic-1950s.mp3"
+    },
+    {
+      "paikka": 11,
+      "nimi": "Hot Summer Love",
+      "esittaja": "Instrumental",
+      "tiedosto": "",
+      "aani": "../biisit/11-hot-summer-love-instrumental.mp3"
+    },
+    {
+      "paikka": 12,
+      "nimi": "Butterflies & Chrome",
+      "esittaja": "",
+      "tiedosto": "",
+      "aani": "../biisit/12-butterflies-and-chrome.mp3"
+    },
+    {
+      "paikka": 13,
+      "nimi": "Golden Shore Forever",
+      "esittaja": "",
+      "tiedosto": "",
+      "aani": "../biisit/13-golden-shore-forever.mp3"
+    },
+    {
+      "paikka": 14,
+      "nimi": "El Sol de California",
+      "esittaja": "Latin Heat",
+      "tiedosto": "",
+      "aani": "../biisit/14-el-sol-de-california.mp3"
+    },
+    {
+      "paikka": 15,
+      "nimi": "My Love",
+      "esittaja": "",
+      "tiedosto": "",
+      "aani": "../biisit/15-my-love.mp3"
+    },
+    {
+      "paikka": 16,
+      "nimi": "Route 66",
+      "esittaja": "",
+      "tiedosto": "",
+      "aani": "../biisit/16-route-66.mp3"
+    },
+    {
+      "paikka": 17,
+      "nimi": "Hot Summer Love",
+      "esittaja": "50's Version",
+      "tiedosto": "",
+      "aani": "../biisit/17-hot-summer-love-matt-santiago.mp3"
+    },
+    {
+      "paikka": 18,
+      "nimi": "Drive-In Moonlight",
+      "esittaja": "Ballad",
+      "tiedosto": "",
+      "aani": "../biisit/18-drive-in-moonlight.mp3"
+    },
+    {
+      "paikka": 19,
+      "nimi": "Jukebox & Milkshake",
+      "esittaja": "Rockabilly",
+      "tiedosto": "",
+      "aani": "../biisit/19-jukebox-and-milkshake.mp3"
+    },
+    {
+      "paikka": 20,
+      "nimi": "Cruisin’ the Block",
+      "esittaja": "",
+      "tiedosto": "",
+      "aani": "../biisit/20-cruisin-the-block.mp3"
+    },
+    {
+      "paikka": 21,
+      "nimi": "Starlight Summer Girl",
+      "esittaja": "Remastered",
+      "tiedosto": "",
+      "aani": "../biisit/21-starlight-summer-girl-remastered.mp3"
+    },
+    {
+      "paikka": 22,
+      "nimi": "Starlight Summer Girl",
+      "esittaja": "’88",
+      "tiedosto": "",
+      "aani": "../biisit/22-starlight-summer-girl-88.mp3"
+    },
+    {
+      "paikka": 23,
+      "nimi": "Amor De Verano",
+      "esittaja": "Beach Latino",
+      "tiedosto": "",
+      "aani": "../biisit/23-amor-de-verano.mp3"
+    },
+    {
+      "paikka": 24,
+      "nimi": "",
+      "esittaja": "",
+      "tiedosto": "",
+      "aani": ""
+    }
+  ]
+}

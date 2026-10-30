@@ -1,0 +1,236 @@
+{
+  "artisti": "KJWhispers",
+  "paivitetty": null,
+  "biisit": [
+    {
+      "id": "raita-01",
+      "nimi": "Golden Flame",
+      "versio": "Dance Mix",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 163.3,
+      "tiedosto": "biisit/01-golden-flame-dance-mix.mp3"
+    },
+    {
+      "id": "raita-02",
+      "nimi": "Golden Flame",
+      "versio": "Radio Edit",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 192.8,
+      "tiedosto": "biisit/02-golden-flame-radio-edit.mp3"
+    },
+    {
+      "id": "raita-03",
+      "nimi": "Golden Summer Love",
+      "versio": "Sunset Version",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 307.0,
+      "tiedosto": "biisit/03-golden-summer-love-sunset.mp3"
+    },
+    {
+      "id": "raita-04",
+      "nimi": "Hot Summer Love",
+      "versio": "Classic Mix",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 192.8,
+      "tiedosto": "biisit/04-hot-summer-love-classic-mix.mp3"
+    },
+    {
+      "id": "raita-05",
+      "nimi": "Hot Summer Love",
+      "versio": "Doo-Wop Version",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 273.0,
+      "tiedosto": "biisit/05-hot-summer-love-doo-wop.mp3"
+    },
+    {
+      "id": "raita-06",
+      "nimi": "Hot Summer Love",
+      "versio": "Rockabilly Pop",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 240.0,
+      "tiedosto": "biisit/06-hot-summer-love-rockabilly-pop.mp3"
+    },
+    {
+      "id": "raita-07",
+      "nimi": "Hot Summer Love",
+      "versio": "Rockabilly Version",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 221.2,
+      "tiedosto": "biisit/07-hot-summer-love-rockabilly.mp3"
+    },
+    {
+      "id": "raita-08",
+      "nimi": "Hot Summer Love",
+      "versio": "Sax Night Version",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 259.9,
+      "tiedosto": "biisit/08-hot-summer-love-sax-night.mp3"
+    },
+    {
+      "id": "raita-09",
+      "nimi": "Hot Summer Love",
+      "versio": "Drama Version",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 251.2,
+      "tiedosto": "biisit/09-hot-summer-love-drama.mp3"
+    },
+    {
+      "id": "raita-10",
+      "nimi": "Hot Summer Love",
+      "versio": "Classic 1950s Doo-Wop",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 260.0,
+      "tiedosto": "biisit/10-hot-summer-love-classic-1950s.mp3"
+    },
+    {
+      "id": "raita-11",
+      "nimi": "Hot Summer Love",
+      "versio": "Instrumental",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 199.8,
+      "tiedosto": "biisit/11-hot-summer-love-instrumental.mp3"
+    },
+    {
+      "id": "raita-12",
+      "nimi": "Butterflies & Chrome",
+      "versio": "",
+      "albumi": "Single",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 260.5,
+      "tiedosto": "biisit/12-butterflies-and-chrome.mp3"
+    },
+    {
+      "id": "raita-13",
+      "nimi": "Golden Shore Forever",
+      "versio": "",
+      "albumi": "Single",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 201.9,
+      "tiedosto": "biisit/13-golden-shore-forever.mp3"
+    },
+    {
+      "id": "raita-14",
+      "nimi": "El Sol de California",
+      "versio": "Latin Heat",
+      "albumi": "Single",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 247.2,
+      "tiedosto": "biisit/14-el-sol-de-california.mp3"
+    },
+    {
+      "id": "raita-15",
+      "nimi": "My Love",
+      "versio": "",
+      "albumi": "Single",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 147.6,
+      "tiedosto": "biisit/15-my-love.mp3"
+    },
+    {
+      "id": "raita-16",
+      "nimi": "Route 66",
+      "versio": "",
+      "albumi": "Single",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 202.1,
+      "tiedosto": "biisit/16-route-66.mp3"
+    },
+    {
+      "id": "raita-17",
+      "nimi": "Hot Summer Love",
+      "versio": "50's Version",
+      "albumi": "Single",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 309.9,
+      "tiedosto": "biisit/17-hot-summer-love-matt-santiago.mp3"
+    },
+    {
+      "id": "raita-18",
+      "nimi": "Drive-In Moonlight",
+      "versio": "Ballad",
+      "albumi": "Single",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 284.4,
+      "tiedosto": "biisit/18-drive-in-moonlight.mp3"
+    },
+    {
+      "id": "raita-19",
+      "nimi": "Jukebox & Milkshake",
+      "versio": "Rockabilly",
+      "albumi": "Single",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 179.9,
+      "tiedosto": "biisit/19-jukebox-and-milkshake.mp3"
+    },
+    {
+      "id": "raita-20",
+      "nimi": "Cruisin’ the Block",
+      "versio": "",
+      "albumi": "Single",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 201.6,
+      "tiedosto": "biisit/20-cruisin-the-block.mp3"
+    },
+    {
+      "id": "raita-21",
+      "nimi": "Starlight Summer Girl",
+      "versio": "Remastered",
+      "albumi": "Single",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 270.0,
+      "tiedosto": "biisit/21-starlight-summer-girl-remastered.mp3"
+    },
+    {
+      "id": "raita-22",
+      "nimi": "Starlight Summer Girl",
+      "versio": "’88",
+      "albumi": "Single",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 194.7,
+      "tiedosto": "biisit/22-starlight-summer-girl-88.mp3"
+    },
+    {
+      "id": "raita-23",
+      "nimi": "Amor De Verano",
+      "versio": "Beach Latino",
+      "albumi": "Single",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 191.9,
+      "tiedosto": "biisit/23-amor-de-verano.mp3"
+    }
+  ]
+}

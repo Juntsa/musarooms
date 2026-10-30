@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KJWhispers</title>
+<style>
+:root{--bg:#0a0908;--txt:#e8ded0;--dim:#9a8b78;--amber:#ff9a1f;--puna:#A52B25}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:radial-gradient(1100px 650px at 50% -8%,#241a12 0%,transparent 62%),var(--bg);
+  color:var(--txt);font:16px/1.6 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:40px 16px;text-align:center}
+h1{font:600 clamp(28px,6vw,46px)/1.1 "Arial Narrow",Arial,sans-serif;
+  letter-spacing:.04em;margin:0 0 6px}
+h1 span{color:var(--amber)}
+.ala{color:var(--dim);font-size:14px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 38px}
+.huoneet{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;max-width:760px}
+a.huone{display:block;width:240px;padding:22px 18px;border-radius:14px;text-decoration:none;
+  color:var(--txt);background:#171310;border:1px solid #2e2419;transition:border-color .15s,transform .15s}
+a.huone:hover{border-color:#8a6c3e;transform:translateY(-2px)}
+a.huone b{display:block;font:600 19px/1.2 "Arial Narrow",Arial,sans-serif;letter-spacing:.05em;
+  color:#ffe9c4;margin-bottom:5px}
+a.huone span{color:var(--dim);font-size:13px;line-height:1.5}
+.tulossa{width:240px;padding:22px 18px;border-radius:14px;border:1px dashed #2e2419;
+  color:#6f6253;font-size:13px;display:flex;align-items:center;justify-content:center}
+footer{margin-top:46px;color:#6f6253;font-size:12px}
+</style>
+</head>
+<body>
+  <h1>KJ<span>Whispers</span></h1>
+  <p class="ala">Time Travel to a Hot Summer</p>
+  <div class="huoneet">
+    <a class="huone" href="jukebox/">
+      <b>JB-2400</b>
+      <span>Jukeboksi. 50-luvun kaari, kuplaputket ja levynvaihto.
+      23 raitaa.</span>
+    </a>
+    <div class="tulossa">Lisää huoneita tulossa</div>
+  </div>
+  <footer>© 2026 KJWhispers</footer>
+</body>
+</html>

@@ -1,0 +1,2046 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KJWhispers JB-2400 — etunäkymä</title>
+<style>
+:root{--bg:#0a0908;--line:#2e2419;--txt:#e8ded0;--dim:#9a8b78;--amber:#ff9a1f}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:radial-gradient(1200px 700px at 50% -5%,#1d150f 0%,transparent 62%),var(--bg);
+  color:var(--txt);font:14px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+#bar{flex:0 0 auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  padding:10px 14px;border-bottom:1px solid var(--line);background:#120f0d}
+#bar b{color:var(--amber);font:600 13px/1 "Segoe UI",sans-serif;letter-spacing:.08em;margin-right:6px}
+button,select{padding:7px 12px;border-radius:7px;border:1px solid #6b5636;background:#2a2219;
+  color:var(--txt);font:600 13px/1 "Segoe UI",sans-serif;cursor:pointer}
+button.on{background:linear-gradient(#7a5a20,#4a3614);border-color:#9c7430;color:#ffe9c4}
+#bar span{color:var(--dim);font-size:12px;margin-left:auto}
+#nyt{color:#ffe9c4;font:600 13px/1 "Segoe UI",sans-serif;letter-spacing:0;
+  margin-left:10px;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lataa{padding:7px 12px;border-radius:7px;border:1px solid #6b5636;background:#2a2219;
+  font:600 13px/1 "Segoe UI",sans-serif;cursor:pointer}
+.lataa input{display:none}
+canvas{touch-action:manipulation}
+
+/* --- 24 paikan raahauspaneeli --- */
+#paikat{position:fixed;inset:auto 0 0 0;max-height:62vh;overflow:auto;z-index:20;
+  background:#141210;border-top:1px solid var(--line);
+  box-shadow:0 -20px 50px rgba(0,0,0,.65);padding:12px 14px 18px}
+#paikat.piilossa{display:none}
+.paikatYla{display:flex;align-items:center;gap:10px;margin-bottom:10px;
+  color:var(--dim);font-size:13px}
+.paikatYla b{color:var(--amber);font:600 13px/1 "Segoe UI",sans-serif;letter-spacing:.06em}
+.paikatYla button{margin-left:auto}
+.paikatTyokalut{display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  padding:0 0 11px;margin-bottom:11px;border-bottom:1px solid var(--line)}
+.paikatTyokalut .vihje{color:var(--dim);font-size:12px;line-height:1.45;max-width:420px}
+.paikatTyokalut .vihje i{color:#c4b091;font-style:normal;font-family:ui-monospace,Consolas,monospace}
+#ruudukko{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+@media (max-width:760px){#ruudukko{grid-template-columns:repeat(2,1fr)}}
+.solu{display:flex;align-items:center;gap:8px;padding:8px 9px;border-radius:8px;
+  border:1px dashed #4a3c2b;background:#1c1815;cursor:pointer;min-height:44px;
+  transition:border-color .12s,background .12s}
+.solu:hover{border-color:#8a6c3e}
+.solu.yli{border-color:var(--amber);background:#2b2214;border-style:solid}
+.solu.taysi{border-style:solid;border-color:#5d4a30;background:#221d18}
+.solu .nro{flex:0 0 22px;text-align:center;font:600 12px/1 "Segoe UI",sans-serif;
+  color:#ffd79a;background:#4a1714;border-radius:4px;padding:4px 0}
+.solu.taysi .nro{background:#6E1A17}
+.solu .nimi{flex:1;font-size:12px;color:var(--txt);overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.solu.tyhja .nimi{color:#6f6253;font-style:italic}
+/* nimi ilman äänitiedostoa: paikka on varattu mutta mitään ei kuulu */
+.solu.vajaa{border-style:dashed;border-color:#7a5a2a;background:#201a12}
+.solu.vajaa .nro{background:#5a3c12}
+.solu.vajaa .nimi{color:#b09a78}
+.solu.vajaa .nimi::after{content:' · ei ääntä';color:#7a6a52;font-size:11px}
+.solu .x{flex:0 0 auto;border:none;background:none;color:#8a7a66;cursor:pointer;
+  font:600 15px/1 "Segoe UI",sans-serif;padding:2px 4px}
+.solu .x:hover{color:#ff6b6b}
+.solu.tyhja .x{visibility:hidden}
+#lava{flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;padding:16px}
+canvas{border-radius:4px;box-shadow:0 30px 80px rgba(0,0,0,.75),0 0 0 1px rgba(255,255,255,.05)}
+</style>
+</head>
+<body>
+
+<div id="bar">
+  <b>JB-2400</b>
+  <select id="koko">
+    <option value="760">korkeus 760 — selaus</option>
+    <option value="1100" selected>korkeus 1100 — katselu</option>
+    <option value="1600">korkeus 1600 — tarkistus</option>
+    <option value="1920">1080 × 1920 — pystyvideo</option>
+  </select>
+  <button id="ristikko">Mittaristikko</button>
+  <button id="valot">Valot musiikkiin</button>
+  <button id="paikatAuki">Biisit</button>
+  <button id="seis">Seis</button>
+  <button id="png">Tallenna PNG</button>
+  <b id="nyt">ei valintaa</b>
+  <span id="tiedot">—</span>
+</div>
+<div id="lava"><canvas id="jb"></canvas></div>
+
+<div id="paikat" class="piilossa">
+  <div class="paikatYla">
+    <b>24 PAIKKAA</b>
+    <span>raahaa mp3 tai wav soluun — tai napauta solua ja valitse tiedosto</span>
+    <button id="paikatKiinni">Sulje</button>
+  </div>
+  <div class="paikatTyokalut">
+    <label class="lataa">Lisää biisejä
+      <input type="file" id="tiedostot" accept="audio/*,.mp3,.wav,.m4a,.ogg,.flac" multiple>
+    </label>
+    <label class="lataa" title="Valitse json JA biisitiedostot samalla kertaa">
+      Lataa paketti
+      <input type="file" id="pakettiLataa" accept=".json,application/json,audio/*,.mp3,.wav,.m4a,.ogg,.flac" multiple>
+    </label>
+    <button id="paketti">Tallenna paketti</button>
+    <button id="jaa">Vie jaettava tiedosto</button>
+    <button id="poista">Poista korteista</button>
+    <button id="tyhjenna">Tyhjennä kaikki</button>
+    <span class="vihje">Paketti on JSON, jossa on 24 paikkaa. Lataa se yhdessä
+      biisitiedostojen kanssa — tai käytä <i>aani</i>-kenttää verkko-osoitteille.</span>
+  </div>
+  <div id="ruudukko"></div>
+</div>
+<input type="file" id="soluTiedosto" accept="audio/*,.mp3,.wav,.m4a,.ogg,.flac" style="display:none">
+
+<script>
+"use strict";
+
+/* ==========================================================================
+   KJWhispers JB-2400 — liikkumaton etunäkymä
+
+   Rakenne on otettu alkuperäisen kaarijukeboksin etukuvasta:
+     kuvun yläosassa näkyy levymekanismi lasin takana
+     keskellä ohjelmakenttä: neljä ryhmää, kussakin kuusi numeroitua
+       nappia ja niiden vieressä kuusi kappalekorttia
+     alla kromipalkki ja valaistu nimikilpi
+     sitten uritettu lista ja iso ovaali säleikkö keskiornamentteineen
+     sivuilla valoputkipilarit, joiden alla uritetut jalustat
+
+   Mittasuhde 152,1 × 85,1 cm → leveys on 56 % korkeudesta. Piirto tapahtuu
+   yksikössä jossa korkeus = 1000, joten sama koodi kelpaa 760 pikselin
+   selaukseen ja 1080 × 1920 pystyvideoon.
+
+   Ulkoasu on oma: muotokieli on aikakauden yleistä, mutta nimikilpi,
+   ruusuornamentti ja paletti ovat KJWhispersin. Valmistajan merkkejä tai
+   logoja ei käytetä.
+   ========================================================================== */
+
+/* --- Biisit. Tätä yhtä listaa vaihtamalla kortit vaihtuvat. --------------
+   Numero tulee järjestyksestä. 24 paikkaa; puuttuvat jäävät tyhjiksi
+   korteiksi, kuten oikeassakin laitteessa.                                */
+const BIISIT = [
+  { nimi:'Hyvää yötä Mansikkakylä',  esittaja:'KJWhispers' },
+  { nimi:'Hyvää yötä · versio 2',    esittaja:'KJWhispers' },
+  { nimi:'Hyvää yötä · versio 3',    esittaja:'KJWhispers' },
+  { nimi:'Piikipallon unilaulu',     esittaja:'KJWhispers' },
+  { nimi:'Nukku-Matin matka',        esittaja:'KJWhispers' },
+  { nimi:'Minä jään',                esittaja:'KJWhispers' },
+  { nimi:'Herra Siili sipsuttaa',    esittaja:'KJWhispers' },
+  { nimi:'Herra Siilin marssi',      esittaja:'KJWhispers' },
+  { nimi:'Kustin ohjeellinen rappi', esittaja:'KJWhispers' },
+  { nimi:'Mutarappi',                esittaja:'KJWhispers' },
+  { nimi:'Metsän rytmikone',         esittaja:'KJWhispers' },
+  { nimi:'Marjalasku',               esittaja:'KJWhispers' },
+  { nimi:'Koulu A–I',                esittaja:'KJWhispers' },
+  { nimi:'Koulu J–R',                esittaja:'KJWhispers' },
+  { nimi:'Koulu S',                  esittaja:'KJWhispers' },
+  { nimi:'Huli',                     esittaja:'KJWhispers' },
+  { nimi:'Mansikkakylä',             esittaja:'KJWhispers' },
+  { nimi:'Mansikkakylän aamu',       esittaja:'KJWhispers' },
+  { nimi:'Puhku-peikko missä oot',   esittaja:'KJWhispers' },
+  { nimi:'Puhkun mökki rakentuu',    esittaja:'KJWhispers' },
+  { nimi:'Puolukkametsästä päivää',  esittaja:'KJWhispers' },
+  { nimi:'Saat olla juuri sinä',     esittaja:'KJWhispers' },
+  { nimi:'Ystävyyttä etsimässä',     esittaja:'KJWhispers' },
+  { nimi:'Lyyti hurraa hurraa',      esittaja:'KJWhispers' },
+];
+
+/* --- Paletti ------------------------------------------------------------- */
+const C = {
+  hunaja:'#FFC45C', pihka:'#ED792B', puna:'#A52B25',
+  norsu:'#F4E5C7', hopea:'#BFC5C8', puu:'#543323',
+  punaTumma:'#6E1A17', puuTumma:'#2A180E', muste:'#3B2415'
+};
+const KIRJ = "'Arial Narrow','DejaVu Sans Condensed','Liberation Sans Narrow',Arial,sans-serif";
+
+/* --- Neonputkien perussävyt (asteina) -----------------------------------
+   Pilareissa magenta, pinkki ja punainen; säleikön sivuilla vihreä; kaari
+   meripihkana. Musiikki siirtää sävyä ja nostaa kirkkautta, mutta ei
+   vaihda väriä villisti — strobo näyttäisi halvalta.                      */
+const SAVY = { pilari: [328, 300, 352], sale: 136, kaari: 34 };
+
+/* --- Tila ---------------------------------------------------------------- */
+const S = {
+  taso:   { basso: 0, keski: 0, diskantti: 0, isku: 0 },
+  savy:   0,                 // hidas ajelehtiminen
+  valittu: -1,               // valittu numero 0..23
+  painettu: -1,              // juuri painettuna oleva nappi
+  painoT: 0,                 // painalluksen jäljellä oleva aika
+  vaihto: -1,                // levynvaihdon eteneminen 0..1, -1 = ei käynnissä
+  soi:    false,
+  levyKulma: 0,
+  nauhaX: 0,
+  valotPaalla: true,
+  aika:   0
+};
+
+/* Paikkojen määrä ja montako niistä on täytetty omilla biiseillä.
+   mallilista on tosi vain ennen ensimmäistä omaa latausta. */
+const PAIKKOJA = 24;
+let ladattu = 0, mallilista = true, poistoTila = false;
+
+/* Tunniste kaksoiskappaleiden tunnistamiseen: nimi ja koko yhdessä.
+   Pelkkä nimi osuisi väärin kahteen eri versioon samannimisestä
+   tiedostosta, pelkkä koko kahteen eri biisiin sattumalta. */
+const tunnus = f => f.name + ':' + f.size;
+
+/* Sävyn ajelehdus. S.savy on vaihe asteina, ja siitä otetaan sini, jotta
+   väri heiluu perussävyn ympärillä eikä karkaa. Ilman rajausta vihreät
+   putket ehtivät siniseksi parissakymmenessä sekunnissa. */
+const AJELEHDUS = 16;
+function savyAjo(kerroin){
+  return Math.sin(S.savy * Math.PI / 180) * AJELEHDUS * (kerroin === undefined ? 1 : kerroin);
+}
+
+/* Neonväri: sävy, taso 0..1 ja valinnainen kylläisyys. */
+function neon(h, t, kylla, pohja){
+  const l = (pohja === undefined ? 34 : pohja) + t * 38;
+  return 'hsl(' + (h % 360).toFixed(0) + ' ' + (kylla || 92) + '% ' + l.toFixed(0) + '%)';
+}
+/* Putken kolmiportainen pystygradientti. */
+function putkiVari(c, y1, y2, h, t){
+  const g = c.createLinearGradient(0, y1, 0, y2);
+  g.addColorStop(0.00, neon(h, t, 95, 56));
+  g.addColorStop(0.45, neon(h, t, 92, 44));
+  g.addColorStop(1.00, neon(h - 8, t, 88, 26));
+  return g;
+}
+
+/* --- Mitat, yksikkö: korkeus = 1000 -------------------------------------- */
+const H = 1000, W = 560;                 // 85,1 / 152,1 = 0,560
+const M = {
+  kupu:     280,                         // kuvun säde = puoli leveyttä
+  kaariLi:   50, kaariLev: 54,           // valokaaren keskilinja ja paksuus
+  kaariAlas:330,                         // mihin kaari vaihtuu pilariksi
+  pilX:    [ 17, 83 ],                   // vasemman pilarin x-väli
+  pilY:    [ 300, 790 ],                 // valoputkiosuus
+  jalusta: [ 790, 962 ],                 // uritettu jalusta
+  sisX:    [ 96, 464 ],                  // sisäosan x-rajat
+  mekAla:   292,                         // mekanismi-ikkunan alareuna
+  ohj:     [ 112, 312, 461, 445 ],       // korttiruudukko x1,y1,x2,y2
+  ohjPad:   13,                          // kehyksen marginaali korttien ympärillä
+  kilpiY:  [ 462, 510 ],                 // kromipalkki ja nimikilpi
+  kilpiW:   136,                         // nimikilven leveys
+  paneeli: [ 120, 63 ],                  // sivupaneelin x ja leveys (oikea peilataan)
+  pylvas:  [ 196, 8 ],                   // nimikilpeä reunustava punainen pylväs
+  uraX:    [ 216, 346 ],                 // uritettu lista
+  uraY:    [ 510, 538 ],
+  sale:    [ 118, 542, 442, 900 ],       // säleikön ovaali
+  ruusu:   [ 280, 780, 34 ],
+  pohja:    900
+};
+
+/* Mitat on luettu alkuperäiskuvasta ankkuroimalla runko kohtaan
+   x 166–896, y 18–1318 (suhde 0,5615 = sama kuin arkistomitta 85,1/152,1).
+   Ohjelmakenttä alkaa 30 %:n korkeudelta ja on 62 % rungon leveydestä.
+   Nimikilven alla oleva punainen uritettu lista EI ole painikerivi:
+   kaikki 24 nappia ovat neljässä pystyrivissä korttien vieressä. */
+
+let ristikkoPaalla = false;
+
+/* ====================  apupiirtäjät  ==================================== */
+
+function kromi(c, x1, y1, x2, y2){
+  const g = c.createLinearGradient(x1, y1, x2, y2);
+  g.addColorStop(0.00,'#555e63'); g.addColorStop(0.14,'#eff5f8');
+  g.addColorStop(0.30,'#929ca2'); g.addColorStop(0.46,'#f8fbfd');
+  g.addColorStop(0.62,'#737d84'); g.addColorStop(0.80,'#dde5e9');
+  g.addColorStop(1.00,'#474f54');
+  return g;
+}
+function kromiTumma(c, x1, y1, x2, y2){
+  const g = c.createLinearGradient(x1, y1, x2, y2);
+  g.addColorStop(0.00,'#2d3337'); g.addColorStop(0.18,'#c6d0d5');
+  g.addColorStop(0.38,'#5e686e'); g.addColorStop(0.55,'#e7eef2');
+  g.addColorStop(0.74,'#495257'); g.addColorStop(1.00,'#232829');
+  return g;
+}
+
+function pyoristetty(c, x, y, w, h, r, rAla){
+  const ry = Math.min(r, w/2, h/2);
+  const ra = Math.min(rAla === undefined ? r : rAla, w/2, h/2);
+  c.beginPath();
+  c.moveTo(x+ry, y); c.lineTo(x+w-ry, y);
+  c.quadraticCurveTo(x+w, y, x+w, y+ry);
+  c.lineTo(x+w, y+h-ra);
+  c.quadraticCurveTo(x+w, y+h, x+w-ra, y+h);
+  c.lineTo(x+ra, y+h);
+  c.quadraticCurveTo(x, y+h, x, y+h-ra);
+  c.lineTo(x, y+ry);
+  c.quadraticCurveTo(x, y, x+ry, y);
+  c.closePath();
+}
+
+function runkoPolku(c){
+  const r = 12;
+  c.beginPath();
+  c.moveTo(0, M.kupu);
+  c.arc(M.kupu, M.kupu, M.kupu, Math.PI, 0);
+  c.lineTo(W, H - r);
+  c.quadraticCurveTo(W, H, W - r, H);
+  c.lineTo(r, H);
+  c.quadraticCurveTo(0, H, 0, H - r);
+  c.closePath();
+}
+
+/* Kaaripolku: alhaalta vasemmalta kuvun yli alas oikealle. */
+function kaariPolku(c, li, alas){
+  const r = M.kupu - li;
+  c.beginPath();
+  c.moveTo(li, alas);
+  c.lineTo(li, M.kupu);
+  c.arc(M.kupu, M.kupu, r, Math.PI, 0);
+  c.lineTo(W - li, alas);
+}
+
+function kaariPiste(li, alas, t){
+  const r = M.kupu - li;
+  const pysty = alas - M.kupu, kaari = Math.PI * r, koko = pysty * 2 + kaari;
+  let s = t * koko;
+  if (s < pysty) return { x: li, y: alas - s, kulma: -Math.PI/2 };
+  s -= pysty;
+  if (s < kaari){
+    const a = Math.PI + s / r;
+    return { x: M.kupu + r*Math.cos(a), y: M.kupu + r*Math.sin(a), kulma: a + Math.PI/2 };
+  }
+  s -= kaari;
+  return { x: W - li, y: M.kupu + s, kulma: Math.PI/2 };
+}
+
+/* Kaaren sisäaukon puolikas leveys korkeudella y. */
+function aukko(y){
+  const r = M.kupu - M.kaariLi - M.kaariLev / 2 - 4;
+  if (y >= M.kupu) return r;
+  const dy = M.kupu - y;
+  return dy >= r ? 0 : Math.sqrt(r*r - dy*dy);
+}
+
+function mahdu(c, txt, x, y, maxW, koko, paino, vari){
+  let k = koko;
+  c.textBaseline = 'alphabetic';
+  do { c.font = paino + ' ' + k.toFixed(2) + 'px ' + KIRJ; k -= 0.2; }
+  while (c.measureText(txt).width > maxW && k > koko * 0.42);
+  c.fillStyle = vari;
+  c.fillText(txt, x, y);
+}
+
+const siemen = i => ((Math.sin(i * 12.9898) * 43758.5453) % 1 + 1) % 1;
+
+/* ====================  runko  =========================================== */
+
+function piirraRunko(c){
+  runkoPolku(c);
+  const g = c.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0,   '#7a4c2c');
+  g.addColorStop(0.35, C.puu);
+  g.addColorStop(0.82,'#3c2416');
+  g.addColorStop(1,    C.puuTumma);
+  c.fillStyle = g; c.fill();
+
+  c.save(); c.clip();
+  for (let i = 0; i < 110; i++){
+    const x = (i * 97 % W) + (i % 3) * 1.7;
+    c.globalAlpha = 0.028 + (i % 5) * 0.011;
+    c.fillStyle = i % 2 ? '#000' : '#c08b55';
+    c.fillRect(x, 0, 1.1 + (i % 4) * 0.5, H);
+  }
+  c.globalAlpha = 1;
+  const kiilto = c.createLinearGradient(0, 0, W * 0.9, H * 0.55);
+  kiilto.addColorStop(0,    'rgba(255,228,190,.15)');
+  kiilto.addColorStop(0.35, 'rgba(255,228,190,.04)');
+  kiilto.addColorStop(0.6,  'rgba(0,0,0,0)');
+  c.fillStyle = kiilto; c.fillRect(0, 0, W, H);
+  c.restore();
+}
+
+/* ====================  mekanismi-ikkuna  ================================ */
+/* Kuvun yläosa on lasia, jonka takana näkyy levypino ja vaihtovarsi. */
+
+/* --- Levymekanismi ------------------------------------------------------
+   Vasemmalla levypino, oikealla lautanen, ja niiden välissä kiskolla
+   kulkeva tarttuja. Oikea vaihtaja on monimutkaisempi, mutta tässä koossa
+   luettava liike kertoo asian paremmin kuin tarkka mekaniikka.            */
+const PINO     = { x: 120, y: 150, w: 126, n: 17, vali: 5.0 };
+const LAUTANEN = { x: 342, y: 212, rx: 47, ry: 16 };
+const KISKO    = { y: 126 };
+
+const pehmene = t => t < 0 ? 0 : t > 1 ? 1 : t * t * (3 - 2 * t);
+const osuus   = (t, a, b) => pehmene((t - a) / (b - a));
+
+function levy(c, x, y, rx, ry, kulma, nimike){
+  c.save(); c.translate(x, y);
+  c.beginPath(); c.ellipse(0, 0, rx, ry, 0, 0, 7);
+  const g = c.createLinearGradient(-rx, 0, rx, 0);
+  g.addColorStop(0, '#15191c'); g.addColorStop(0.42, '#39424a');
+  g.addColorStop(0.5, '#59656d'); g.addColorStop(0.58, '#39424a');
+  g.addColorStop(1, '#12161a');
+  c.fillStyle = g; c.fill();
+  /* uraheijastus pyörii kulman mukana */
+  for (let i = 0; i < 2; i++){
+    const a = kulma + i * Math.PI;
+    c.beginPath();
+    c.ellipse(0, 0, rx * 0.93, ry * 0.93, 0, a - 0.35, a + 0.35);
+    c.lineWidth = Math.max(0.6, ry * 0.22);
+    c.strokeStyle = 'rgba(226,236,242,.42)'; c.stroke();
+  }
+  if (nimike){
+    c.beginPath(); c.ellipse(0, 0, rx * 0.34, ry * 0.34, 0, 0, 7);
+    c.fillStyle = C.puna; c.fill();
+  }
+  c.restore();
+}
+
+function mekanismi(c){
+  const t = S.vaihto;
+  const kaynnissa = t >= 0;
+
+  /* kuinka monta levyä pinossa näkyy */
+  const otettu = kaynnissa && t > 0.35;
+  const n = PINO.n - (otettu ? 1 : 0);
+
+  /* levypino */
+  for (let i = 0; i < n; i++){
+    const y = PINO.y + i * PINO.vali;
+    c.beginPath();
+    c.ellipse(PINO.x + PINO.w/2, y, PINO.w/2, 5.0, 0, 0, 7);
+    c.fillStyle = i % 2 ? '#20262a' : '#39424a'; c.fill();
+    c.beginPath();
+    c.ellipse(PINO.x + PINO.w/2, y - 1.1, PINO.w/2, 5.0, 0, Math.PI*1.05, Math.PI*1.95);
+    c.lineWidth = 1.1; c.strokeStyle = 'rgba(226,236,242,.52)'; c.stroke();
+  }
+  /* pinon ohjainkiskot päissä */
+  for (const x of [PINO.x - 5, PINO.x + PINO.w + 1]){
+    pyoristetty(c, x, PINO.y - 12, 5, n * PINO.vali + 22, 2.5);
+    c.fillStyle = kromi(c, x, 0, x + 5, 0); c.fill();
+  }
+
+  /* lautanen */
+  c.beginPath();
+  c.ellipse(LAUTANEN.x, LAUTANEN.y + 5, LAUTANEN.rx + 4, LAUTANEN.ry + 3, 0, 0, 7);
+  c.fillStyle = 'rgba(0,0,0,.45)'; c.fill();
+  c.beginPath();
+  c.ellipse(LAUTANEN.x, LAUTANEN.y, LAUTANEN.rx, LAUTANEN.ry, 0, 0, 7);
+  c.fillStyle = kromi(c, LAUTANEN.x - LAUTANEN.rx, 0, LAUTANEN.x + LAUTANEN.rx, 0);
+  c.fill();
+  c.lineWidth = 1.6; c.strokeStyle = 'rgba(0,0,0,.5)'; c.stroke();
+
+  /* lautasella oleva levy, kun soitetaan eikä vaihdeta */
+  if (S.soi && !kaynnissa)
+    levy(c, LAUTANEN.x, LAUTANEN.y - 3, LAUTANEN.rx - 4, LAUTANEN.ry - 3, S.levyKulma, true);
+
+  /* yläkisko */
+  pyoristetty(c, PINO.x + 10, KISKO.y - 4, (LAUTANEN.x + 20) - (PINO.x + 10), 8, 4);
+  c.fillStyle = kromi(c, 0, KISKO.y - 4, 0, KISKO.y + 4); c.fill();
+  c.lineWidth = 1.2; c.strokeStyle = 'rgba(0,0,0,.45)'; c.stroke();
+
+  /* tarttujan sijainti */
+  const pinoX = PINO.x + PINO.w / 2, lautX = LAUTANEN.x;
+  let vx = lautX, lasku = 0, kantaa = false;
+  if (kaynnissa){
+    const meno   = osuus(t, 0.00, 0.20);   // lautaselta pinolle
+    const tartu  = osuus(t, 0.20, 0.34);   // alas pinoon
+    const nosto  = osuus(t, 0.34, 0.48);   // ylös levyn kanssa
+    const paluu  = osuus(t, 0.50, 0.78);   // pinolta lautaselle
+    const jata   = osuus(t, 0.78, 0.90);   // alas lautaselle
+    const ylos   = osuus(t, 0.90, 1.00);   // tyhjänä ylös
+    vx = lautX + (pinoX - lautX) * meno;
+    vx = vx + (lautX - vx) * paluu;
+    lasku = tartu - nosto + jata - ylos;
+    kantaa = t > 0.30 && t < 0.86;
+  }
+  const pinoYla = PINO.y - 6;
+  const kohde   = vx < (pinoX + lautX) / 2 ? pinoYla : LAUTANEN.y - 6;
+  const vy      = KISKO.y + 16 + lasku * (kohde - KISKO.y - 16);
+
+  /* pystyvarsi ja tarttuja */
+  c.fillStyle = kromi(c, vx - 5, 0, vx + 5, 0);
+  pyoristetty(c, vx - 4.5, KISKO.y - 6, 9, vy - KISKO.y + 8, 3); c.fill();
+  c.lineWidth = 1; c.strokeStyle = 'rgba(0,0,0,.4)'; c.stroke();
+  pyoristetty(c, vx - 13, vy - 5, 26, 10, 4);
+  c.fillStyle = kromi(c, vx - 13, vy - 5, vx + 13, vy + 5); c.fill();
+  c.lineWidth = 1.1; c.strokeStyle = 'rgba(0,0,0,.5)'; c.stroke();
+
+  /* kannettava levy */
+  if (kantaa) levy(c, vx, vy + 8, 44, 14, t * 9, true);
+}
+
+/* Takaseinän säteilykuvio: vuorottelevat kiilat alhaalta keskeltä. */
+function sateet(c){
+  const kx = M.kupu, ky = 268, n = 23;
+  for (let i = 0; i < n; i++){
+    const a0 = -Math.PI + i / n * Math.PI, a1 = -Math.PI + (i + 1) / n * Math.PI;
+    c.beginPath();
+    c.moveTo(kx, ky);
+    c.lineTo(kx + Math.cos(a0) * 340, ky + Math.sin(a0) * 340);
+    c.lineTo(kx + Math.cos(a1) * 340, ky + Math.sin(a1) * 340);
+    c.closePath();
+    c.fillStyle = i % 2 ? 'rgba(255,164,74,.15)' : 'rgba(120,28,16,.22)';
+    c.fill();
+  }
+  const h = c.createRadialGradient(kx, ky, 8, kx, ky, 260);
+  h.addColorStop(0, 'rgba(255,196,110,.34)');
+  h.addColorStop(1, 'rgba(0,0,0,0)');
+  c.fillStyle = h; c.fillRect(0, 0, W, M.mekAla);
+}
+
+/* Laskostettu verho kuvun yläreunassa, kuten alkuperäisessä. */
+function verho(c, ri){
+  const n = 6, a0 = Math.PI + 0.46, a1 = 2 * Math.PI - 0.46;
+  const syva = 58, ripustus = 6;
+
+  const reuna = u => {
+    const a = a0 + (a1 - a0) * u;
+    /* sin toiseen: poimut kaartuvat pehmeästi eivätkä kärjisty sahalaidaksi */
+    const s = Math.pow(Math.sin(u * n * Math.PI), 2);
+    const r = ri - ripustus - syva * s;
+    return { x: M.kupu + Math.cos(a) * r, y: M.kupu + Math.sin(a) * r, a: a, s: s };
+  };
+
+  c.beginPath();
+  c.arc(M.kupu, M.kupu, ri, a0, a1);
+  for (let i = 220; i >= 0; i--){
+    const p = reuna(i / 220);
+    c.lineTo(p.x, p.y);
+  }
+  c.closePath();
+  /* Gradientti säteen suunnassa, jotta se seuraa kaarta: ylhäällä kangas
+     on valaistu, poimun pohjalla varjossa. */
+  const g = c.createRadialGradient(M.kupu, M.kupu, ri - syva - ripustus - 6,
+                                   M.kupu, M.kupu, ri);
+  g.addColorStop(0,    '#2e0906');
+  g.addColorStop(0.40, '#6e1a12');
+  g.addColorStop(0.80, '#a8301a');
+  g.addColorStop(1,    '#c44524');
+  c.fillStyle = g; c.fill();
+
+  /* Laskokset kerääntyvät poimujen liitoskohtiin. Tasaisesti jaetut
+     säteittäiset viivat näyttäisivät vain lisää taustan säteilyä. */
+  c.save();
+  c.beginPath();
+  c.arc(M.kupu, M.kupu, ri, a0, a1);
+  for (let i = 220; i >= 0; i--){ const p = reuna(i / 220); c.lineTo(p.x, p.y); }
+  c.closePath(); c.clip();
+
+  /* kankaan oma varjostus: tummempi poimujen pohjalla */
+  for (let i = 0; i <= 160; i++){
+    const u = i / 160, p = reuna(u), a = a0 + (a1 - a0) * u;
+    const s = Math.pow(Math.sin(u * n * Math.PI), 2);
+    c.beginPath();
+    c.moveTo(M.kupu + Math.cos(a) * ri, M.kupu + Math.sin(a) * ri);
+    c.lineTo(p.x, p.y);
+    c.lineWidth = 3;
+    c.strokeStyle = 'rgba(20,3,2,' + (0.42 * (1 - s)).toFixed(3) + ')';
+    c.stroke();
+  }
+  /* liitoskohtien tiiviit laskokset */
+  for (let k = 0; k <= n; k++){
+    for (let j = -2; j <= 2; j++){
+      const u = (k + j * 0.055) / n;
+      if (u < 0 || u > 1) continue;
+      const a = a0 + (a1 - a0) * u, p = reuna(u);
+      c.beginPath();
+      c.moveTo(M.kupu + Math.cos(a) * ri, M.kupu + Math.sin(a) * ri);
+      c.lineTo(p.x, p.y);
+      c.lineWidth = 1.5;
+      c.strokeStyle = j % 2 ? 'rgba(255,170,110,.30)' : 'rgba(25,4,2,.65)';
+      c.stroke();
+    }
+  }
+  c.restore();
+
+  /* poimujen alareuna: ohut valo ja sen alle varjo, jotta verho irtoaa
+     taustan säteistä */
+  c.beginPath();
+  for (let i = 0; i <= 220; i++){ const p = reuna(i / 220); i ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y); }
+  c.lineWidth = 4.5; c.strokeStyle = 'rgba(40,8,4,.45)';
+  c.save(); c.translate(0, 3); c.stroke(); c.restore();
+  c.lineWidth = 1.8; c.strokeStyle = 'rgba(255,214,160,.55)'; c.stroke();
+}
+
+/* --- Nimikilpi levynvaihtajan alla --------------------------------------
+   Kelautuva teksti, joka kertoo mikä biisi on valittu. Teksti kulkee
+   oikealta vasemmalle, koska se on ainoa suunta jossa kelautuvaa tekstiä
+   pystyy lukemaan. Vaihda NAUHA_SUUNTA arvoon +1 jos haluat toisin päin. */
+const NAUHA = { x: 106, y: 246, w: 348, h: 38 };
+const NAUHA_SUUNTA = -1;
+const NAUHA_NOPEUS = 42;             // yksikköä sekunnissa
+
+let settiNimi = '';                  // latauspaketin nimi, näkyy nimikilvessä
+
+function nauhaTeksti(){
+  const b = BIISIT[S.valittu];
+  if (b && b.nimi)
+    return (S.valittu + 1) + '   ' + b.nimi + (b.esittaja ? '   ·   ' + b.esittaja : '');
+  if (settiNimi) return settiNimi;
+  if (mallilista) return 'KJWhispers   ·   JB-2400   ·   24 SELECTIONS';
+  return ladattu > 0 ? ladattu + ' / ' + PAIKKOJA + ' PAIKKAA TÄYNNÄ'
+                     : 'EI BIISEJÄ  ·  RAAHAA MP3 TAI WAV PAIKKOIHIN';
+}
+
+function nauha(c){
+  const { x, y, w, h } = NAUHA;
+
+  /* lasipaneeli kromikehyksessä */
+  pyoristetty(c, x - 4, y - 4, w + 8, h + 8, 7);
+  c.fillStyle = kromiTumma(c, x, y - 4, x, y + h + 4); c.fill();
+  pyoristetty(c, x, y, w, h, 4);
+  const g = c.createLinearGradient(0, y, 0, y + h);
+  g.addColorStop(0, '#120a05'); g.addColorStop(0.5, '#1d1108'); g.addColorStop(1, '#0d0704');
+  c.fillStyle = g; c.fill();
+  c.lineWidth = 1.2; c.strokeStyle = 'rgba(0,0,0,.6)'; c.stroke();
+
+  c.save();
+  pyoristetty(c, x, y, w, h, 4); c.clip();
+
+  const t = nauhaTeksti();
+  c.font = '600 ' + (h * 0.52).toFixed(1) + 'px ' + KIRJ;
+  c.textBaseline = 'middle';
+  const lev = c.measureText(t).width;
+  const ty = y + h / 2;
+
+  /* hehku: teksti on valaistua lasia */
+  c.shadowColor = 'rgba(255,150,40,.85)';
+  c.shadowBlur = h * 0.45;
+  c.fillStyle = '#ffc45c';
+
+  if (lev <= w - 24){
+    /* mahtuu kokonaan: ei ole mitään syytä kelata */
+    c.textAlign = 'center';
+    c.fillText(t, x + w / 2, ty);
+    c.textAlign = 'left';
+  } else {
+    const vali = h * 2.2, jakso = lev + vali;
+    let px = x - (((S.nauhaX % jakso) + jakso) % jakso);
+    while (px < x + w){ c.fillText(t, px, ty); px += jakso; }
+  }
+  c.shadowBlur = 0;
+  c.textBaseline = 'alphabetic';
+
+  /* reunojen häivytys, jotta teksti ei katkea terävästi */
+  const h1 = c.createLinearGradient(x, 0, x + h * 0.9, 0);
+  h1.addColorStop(0, 'rgba(16,9,4,1)'); h1.addColorStop(1, 'rgba(16,9,4,0)');
+  c.fillStyle = h1; c.fillRect(x, y, h * 0.9, h);
+  const h2 = c.createLinearGradient(x + w, 0, x + w - h * 0.9, 0);
+  h2.addColorStop(0, 'rgba(16,9,4,1)'); h2.addColorStop(1, 'rgba(16,9,4,0)');
+  c.fillStyle = h2; c.fillRect(x + w - h * 0.9, y, h * 0.9, h);
+  c.restore();
+}
+
+function piirraMekanismi(c){
+  const li = M.kaariLi + M.kaariLev / 2 - 2, r = M.kupu - li;
+  c.save();
+  c.beginPath();
+  c.moveTo(li, M.mekAla);
+  c.lineTo(li, M.kupu);
+  c.arc(M.kupu, M.kupu, r, Math.PI, 0);
+  c.lineTo(W - li, M.mekAla);
+  c.closePath();
+
+  const g = c.createLinearGradient(0, 40, 0, M.mekAla);
+  g.addColorStop(0,   '#3a1410');
+  g.addColorStop(0.45,'#521b14');
+  g.addColorStop(1,   '#2a1109');
+  c.fillStyle = g; c.fill();
+  c.clip();
+
+  /* takaseinän punainen hehku, kuten alkuperäisessä */
+  const h = c.createRadialGradient(M.kupu, 130, 10, M.kupu, 130, 230);
+  h.addColorStop(0,   'rgba(255,120,70,.40)');
+  h.addColorStop(0.6, 'rgba(180,45,30,.18)');
+  h.addColorStop(1,   'rgba(0,0,0,0)');
+  c.fillStyle = h; c.fillRect(0, 0, W, M.mekAla);
+
+  sateet(c);
+  verho(c, r);
+
+  mekanismi(c);
+  nauha(c);
+
+  /* lasin vino heijastus */
+  c.globalAlpha = 0.12; c.fillStyle = '#fff';
+  c.beginPath();
+  c.moveTo(li + 14, 250); c.lineTo(205, 66); c.lineTo(252, 66); c.lineTo(li + 14, 276);
+  c.closePath(); c.fill();
+  c.globalAlpha = 1;
+  c.restore();
+
+  /* ikkunan kromireunus */
+  c.beginPath();
+  c.moveTo(li, M.mekAla);
+  c.lineTo(li, M.kupu);
+  c.arc(M.kupu, M.kupu, r, Math.PI, 0);
+  c.lineTo(W - li, M.mekAla);
+  c.lineWidth = 5; c.strokeStyle = kromiTumma(c, 0, 0, 0, 220); c.stroke();
+}
+
+/* ====================  valokaari ja pilarit  ============================ */
+
+function piirraKaari(c){
+  /* uloin kromilista */
+  kaariPolku(c, 16, M.kaariAlas - 4);
+  c.lineWidth = 22; c.strokeStyle = kromi(c, 0, 0, W, 130); c.stroke();
+
+  /* iso valoputki: hunajasta meripihkaan */
+  /* Kaari seuraa kokonaistasoa: sävy ajelehtii hitaasti, kirkkaus nousee
+     iskun mukana. */
+  const tK = S.valotPaalla ? Math.min(1, S.taso.keski * 0.8 + S.taso.isku * 0.5) : 0;
+  const hK = SAVY.kaari + savyAjo(0.5);
+  const g = c.createLinearGradient(0, 30, 0, M.kaariAlas + 40);
+  g.addColorStop(0.00, neon(hK + 10, tK, 96, 62));
+  g.addColorStop(0.30, neon(hK,      tK, 94, 52));
+  g.addColorStop(0.62, neon(hK - 12, tK, 92, 42));
+  g.addColorStop(1.00, neon(hK - 22, tK, 90, 28));
+  kaariPolku(c, M.kaariLi, M.kaariAlas);
+  c.lineWidth = M.kaariLev; c.lineCap = 'round';
+  c.strokeStyle = g; c.stroke();
+  c.lineCap = 'butt';
+
+  /* putken reunavarjot ja kirkas selkä */
+  kaariPolku(c, M.kaariLi - M.kaariLev/2 + 3, M.kaariAlas - 2);
+  c.lineWidth = 5; c.strokeStyle = 'rgba(120,40,10,.34)'; c.stroke();
+  kaariPolku(c, M.kaariLi + M.kaariLev/2 - 3, M.kaariAlas - 2);
+  c.lineWidth = 5; c.strokeStyle = 'rgba(120,40,10,.40)'; c.stroke();
+  kaariPolku(c, M.kaariLi - M.kaariLev/4, M.kaariAlas - 8);
+  c.lineWidth = 9; c.strokeStyle = 'rgba(255,245,215,.40)'; c.stroke();
+
+  /* kuplat */
+  for (let i = 0; i < 34; i++){
+    const t = (i + 0.5) / 34;
+    const p = kaariPiste(M.kaariLi, M.kaariAlas, t);
+    const r = 2.2 + siemen(i + 7) * 3.2;
+    const poikki = (siemen(i + 3) - 0.5) * (M.kaariLev - 16);
+    const x = p.x + Math.cos(p.kulma) * poikki, y = p.y + Math.sin(p.kulma) * poikki;
+    c.beginPath(); c.arc(x, y, r, 0, 7);
+    c.fillStyle = 'rgba(255,252,236,' + (0.30 + siemen(i + 11) * 0.40).toFixed(2) + ')';
+    c.fill();
+    c.beginPath(); c.arc(x - r*0.3, y - r*0.3, r*0.38, 0, 7);
+    c.fillStyle = 'rgba(255,255,255,.8)'; c.fill();
+  }
+
+  kruunu(c);
+}
+
+/* Kaaren laen kromikoriste. */
+function kruunu(c){
+  const cx = M.kupu;
+  c.save();
+  c.translate(cx, 0);
+  c.beginPath();
+  c.moveTo(-54, 56); c.quadraticCurveTo(-46, 10, 0, 8);
+  c.quadraticCurveTo(46, 10, 54, 56);
+  c.quadraticCurveTo(28, 40, 0, 40);
+  c.quadraticCurveTo(-28, 40, -54, 56);
+  c.closePath();
+  c.fillStyle = kromi(c, -54, 8, 54, 56); c.fill();
+  c.lineWidth = 1.6; c.strokeStyle = 'rgba(0,0,0,.5)'; c.stroke();
+  /* punainen lasi keskellä */
+  c.beginPath(); c.ellipse(0, 30, 15, 11, 0, 0, 7);
+  const g = c.createLinearGradient(0, 19, 0, 41);
+  g.addColorStop(0, '#e05murky'.replace('murky','0'), 0);
+  c.restore();
+
+  /* keskilasi erikseen, selkeämmin */
+  c.save(); c.translate(cx, 0);
+  c.beginPath(); c.ellipse(0, 29, 15, 11, 0, 0, 7);
+  const r = c.createRadialGradient(-4, 25, 1, 0, 29, 16);
+  r.addColorStop(0, '#ff8a6a'); r.addColorStop(0.6, C.puna); r.addColorStop(1, '#5e1512');
+  c.fillStyle = r; c.fill();
+  c.lineWidth = 2; c.strokeStyle = kromiTumma(c, -15, 18, 15, 40); c.stroke();
+  c.restore();
+}
+
+function piirraPilarit(c){
+  for (const peili of [false, true]){
+    c.save();
+    if (peili){ c.translate(W, 0); c.scale(-1, 1); }
+    const [x1, x2] = M.pilX, [y1, y2] = M.pilY, lev = x2 - x1;
+
+    /* Kolme neonputkea rinnakkain. Kukin seuraa omaa taajuuskaistaansa:
+       basso, keskialue ja diskantti — näin putket elävät eri tahtiin
+       eivätkä välky yhtenä möykkynä. */
+    const kaistat = S.valotPaalla
+      ? [S.taso.basso, S.taso.keski, S.taso.diskantti]
+      : [0.18, 0.18, 0.18];
+    const pw = lev / 3.25;
+    for (let i = 0; i < 3; i++){
+      const x = x1 + 2 + i * (pw + 1.5);
+      const h = SAVY.pilari[i] + savyAjo(i === 1 ? 1.0 : 0.6);
+      const g = putkiVari(c, y1, y2, h, Math.min(1, kaistat[i] * 1.15));
+      pyoristetty(c, x, y1 + 20, pw, y2 - y1 - 20, pw / 2);
+      c.fillStyle = g; c.fill();
+      /* kirkas selkä */
+      pyoristetty(c, x + pw * 0.22, y1 + 26, pw * 0.26, y2 - y1 - 34, pw * 0.13);
+      c.fillStyle = 'rgba(255,250,235,.42)'; c.fill();
+    }
+    /* kuplia putkissa */
+    for (let i = 0; i < 26; i++){
+      const s = (i * 7) % 3;
+      const x = x1 + 2 + s * (pw + 1.5) + pw * (0.3 + siemen(i) * 0.4);
+      const y = y1 + 34 + siemen(i + 5) * (y2 - y1 - 50);
+      const r = 1.6 + siemen(i + 9) * 2.0;
+      c.beginPath(); c.arc(x, y, r, 0, 7);
+      c.fillStyle = 'rgba(255,252,238,.62)'; c.fill();
+    }
+
+    /* yläkaulus: pinottuja kromirenkaita */
+    for (let i = 0; i < 4; i++){
+      const y = M.pilY[0] - 6 + i * 13;
+      pyoristetty(c, x1 - 7, y, lev + 14, 10, 4);
+      c.fillStyle = kromi(c, 0, y, 0, y + 10); c.fill();
+      c.lineWidth = 1.1; c.strokeStyle = 'rgba(0,0,0,.45)'; c.stroke();
+    }
+
+    /* uritettu tumma jalusta */
+    const [j1, j2] = M.jalusta;
+    pyoristetty(c, x1 - 8, j1, lev + 16, j2 - j1, 5);
+    const jg = c.createLinearGradient(x1 - 8, 0, x1 + lev + 8, 0);
+    jg.addColorStop(0, '#0e0c0b'); jg.addColorStop(0.35, '#2b2724');
+    jg.addColorStop(0.6, '#161312'); jg.addColorStop(1, '#070606');
+    c.fillStyle = jg; c.fill();
+    c.save();
+    pyoristetty(c, x1 - 8, j1, lev + 16, j2 - j1, 5); c.clip();
+    for (let i = 0; i < 7; i++){
+      const x = x1 - 6 + i * ((lev + 12) / 7);
+      c.fillStyle = 'rgba(255,255,255,.09)'; c.fillRect(x, j1, 2.4, j2 - j1);
+      c.fillStyle = 'rgba(0,0,0,.45)'; c.fillRect(x + 2.4, j1, 2.4, j2 - j1);
+    }
+    c.restore();
+    /* jalustan kromirenkaat */
+    for (const y of [j1, j1 + 11, j2 - 13]){
+      pyoristetty(c, x1 - 10, y, lev + 20, 9, 3);
+      c.fillStyle = kromi(c, 0, y, 0, y + 9); c.fill();
+    }
+
+    /* kromijalka */
+    pyoristetty(c, x1 - 10, j2, lev + 20, 36, 7);
+    c.fillStyle = kromi(c, x1 - 10, 0, x1 + lev + 10, 0); c.fill();
+    c.lineWidth = 1.4; c.strokeStyle = 'rgba(0,0,0,.5)'; c.stroke();
+    c.restore();
+  }
+}
+
+/* ====================  ohjelmakenttä  =================================== */
+/* Neljä ryhmää, kussakin kuusi nappia ja kuusi korttia niiden vieressä. */
+
+const RYHMIA = 4, RIVEJA = 6;
+
+function ohjelmaMitat(){
+  const [x1, y1, x2, y2] = M.ohj;
+  const rako = 5;
+  const rLev = (x2 - x1 - rako * (RYHMIA - 1)) / RYHMIA;
+  const nLev = rLev * 0.30;                 // nappisarake
+  const kLev = rLev - nLev - 3;             // korttisarake
+  const rKor = (y2 - y1) / RIVEJA;
+  return { x1, y1, x2, y2, rako, rLev, nLev, kLev, rKor };
+}
+
+function piirraOhjelma(c){
+  const m = ohjelmaMitat();
+
+  /* koko kentän tausta: tumma puinen kehys kromilistoin */
+  const p = M.ohjPad;
+  if (poistoTila){
+    /* poistotilassa kenttä saa varoitusreunan, muuten napautus poistaisi
+       biisin ilman mitään vihjettä */
+    c.save();
+    c.shadowColor = 'rgba(255,90,70,.9)'; c.shadowBlur = 14;
+    pyoristetty(c, m.x1 - p - 3, m.y1 - p - 3, (m.x2 - m.x1) + 2*p + 6,
+                (m.y2 - m.y1) + 2*p + 6, 8);
+    c.lineWidth = 2.5; c.strokeStyle = '#ff5a46'; c.stroke();
+    c.restore();
+  }
+  pyoristetty(c, m.x1 - p, m.y1 - p, (m.x2 - m.x1) + 2*p, (m.y2 - m.y1) + 2*p, 6);
+  const tg = c.createLinearGradient(0, m.y1 - 10, 0, m.y2 + 10);
+  tg.addColorStop(0, '#2a1a0f'); tg.addColorStop(1, '#17100a');
+  c.fillStyle = tg; c.fill();
+  c.lineWidth = 2.4; c.strokeStyle = kromiTumma(c, m.x1, m.y1, m.x2, m.y1); c.stroke();
+
+  for (let r = 0; r < RYHMIA; r++){
+    const gx = m.x1 + r * (m.rLev + m.rako);
+    ryhma(c, gx, m, r);
+  }
+}
+
+function ryhma(c, gx, m, ryhmaNro){
+  const kork = m.y2 - m.y1;
+
+  /* nappisarakkeen kromipohja */
+  pyoristetty(c, gx, m.y1 - 4, m.nLev, kork + 8, m.nLev * 0.34);
+  c.fillStyle = kromi(c, gx, 0, gx + m.nLev, 0); c.fill();
+  c.lineWidth = 1.2; c.strokeStyle = 'rgba(0,0,0,.5)'; c.stroke();
+
+  /* korttisarakkeen pohja */
+  const kx = gx + m.nLev + 3;
+  pyoristetty(c, kx - 2, m.y1 - 4, m.kLev + 4, kork + 8, 3);
+  c.fillStyle = '#0f0a06'; c.fill();
+  c.lineWidth = 1.6; c.strokeStyle = kromiTumma(c, kx, m.y1, kx + m.kLev, m.y1); c.stroke();
+
+  for (let i = 0; i < RIVEJA; i++){
+    const n = ryhmaNro * RIVEJA + i;
+    const y = m.y1 + i * m.rKor;
+    /* Nappi jää alas levynvaihdon ajaksi, kuten oikeassa laitteessa. */
+    const alas = S.painettu === n || (S.valittu === n && S.vaihto >= 0);
+    nappi(c, gx + m.nLev / 2, y + m.rKor / 2, Math.min(m.nLev * 0.40, m.rKor * 0.39),
+          n + 1, ryhmaNro < 2, alas);
+    kortti(c, kx, y + 1, m.kLev, m.rKor - 2, BIISIT[n], S.valittu === n);
+  }
+}
+
+/* Numeroitu valintanappi. Kaksi ensimmäistä ryhmää punaisia,
+   kaksi jälkimmäistä hunajankeltaisia — kuten alkuperäisessä. */
+function nappi(c, cx, cy, r, nro, punainen, alas){
+  /* kaulus pysyy paikallaan, nuppi painuu sen sisään */
+  c.beginPath(); c.arc(cx, cy, r * 1.3, 0, 7);
+  c.fillStyle = kromiTumma(c, cx - r, cy - r, cx + r, cy + r); c.fill();
+  c.lineWidth = 0.7; c.strokeStyle = 'rgba(0,0,0,.55)'; c.stroke();
+  if (alas){
+    c.beginPath(); c.arc(cx, cy, r * 1.12, 0, 7);
+    c.fillStyle = 'rgba(0,0,0,.55)'; c.fill();
+  }
+
+  const d = alas ? r * 0.22 : 0;              // painuman syvyys
+  const ny = cy + d, nr = alas ? r * 0.93 : r;
+  const g = c.createRadialGradient(cx - nr*0.35, ny - nr*0.45, nr*0.1, cx, ny, nr*1.1);
+  const tumm = alas ? 0.72 : 1;
+  if (punainen){
+    g.addColorStop(0, alas ? '#b8544a' : '#e8705f');
+    g.addColorStop(0.45, alas ? '#7d2019' : C.puna);
+    g.addColorStop(1, '#3a0b09');
+  } else {
+    g.addColorStop(0, alas ? '#d6bd8a' : '#ffe3ab');
+    g.addColorStop(0.45, alas ? '#c08f35' : C.hunaja);
+    g.addColorStop(1, '#7c4d14');
+  }
+  c.beginPath(); c.arc(cx, ny, nr, 0, 7);
+  c.fillStyle = g; c.fill();
+
+  c.textAlign = 'center'; c.textBaseline = 'middle';
+  c.font = '600 ' + (nr * 1.05).toFixed(2) + 'px ' + KIRJ;
+  c.fillStyle = punainen ? 'rgba(255,240,220,' + (0.95*tumm) + ')'
+                         : 'rgba(70,40,12,' + (0.92*tumm) + ')';
+  c.fillText(String(nro), cx, ny + nr * 0.05);
+  c.textAlign = 'left'; c.textBaseline = 'alphabetic';
+
+  c.beginPath(); c.arc(cx - nr*0.3, ny - nr*0.4, nr*0.26, 0, 7);
+  c.fillStyle = 'rgba(255,255,255,' + (alas ? 0.22 : 0.55) + ')'; c.fill();
+}
+
+/* Kappalekortti: norsunluinen paperiliuska ohuessa kehyksessä. */
+function kortti(c, x, y, w, h, b, valittu){
+  const g = c.createLinearGradient(0, y, 0, y + h);
+  if (valittu){
+    /* valittu kortti saa hillityn valon takaa — ei korostusväriä */
+    g.addColorStop(0, '#fffdf4'); g.addColorStop(0.5, '#fff6dd'); g.addColorStop(1, '#f3e2bc');
+  } else {
+    g.addColorStop(0, '#fdf6e5'); g.addColorStop(0.55, C.norsu); g.addColorStop(1, '#e3d0ad');
+  }
+  c.fillStyle = g;
+  c.fillRect(x, y, w, h);
+  if (valittu){
+    c.save();
+    c.shadowColor = 'rgba(255,208,130,.95)'; c.shadowBlur = h * 0.7;
+    c.lineWidth = 1.1; c.strokeStyle = 'rgba(255,214,150,.85)';
+    c.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
+    c.restore();
+  }
+  c.lineWidth = 0.7; c.strokeStyle = 'rgba(84,51,35,.45)';
+  c.strokeRect(x + 0.35, y + 0.35, w - 0.7, h - 0.7);
+
+  if (!b) return;
+  /* Teksti rajataan kortin sisälle. Nimet ovat eripituisia, ja ilman
+     rajausta pisin valuu naapurisarakkeen päälle. */
+  c.save();
+  c.beginPath(); c.rect(x + 2, y, w - 4, h); c.clip();
+  mahdu(c, b.nimi, x + 3, y + h * 0.52, w - 6, h * 0.42, '600', C.muste);
+  if (b.esittaja)
+    mahdu(c, b.esittaja.toUpperCase(), x + 3, y + h * 0.90, w - 6, h * 0.26, '400',
+          'rgba(84,51,35,.62)');
+  c.restore();
+}
+
+/* ====================  nimikilpi ja uritettu lista  ===================== */
+
+function piirraKilpi(c){
+  const [y1, y2] = M.kilpiY, h = y2 - y1;
+  const [sx1, sx2] = M.sisX;
+
+  /* kromipalkki koko sisäleveydelle */
+  pyoristetty(c, sx1 - 2, y1, (sx2 - sx1) + 4, h, 5);
+  c.fillStyle = kromi(c, 0, y1, 0, y2); c.fill();
+  c.lineWidth = 1.6; c.strokeStyle = 'rgba(0,0,0,.5)'; c.stroke();
+
+  /* sivupaneelit: kolikko- ja säätöpaneeli */
+  const [pX, pW] = M.paneeli;
+  for (const px of [pX, W - pX - pW]){
+    pyoristetty(c, px, y1 + 8, pW, h - 16, 3);
+    c.fillStyle = '#20262a'; c.fill();
+    c.lineWidth = 1.4; c.strokeStyle = kromiTumma(c, px, y1, px + pW, y1); c.stroke();
+    for (let i = 0; i < 3; i++){
+      const x = px + 11 + i * 15;
+      pyoristetty(c, x, y1 + 15, 7, h - 30, 2);
+      c.fillStyle = kromi(c, x, 0, x + 7, 0); c.fill();
+    }
+    c.beginPath(); c.arc(px + pW - 8, y1 + h/2, 4, 0, 7);
+    c.fillStyle = px < W/2 ? '#d8402f' : '#4ad07a'; c.fill();
+  }
+
+  /* nimikilpeä reunustavat punaiset pylväät */
+  const [qx, qw] = M.pylvas;
+  for (const x of [qx, W - qx - qw]){
+    const g = c.createLinearGradient(x, 0, x + qw, 0);
+    g.addColorStop(0, '#6e1a17'); g.addColorStop(0.4, '#e2574a'); g.addColorStop(1, '#8e2420');
+    pyoristetty(c, x, y1 + 4, qw, M.uraY[1] - y1 - 8, qw / 2);
+    c.fillStyle = g; c.fill();
+  }
+
+  /* valaistu nimikilpi keskellä */
+  const w = M.kilpiW, x = (W - w) / 2, ky = y1 + 9, kh = h - 18;
+  pyoristetty(c, x - 4, ky - 3, w + 8, kh + 6, 4);
+  c.fillStyle = kromiTumma(c, x, ky, x + w, ky); c.fill();
+  pyoristetty(c, x, ky, w, kh, 2);
+  const g = c.createLinearGradient(0, ky, 0, ky + kh);
+  g.addColorStop(0, '#c4362e'); g.addColorStop(0.45, C.puna); g.addColorStop(1, C.punaTumma);
+  c.fillStyle = g; c.fill();
+  /* hehku: kilpi on valaistu takaa */
+  c.save();
+  pyoristetty(c, x, ky, w, kh, 2); c.clip();
+  const hg = c.createRadialGradient(W/2, ky + kh*0.4, 4, W/2, ky + kh*0.4, w*0.6);
+  hg.addColorStop(0, 'rgba(255,170,120,.45)'); hg.addColorStop(1, 'rgba(255,120,60,0)');
+  c.fillStyle = hg; c.fillRect(x, ky, w, kh);
+  c.restore();
+
+  c.textAlign = 'center';
+  let ks = kh * 0.62;
+  do { c.font = '600 ' + ks.toFixed(2) + 'px ' + KIRJ; ks -= 0.4; }
+  while (c.measureText('KJWhispers').width > w - 18 && ks > 6);
+  c.fillStyle = 'rgba(60,8,6,.55)';
+  c.fillText('KJWhispers', W/2 + 1, ky + kh * 0.73 + 1.2);
+  const sg = c.createLinearGradient(0, ky + 3, 0, ky + kh - 3);
+  sg.addColorStop(0, '#ffffff'); sg.addColorStop(0.45, C.hopea);
+  sg.addColorStop(0.55, '#8c949a'); sg.addColorStop(1, '#eef3f6');
+  c.fillStyle = sg;
+  c.fillText('KJWhispers', W/2, ky + kh * 0.73);
+  c.textAlign = 'left';
+}
+
+function piirraUra(c){
+  const [y1, y2] = M.uraY, [x1, x2] = M.uraX;
+  c.fillStyle = kromiTumma(c, 0, y1, 0, y2);
+  c.fillRect(x1, y1, x2 - x1, y2 - y1);
+  const n = 9, vali = (x2 - x1) / n;
+  for (let i = 0; i < n; i++){
+    const x = x1 + vali * i + vali * 0.18;
+    const g = c.createLinearGradient(0, y1, 0, y2);
+    g.addColorStop(0, '#e2574a'); g.addColorStop(0.5, C.puna); g.addColorStop(1, '#5e1512');
+    c.fillStyle = g;
+    c.fillRect(x, y1 + 2, vali * 0.6, y2 - y1 - 4);
+  }
+  c.fillStyle = kromi(c, 0, y1 - 3, 0, y1 + 3); c.fillRect(x1 - 4, y1 - 3, (x2 - x1) + 8, 5);
+  c.fillStyle = kromi(c, 0, y2 - 3, 0, y2 + 3); c.fillRect(x1 - 4, y2 - 2, (x2 - x1) + 8, 5);
+}
+
+/* ====================  säleikkö  ======================================== */
+
+function piirraSaleikko(c){
+  const [x1, y1, x2, y2] = M.sale, w = x2 - x1, h = y2 - y1;
+
+  /* ovaalin ulkoreuna: ylhäältä loiva, alhaalta täysin pyöreä */
+  const ovaali = () => pyoristetty(c, x1, y1, w, h, 34, w / 2);
+
+  /* taustan lämmin valo ovaalin sisällä */
+  ovaali();
+  c.save(); c.clip();
+  const pohja = c.createLinearGradient(0, y1, 0, y2);
+  pohja.addColorStop(0, '#2a1a0c'); pohja.addColorStop(0.7, '#3a2208'); pohja.addColorStop(1, '#8a4a12');
+  c.fillStyle = pohja; c.fillRect(x1, y1, w, h);
+
+  /* sivuilla ja alla kiertävä valoputki */
+  const putki = w * 0.135;
+  for (const peili of [false, true]){
+    c.save();
+    if (peili){ c.translate(W, 0); c.scale(-1, 1); }
+    const px = x1 + putki * 0.45;
+    const tS = S.valotPaalla ? Math.min(1, S.taso.basso * 0.9 + S.taso.isku * 0.4) : 0.2;
+    const g = putkiVari(c, y1 + h * 0.10, y2, SAVY.sale + savyAjo(0.8), tS);
+    pyoristetty(c, px, y1 + h * 0.10, putki, h * 0.82, putki / 2);
+    c.fillStyle = g; c.fill();
+    pyoristetty(c, px + putki * 0.24, y1 + h * 0.13, putki * 0.26, h * 0.74, putki * 0.13);
+    c.fillStyle = 'rgba(255,252,240,.45)'; c.fill();
+    c.restore();
+  }
+  /* alareunan hehku */
+  const alaG = c.createRadialGradient(W/2, y2 - h*0.06, 6, W/2, y2 - h*0.06, w*0.52);
+  alaG.addColorStop(0, 'rgba(255,200,120,.55)'); alaG.addColorStop(1, 'rgba(255,150,60,0)');
+  c.fillStyle = alaG; c.fillRect(x1, y1, w, h);
+
+  /* keskipaneeli: kultainen kangas ja kromiritilä */
+  const kx = x1 + w * 0.255, kw = w * 0.49;
+  const ky = y1 + h * 0.055, kh = h * 0.80;
+  kangas(c, kx, ky, kw, kh);
+  ritila(c, kx, ky, kw, kh);
+  c.restore();
+
+  /* ovaalin kromikehys */
+  ovaali();
+  c.lineWidth = 7; c.strokeStyle = kromi(c, x1, y1, x2, y2); c.stroke();
+  ovaali();
+  c.lineWidth = 1.6; c.strokeStyle = 'rgba(0,0,0,.5)'; c.stroke();
+
+  koriste(c);
+  ruusu(c, M.ruusu[0], M.ruusu[1], M.ruusu[2]);
+}
+
+function kangas(c, x, y, w, h){
+  c.save();
+  pyoristetty(c, x, y, w, h, 10, w / 2.4); c.clip();
+  const g = c.createLinearGradient(0, y, 0, y + h);
+  g.addColorStop(0, '#7a5a1c'); g.addColorStop(0.5, '#a07a28'); g.addColorStop(1, '#6a4612');
+  c.fillStyle = g; c.fillRect(x, y, w, h);
+  /* kudos */
+  for (let i = 0; i * 4 < h; i++){
+    c.fillStyle = i % 2 ? 'rgba(255,220,150,.10)' : 'rgba(0,0,0,.12)';
+    c.fillRect(x, y + i * 4, w, 2);
+  }
+  for (let i = 0; i * 4 < w; i++){
+    c.fillStyle = 'rgba(0,0,0,.07)';
+    c.fillRect(x + i * 4, y, 2, h);
+  }
+  c.restore();
+}
+
+/* Vinoneliöritilä kankaan päälle. */
+function ritila(c, x, y, w, h){
+  c.save();
+  pyoristetty(c, x, y, w, h, 10, w / 2.4); c.clip();
+  const vali = w / 3.4;
+  c.lineWidth = w * 0.035;
+  for (let s = -3; s < 8; s++){
+    for (const suunta of [1, -1]){
+      c.beginPath();
+      c.moveTo(x + s * vali, y - 20);
+      c.lineTo(x + s * vali + suunta * (h + 40), y + h + 20);
+      c.strokeStyle = kromi(c, x, y, x + w, y + h);
+      c.stroke();
+      c.beginPath();
+      c.moveTo(x + s * vali + 1.5, y - 20 + 2);
+      c.lineTo(x + s * vali + suunta * (h + 40) + 1.5, y + h + 22);
+      c.lineWidth = w * 0.012; c.strokeStyle = 'rgba(0,0,0,.35)'; c.stroke();
+      c.lineWidth = w * 0.035;
+    }
+  }
+  c.restore();
+  pyoristetty(c, x, y, w, h, 10, w / 2.4);
+  c.lineWidth = 3.4; c.strokeStyle = kromiTumma(c, x, y, x + w, y); c.stroke();
+}
+
+/* Kromikiehkurat ruusun ympärillä. */
+function koriste(c){
+  const [cx, cy, R] = M.ruusu;
+  c.save();
+  c.lineWidth = 5; c.strokeStyle = kromi(c, cx - 110, cy - 30, cx + 110, cy + 30);
+  for (const s of [-1, 1]){
+    c.beginPath();
+    c.moveTo(cx + s * (R + 4), cy);
+    c.bezierCurveTo(cx + s * (R + 48), cy - 34, cx + s * (R + 92), cy - 6,
+                    cx + s * (R + 84), cy + 28);
+    c.stroke();
+    c.beginPath();
+    c.moveTo(cx + s * (R + 10), cy + 16);
+    c.bezierCurveTo(cx + s * (R + 40), cy + 40, cx + s * (R + 66), cy + 44,
+                    cx + s * (R + 72), cy + 22);
+    c.stroke();
+  }
+  c.restore();
+}
+
+/* Keskiornamentti: kromirengas ja sen sisällä KJWhispersin ruusu. */
+function ruusu(c, cx, cy, R){
+  c.beginPath(); c.arc(cx, cy, R * 1.30, 0, 7);
+  c.fillStyle = kromi(c, cx - R, cy - R, cx + R, cy + R); c.fill();
+  c.beginPath(); c.arc(cx, cy, R * 1.30, 0, 7);
+  c.lineWidth = 2; c.strokeStyle = 'rgba(0,0,0,.55)'; c.stroke();
+
+  c.beginPath(); c.arc(cx, cy, R, 0, 7);
+  const p = c.createRadialGradient(cx, cy - R*0.3, R*0.1, cx, cy, R);
+  p.addColorStop(0, '#c4362e'); p.addColorStop(0.55, C.puna); p.addColorStop(1, '#4e100d');
+  c.fillStyle = p; c.fill();
+  c.beginPath(); c.arc(cx, cy, R, 0, 7);
+  c.lineWidth = 1.6; c.strokeStyle = 'rgba(0,0,0,.45)'; c.stroke();
+
+  /* Ruusu: viisi isoa ulkoterälehteä ja kolme sisempää. Vähän lehtiä ja
+     selvät reunaviivat, muuten se sotkeutuu tahraksi pienessä koossa. */
+  const S = R * 0.92;
+  const lehti = (a, rr, syv) => {
+    c.save();
+    c.translate(cx + Math.cos(a) * rr * syv, cy + Math.sin(a) * rr * syv);
+    c.rotate(a + Math.PI / 2);
+    c.beginPath();
+    c.moveTo(0, rr * 0.40);
+    c.bezierCurveTo(-rr * 0.52, rr * 0.24, -rr * 0.44, -rr * 0.40, 0, -rr * 0.44);
+    c.bezierCurveTo(rr * 0.44, -rr * 0.40, rr * 0.52, rr * 0.24, 0, rr * 0.40);
+    c.closePath();
+    const g = c.createLinearGradient(0, -rr * 0.44, 0, rr * 0.40);
+    g.addColorStop(0, '#ffffff'); g.addColorStop(0.42, C.norsu);
+    g.addColorStop(1, '#b9985f');
+    c.fillStyle = g; c.fill();
+    c.lineWidth = Math.max(0.5, rr * 0.055);
+    c.strokeStyle = 'rgba(62,12,10,.75)'; c.stroke();
+    c.restore();
+  };
+  for (let i = 0; i < 5; i++) lehti(i / 5 * Math.PI * 2 - Math.PI / 2, S * 0.92, 0.40);
+  for (let i = 0; i < 3; i++) lehti(i / 3 * Math.PI * 2 + 0.6, S * 0.56, 0.26);
+  c.beginPath(); c.arc(cx, cy, S * 0.13, 0, 7);
+  c.fillStyle = '#8d2a22'; c.fill();
+  c.lineWidth = Math.max(0.5, S * 0.035);
+  c.strokeStyle = 'rgba(62,12,10,.8)'; c.stroke();
+}
+
+/* ====================  jalka  =========================================== */
+
+function piirraJalka(c){
+  const y = M.pohja;
+  c.fillStyle = kromi(c, 0, y - 5, 0, y + 9);
+  c.fillRect(M.sisX[0] - 6, y + 2, (M.sisX[1] - M.sisX[0]) + 12, 9);
+
+  const w = 196, h = 24, x = (W - w) / 2, ky = y + 36;
+  pyoristetty(c, x, ky, w, h, 3);
+  c.fillStyle = '#1b1008'; c.fill();
+  c.lineWidth = 1.6; c.strokeStyle = kromiTumma(c, x, ky, x + w, ky); c.stroke();
+  c.textAlign = 'center';
+  c.font = '600 ' + (h * 0.44).toFixed(1) + 'px ' + KIRJ;
+  c.fillStyle = C.hopea;
+  c.letterSpacing = '1.4px';
+  c.fillText('JB-2400 · 24 SELECTIONS', W / 2, ky + h * 0.66);
+  c.letterSpacing = '0px';
+  c.textAlign = 'left';
+
+  c.fillStyle = 'rgba(0,0,0,.45)'; c.fillRect(0, H - 22, W, 22);
+  c.fillStyle = 'rgba(255,220,180,.07)'; c.fillRect(0, H - 23, W, 2);
+}
+
+function valaistus(c){
+  c.save();
+  runkoPolku(c); c.clip();
+  const y = c.createRadialGradient(W * 0.42, -60, 40, W * 0.42, -60, H * 0.95);
+  y.addColorStop(0,   'rgba(255,236,206,.12)');
+  y.addColorStop(0.45,'rgba(255,236,206,.035)');
+  y.addColorStop(1,   'rgba(0,0,0,0)');
+  c.fillStyle = y; c.fillRect(0, 0, W, H);
+  const v = c.createRadialGradient(W/2, H*0.50, W*0.32, W/2, H*0.50, W*0.98);
+  v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,.40)');
+  c.fillStyle = v; c.fillRect(0, 0, W, H);
+  c.restore();
+}
+
+function ristikko(c){
+  c.save();
+  c.lineWidth = 0.7;
+  for (let i = 0; i <= 10; i++){
+    const y = i * 100;
+    c.strokeStyle = i % 5 === 0 ? 'rgba(74,208,122,.75)' : 'rgba(74,208,122,.28)';
+    c.beginPath(); c.moveTo(0, y); c.lineTo(W, y); c.stroke();
+    c.fillStyle = 'rgba(74,208,122,.9)'; c.font = '11px ' + KIRJ;
+    c.fillText(String(y), 3, y - 3);
+  }
+  for (let i = 0; i <= 5; i++){
+    c.strokeStyle = 'rgba(74,208,122,.28)';
+    c.beginPath(); c.moveTo(i * 112, 0); c.lineTo(i * 112, H); c.stroke();
+  }
+  const lk = (n, y1, y2) => {
+    c.strokeStyle = 'rgba(255,154,31,.9)';
+    c.beginPath(); c.moveTo(W - 13, y1); c.lineTo(W - 13, y2); c.stroke();
+    c.fillStyle = 'rgba(255,154,31,.95)'; c.font = '10px ' + KIRJ;
+    c.save(); c.translate(W - 16, (y1 + y2) / 2); c.rotate(-Math.PI/2);
+    c.textAlign = 'center'; c.fillText(n, 0, 0); c.restore();
+  };
+  lk('mekanismi', 60, M.mekAla);
+  lk('ohjelma', M.ohj[1], M.ohj[3]);
+  lk('kilpi', M.kilpiY[0], M.kilpiY[1]);
+  lk('säleikkö', M.sale[1], M.sale[3]);
+  c.restore();
+}
+
+/* ====================  kokoonpano  ====================================== */
+
+function piirraJukeboksi(c, x, y, w, h){
+  c.save();
+  c.translate(x, y);
+  c.scale(w / W, h / H);
+  c.lineJoin = 'round';
+
+  piirraRunko(c);
+  piirraMekanismi(c);
+  piirraOhjelma(c);
+  piirraKilpi(c);
+  piirraUra(c);
+  piirraSaleikko(c);
+  piirraJalka(c);
+  /* Kaari ensin, pilarit päälle: kromikaulus peittää kohdan jossa
+     valokaari vaihtuu pilariputkiksi. */
+  piirraKaari(c);
+  piirraPilarit(c);
+  valaistus(c);
+  if (ristikkoPaalla) ristikko(c);
+
+  c.restore();
+}
+
+/* ====================  ruutu  =========================================== */
+
+const cv = document.getElementById('jb'), ctx = cv.getContext('2d');
+const $ = id => document.getElementById(id);
+
+/* Piirtomuunnos talteen, jotta kosketus osataan muuttaa yksiköiksi. */
+let TM = { ox: 0, oy: 0, s: 1 };
+
+function piirra(){
+  const val = $('koko').value;
+  const pysty = val === '1920';
+  const kh = parseInt(val, 10);
+  const kw = pysty ? 1080 : Math.round(kh * W / H);
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  if (cv.width !== kw * dpr || cv.height !== kh * dpr){
+    cv.width = kw * dpr; cv.height = kh * dpr;
+  }
+  /* Näyttökoko lasketaan itse: pelkkä max-height kutistaisi vain toista
+     suuntaa ja juuri mittasuhde on tässä se mitä arvioidaan. */
+  const lava = $('lava');
+  const mahtuu = Math.min(1, (lava.clientWidth - 32) / kw, (lava.clientHeight - 32) / kh);
+  cv.style.width  = Math.round(kw * mahtuu) + 'px';
+  cv.style.height = Math.round(kh * mahtuu) + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  if (pysty){
+    const g = ctx.createLinearGradient(0, 0, 0, kh);
+    g.addColorStop(0, '#231a12'); g.addColorStop(1, '#070605');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, kw, kh);
+    const h = kh * 0.94, w = h * W / H;
+    TM = { ox: (kw - w) / 2, oy: (kh - h) / 2, s: w / W };
+  } else {
+    ctx.clearRect(0, 0, kw, kh);
+    TM = { ox: 0, oy: 0, s: kw / W };
+  }
+  piirraJukeboksi(ctx, TM.ox, TM.oy, W * TM.s, H * TM.s);
+
+  const m = ohjelmaMitat();
+  $('tiedot').textContent =
+    kw + ' × ' + kh + ' px · kortti ' + (m.kLev * TM.s).toFixed(0) + ' px leveä' +
+    (S.valittu >= 0 ? ' · valittu ' + (S.valittu + 1) : '');
+}
+
+/* ====================  ääniketju  ======================================= */
+
+let ac = null, an = null, el = null, lahde = null, fbuf = null;
+
+/* Palauttaa aina täyttyvän lupauksen: jos ääniketju ei jostain syystä
+   lähde käyntiin, kuvan pitää silti toimia. */
+function aanetKayntiin(){
+  try { return aanetKayntiinOikeasti().catch(() => {}); }
+  catch (e){ return Promise.resolve(); }
+}
+
+function aanetKayntiinOikeasti(){
+  if (ac) return ac.state === 'running' ? Promise.resolve() : ac.resume();
+  ac = new (window.AudioContext || window.webkitAudioContext)();
+  an = ac.createAnalyser();
+  an.fftSize = 2048;
+  an.smoothingTimeConstant = 0.72;
+  fbuf = new Uint8Array(an.frequencyBinCount);
+  an.connect(ac.destination);
+  el = new Audio();
+  el.preload = 'auto';
+  el.addEventListener('ended', () => { S.soi = false; paivitaNapit(); });
+  lahde = ac.createMediaElementSource(el);
+  lahde.connect(an);
+  return ac.resume();
+}
+
+/* Mekaaninen naksahdus: terävä kohina ja matala tömähdys.
+   Syntetisoitu, jotta tiedosto pysyy yhtenä eikä tarvitse ääninäytteitä. */
+function naps(voima){
+  if (!ac) return;
+  const t = ac.currentTime, v = voima === undefined ? 1 : voima;
+
+  const n = ac.createBuffer(1, Math.ceil(ac.sampleRate * 0.04), ac.sampleRate);
+  const d = n.getChannelData(0);
+  for (let i = 0; i < d.length; i++)
+    d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 7);
+  const s = ac.createBufferSource(); s.buffer = n;
+  const bp = ac.createBiquadFilter(); bp.type = 'bandpass';
+  bp.frequency.value = 2600; bp.Q.value = 1.1;
+  const g1 = ac.createGain(); g1.gain.value = 0.34 * v;
+  s.connect(bp).connect(g1).connect(ac.destination);
+  s.start(t); s.stop(t + 0.05);
+
+  const o = ac.createOscillator(); o.type = 'triangle';
+  o.frequency.setValueAtTime(150, t);
+  o.frequency.exponentialRampToValueAtTime(58, t + 0.07);
+  const g2 = ac.createGain();
+  g2.gain.setValueAtTime(0.26 * v, t);
+  g2.gain.exponentialRampToValueAtTime(0.0008, t + 0.09);
+  o.connect(g2).connect(ac.destination);
+  o.start(t); o.stop(t + 0.1);
+}
+
+/* Releen kolahdus levynvaihdon päissä. */
+function kolahdus(){
+  if (!ac) return;
+  const t = ac.currentTime;
+  const o = ac.createOscillator(); o.type = 'square';
+  o.frequency.setValueAtTime(92, t);
+  o.frequency.exponentialRampToValueAtTime(42, t + 0.12);
+  const f = ac.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 900;
+  const g = ac.createGain();
+  g.gain.setValueAtTime(0.14, t);
+  g.gain.exponentialRampToValueAtTime(0.0008, t + 0.16);
+  o.connect(f).connect(g).connect(ac.destination);
+  o.start(t); o.stop(t + 0.18);
+}
+
+/* ====================  valinta ja vaihto  =============================== */
+
+const VAIHTO_KESTO = 2.6;          // sekuntia
+/* Käynnissäolo on oma lippunsa. Jos tilaa luettaisiin pelkästä
+   S.vaihto-luvusta, yksikin negatiivinen arvo jättäisi jakson jumiin. */
+let vaihtoKaynnissa = false, vaihtoAlku = -1, vaihtoAanet = 0;
+
+function valitse(n){
+  if (vaihtoKaynnissa) return;               // vaihto kesken
+  /* Tyhjä paikka: vaimea naksahdus eikä levynvaihtoa — oikeassakaan
+     laitteessa tyhjä paikka ei käynnistä mekanismia. Ennen ensimmäistä
+     latausta koneessa on mallilista, jolloin kaikki paikat toimivat
+     äänettöminä: muuten mekanismia ei pääsisi katsomaan ollenkaan. */
+  if (!mallilista && (!BIISIT[n] || !BIISIT[n].nimi)){
+    aanetKayntiin().then(() => naps(0.35));
+    S.painettu = n; S.painoT = 0.10;
+    $('nyt').textContent = 'paikka ' + (n + 1) + ' on tyhjä';
+    return;
+  }
+  aanetKayntiin().then(() => {
+    naps(1);
+    S.painettu = n; S.painoT = 0.13;
+    S.valittu = n;
+    S.soi = false;
+    if (el){ try { el.pause(); } catch(e){} }
+    vaihtoKaynnissa = true; vaihtoAlku = -1; vaihtoAanet = 0; S.vaihto = 0;
+  });
+}
+
+function vaihtoValmis(){
+  const b = BIISIT[S.valittu];
+  if (b && b.aani && el){
+    /* Odotetaan että elementti on valmis ennen play():ta. Tuore src ei ole
+       heti soitettavissa, ja aikainen kutsu hylätään hiljaa — sama ansa
+       kuin SilverDeckin ääniketjussa. */
+    el.src = b.aani;
+    el.load();
+    const aloita = () => el.play()
+      .then(() => { S.soi = true;  paivitaNapit(); })
+      .catch(() => { S.soi = false; paivitaNapit(); });
+    if (el.readyState >= 2) aloita();
+    else el.addEventListener('canplay', aloita, { once: true });
+  } else {
+    /* Nimi ilman äänitiedostoa on kelvollinen tila: paketti on täytetty
+       mutta tiedosto puuttuu. Levy jää pyörimään äänettömänä ja palkki
+       sanoo suoraan miksi mitään ei kuulu. */
+    S.soi = true;
+    paivitaNapit();
+    if (b) $('nyt').textContent = (S.valittu + 1) + '  ' + b.nimi + ' · ei äänitiedostoa';
+    return;
+  }
+  paivitaNapit();
+}
+
+function paivitaNapit(){
+  const b = BIISIT[S.valittu];
+  if (S.valittu < 0){
+    $('nyt').textContent = mallilista
+      ? 'mallilista — lataa omat biisit'
+      : ladattu + ' / ' + PAIKKOJA + ' paikkaa täynnä';
+    return;
+  }
+  $('nyt').textContent = (S.valittu + 1) + '  ' + (b ? b.nimi : '—') +
+    (S.soi ? '' : ' · pysäytetty');
+}
+
+/* ====================  kosketus  ======================================== */
+
+/* Palauttaa mihin osuttiin: nappiin, korttiin vai ei mihinkään. */
+function osuma(cx, cy){
+  const r = cv.getBoundingClientRect();
+  /* ruutukoordinaatti -> canvasin CSS-piste -> yksikkö */
+  const px = (cx - r.left) / r.width  * parseFloat(cv.style.width);
+  const py = (cy - r.top)  / r.height * parseFloat(cv.style.height);
+  const ux = (px - TM.ox) / TM.s, uy = (py - TM.oy) / TM.s;
+
+  const m = ohjelmaMitat();
+  if (uy < m.y1 - 6 || uy > m.y2 + 6) return null;
+  const i = Math.floor((uy - m.y1) / m.rKor);
+  if (i < 0 || i >= RIVEJA) return null;
+  for (let g = 0; g < RYHMIA; g++){
+    const gx = m.x1 + g * (m.rLev + m.rako);
+    const n = g * RIVEJA + i;
+    if (ux >= gx - 2 && ux <= gx + m.nLev + 2) return { tyyppi: 'nappi', n: n };
+    const kx = gx + m.nLev + 3;
+    if (ux >= kx - 2 && ux <= kx + m.kLev + 2) return { tyyppi: 'kortti', n: n };
+  }
+  return null;
+}
+
+cv.addEventListener('pointerdown', e => {
+  const o = osuma(e.clientX, e.clientY);
+  if (!o) return;
+  e.preventDefault();
+  if (poistoTila) poistaPaikka(o.n);
+  else if (o.tyyppi === 'nappi') valitse(o.n);
+});
+
+/* ====================  silmukka  ======================================== */
+
+let edellinen = performance.now();
+
+function kaistat(dt){
+  if (!an || !S.valotPaalla){
+    for (const k of ['basso','keski','diskantti'])
+      S.taso[k] += (0.16 - S.taso[k]) * Math.min(1, dt * 3);
+    S.taso.isku *= Math.max(0, 1 - dt * 4);
+    return;
+  }
+  an.getByteFrequencyData(fbuf);
+  const ka = (a, b) => { let s = 0; for (let i = a; i < b; i++) s += fbuf[i]; return s / (b - a) / 255; };
+  /* noin 23 Hz per lokero 48 kHz:n näytteenotolla */
+  const uusi = { basso: ka(1, 8), keski: ka(8, 60), diskantti: ka(60, 260) };
+  for (const k of ['basso','keski','diskantti']){
+    const u = uusi[k];
+    /* nousu nopeasti, lasku hitaasti — näin isku näkyy mutta ei välky */
+    S.taso[k] += (u - S.taso[k]) * (u > S.taso[k] ? 0.55 : Math.min(1, dt * 3.2));
+  }
+  /* iskuntunnistus bassosta */
+  S.taso.isku = Math.max(S.taso.isku * Math.max(0, 1 - dt * 5),
+                         Math.max(0, uusi.basso - 0.42) * 1.6);
+}
+
+function askel(nyt){
+  const dt = Math.min(0.05, (nyt - edellinen) / 1000);
+  edellinen = nyt;
+  S.aika += dt;
+
+  kaistat(dt);
+  /* sävyn hidas ajelehtiminen, hiukan nopeampi kun musiikki soi */
+  S.savy += dt * (6 + S.taso.keski * 26);
+
+  if (S.painoT > 0){ S.painoT -= dt; if (S.painoT <= 0) S.painettu = -1; }
+
+  if (vaihtoKaynnissa){
+    /* alku otetaan samasta kellosta kuin ruudunpäivitys */
+    if (vaihtoAlku < 0) vaihtoAlku = nyt / 1000;
+    const t = Math.max(0, (nyt / 1000 - vaihtoAlku) / VAIHTO_KESTO);
+    S.vaihto = Math.min(1, t);
+    if (vaihtoAanet === 0 && t > 0.30){ kolahdus(); vaihtoAanet = 1; }
+    if (vaihtoAanet === 1 && t > 0.86){ kolahdus(); vaihtoAanet = 2; }
+    if (t >= 1){ vaihtoKaynnissa = false; S.vaihto = -1; vaihtoValmis(); }
+  }
+  if (S.soi) S.levyKulma += dt * 8.2;         // 78 kierrosta minuutissa, hidastettuna
+  S.nauhaX -= NAUHA_SUUNTA * dt * NAUHA_NOPEUS;
+
+  piirra();
+  requestAnimationFrame(askel);
+}
+
+/* ====================  ohjaimet  ======================================== */
+
+$('koko').addEventListener('change', piirra);
+$('ristikko').addEventListener('click', e => {
+  ristikkoPaalla = !ristikkoPaalla;
+  e.currentTarget.classList.toggle('on', ristikkoPaalla);
+});
+$('valot').addEventListener('click', e => {
+  S.valotPaalla = !S.valotPaalla;
+  e.currentTarget.classList.toggle('on', S.valotPaalla);
+});
+$('png').addEventListener('click', () => {
+  const a = document.createElement('a');
+  a.download = 'JB-2400_etunakyma_' + cv.width + 'x' + cv.height + '.png';
+  a.href = cv.toDataURL('image/png');
+  a.click();
+});
+/* Omat biisit: tiedostot menevät nimen mukaan järjestyksessä paikoille
+   1–24. Lataamattomat paikat tyhjennetään, jotta yhdellä silmäyksellä
+   näkee mitä koneessa on — mallinimien jättäminen näyttäisi siltä kuin
+   kaikki 24 olisi ladattu. */
+/* --- Latauspaketti ------------------------------------------------------
+   JSON-tiedosto joka määrää kaikki 24 paikkaa kerralla: nimi, esittäjä ja
+   joko tiedoston nimi (valitaan samalla kertaa biisien kanssa) tai suora
+   osoite (kun soitin on verkossa). Sama kuvio kuin Mansikkakylän
+   soittolistassa.                                                         */
+
+function paketinPohja(){
+  return {
+    laite: 'KJWhispers JB-2400',
+    paikkoja: PAIKKOJA,
+    ohje: 'Täytä tiedosto-kenttä äänitiedoston nimellä ja valitse latauksessa ' +
+          'sekä tämä json että biisitiedostot. Jos soitin on verkossa, voit ' +
+          'käyttää aani-kenttää suorana osoitteena. Tyhjä paikka jää tyhjäksi.',
+    paikat: Array.from({ length: PAIKKOJA }, (_, i) => {
+      const b = BIISIT[i];
+      return {
+        paikka: i + 1,
+        nimi: b && b.nimi ? b.nimi : '',
+        esittaja: b && b.esittaja ? b.esittaja : 'KJWhispers',
+        tiedosto: b && b.tiedosto ? b.tiedosto : '',
+        aani: b && b.aani && /^(https?:|\.|\/)/.test(b.aani) ? b.aani : ''
+      };
+    })
+  };
+}
+
+$('paketti').addEventListener('click', () => {
+  const teksti = JSON.stringify(paketinPohja(), null, 2);
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([teksti], { type: 'application/json' }));
+  a.download = 'JB-2400_latauspaketti.json';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  $('nyt').textContent = 'latauspaketti tallennettu — täytä ja lataa takaisin';
+});
+
+/* Paketin lukeminen. Äänitiedostot tulevat samasta valinnasta ja
+   yhdistetään nimen perusteella. */
+function lataaPaketti(pkt, aanet){
+  settiNimi = (pkt.nimi || pkt.setti || '').trim();
+  const kartta = new Map();
+  for (const f of aanet) kartta.set(f.name.toLowerCase(), f);
+
+  for (let i = 0; i < PAIKKOJA; i++) BIISIT[i] = null;
+  mallilista = false;
+
+  let taytetty = 0, puuttuu = [];
+  const paikat = Array.isArray(pkt.paikat) ? pkt.paikat : [];
+  for (const rivi of paikat){
+    const i = (parseInt(rivi.paikka, 10) || 0) - 1;
+    if (i < 0 || i >= PAIKKOJA) continue;
+    const nimi = (rivi.nimi || '').trim();
+    if (!nimi) continue;
+    let url = '', tiedosto = (rivi.tiedosto || '').trim();
+    const f = tiedosto ? kartta.get(tiedosto.toLowerCase()) : null;
+    if (f) url = URL.createObjectURL(f);
+    else if ((rivi.aani || '').trim()) url = rivi.aani.trim();
+    else if (tiedosto) puuttuu.push(tiedosto);
+    BIISIT[i] = {
+      nimi: nimi,
+      esittaja: (rivi.esittaja || 'KJWhispers').trim(),
+      aani: url,
+      tiedosto: tiedosto,
+      tunnus: f ? tunnus(f) : (url ? 'url:' + url : '')
+    };
+    taytetty++;
+  }
+  ladattu = BIISIT.filter(b => b && b.nimi).length;
+  S.valittu = -1; S.soi = false;
+  if (el){ try { el.pause(); } catch(err){} }
+
+  const osat = ['paketti ladattu · ' + taytetty + ' / ' + PAIKKOJA];
+  if (puuttuu.length) osat.push(puuttuu.length + ' äänitiedostoa puuttui');
+  $('nyt').textContent = osat.join(' · ');
+  paivitaRuudukko();
+}
+
+/* Sama käsittelijä molemmille valitsimille: paketti tunnistetaan
+   valinnan sisällöstä, ei siitä mitä nappia painettiin. */
+async function kasitteleTiedostot(e){
+  const kaikki = Array.from(e.target.files);
+  aanetKayntiin();
+
+  /* Jos valinnassa on paketti, se määrää koko setin. */
+  const pkt = kaikki.find(f => /\.json$/i.test(f.name));
+  if (pkt){
+    try {
+      const data = JSON.parse(await pkt.text());
+      lataaPaketti(data, kaikki.filter(f => f !== pkt));
+    } catch (err){
+      $('nyt').textContent = 'pakettia ei voitu lukea: ' + err.message;
+    }
+    e.target.value = '';
+    return;
+  }
+
+  const fs = kaikki.sort((a, b) => a.name.localeCompare(b.name, 'fi', { numeric: true }));
+
+  /* Ensimmäinen oma lataus korvaa mallilistan. Sen jälkeen lisätään
+     vapaisiin paikkoihin, jotta yhden biisin voi tuoda erikseen. */
+  if (mallilista){
+    for (let i = 0; i < PAIKKOJA; i++) BIISIT[i] = null;
+    mallilista = false;
+  }
+
+  const jo = new Set();
+  for (const b of BIISIT) if (b && b.tunnus) jo.add(b.tunnus);
+
+  let lisatty = 0, kaksoset = 0, eiMahtunut = 0;
+  for (const f of fs){
+    const t = tunnus(f);
+    if (jo.has(t)){ kaksoset++; continue; }
+    const paikka = BIISIT.findIndex((b, i) => i < PAIKKOJA && (!b || !b.nimi));
+    if (paikka < 0){ eiMahtunut++; continue; }
+    BIISIT[paikka] = {
+      nimi: f.name.replace(/\.[^.]+$/, '').replace(/^\d+[\s._-]+/, ''),
+      esittaja: 'KJWhispers',
+      aani: URL.createObjectURL(f),
+      tiedosto: f.name,              // talteen, jotta paketti osaa viitata siihen
+      tunnus: t
+    };
+    jo.add(t); lisatty++;
+  }
+  ladattu = BIISIT.filter(b => b && b.nimi).length;
+
+  const osat = ['lisätty ' + lisatty];
+  if (kaksoset)   osat.push(kaksoset + ' oli jo koneessa');
+  if (eiMahtunut) osat.push(eiMahtunut + ' ei mahtunut — kone on täynnä');
+  osat.push(ladattu + ' / ' + PAIKKOJA);
+  $('nyt').textContent = osat.join(' · ');
+  paivitaRuudukko();
+  e.target.value = '';                      // sama tiedosto voi tulla uudelleen
+}
+
+$('tiedostot').addEventListener('change', kasitteleTiedostot);
+$('pakettiLataa').addEventListener('change', kasitteleTiedostot);
+
+/* Tyhjennä: kaikki paikat vapaiksi. */
+$('tyhjenna').addEventListener('click', () => {
+  for (let i = 0; i < PAIKKOJA; i++) BIISIT[i] = null;
+  mallilista = false; ladattu = 0;
+  S.valittu = -1; S.soi = false;
+  if (el){ try { el.pause(); } catch(err){} }
+  $('nyt').textContent = 'kaikki paikat tyhjennetty';
+  paivitaRuudukko();
+});
+
+/* Poistotila: kortin napautus vapauttaa sen paikan. */
+$('poista').addEventListener('click', e => {
+  poistoTila = !poistoTila;
+  e.currentTarget.classList.toggle('on', poistoTila);
+  $('nyt').textContent = poistoTila
+    ? 'poistotila päällä — napauta korttia niin paikka vapautuu'
+    : (ladattu + ' / ' + PAIKKOJA + ' paikkaa täynnä');
+});
+
+function poistaPaikka(n){
+  if (!BIISIT[n] || !BIISIT[n].nimi){
+    $('nyt').textContent = 'paikka ' + (n + 1) + ' on jo tyhjä';
+    return;
+  }
+  const nimi = BIISIT[n].nimi;
+  if (BIISIT[n].aani) { try { URL.revokeObjectURL(BIISIT[n].aani); } catch(err){} }
+  BIISIT[n] = null;
+  if (S.valittu === n){ S.valittu = -1; S.soi = false;
+    if (el){ try { el.pause(); } catch(err){} } }
+  ladattu = BIISIT.filter(b => b && b.nimi).length;
+  aanetKayntiin().then(() => naps(0.4));
+  $('nyt').textContent = 'paikka ' + (n + 1) + ' vapautettu (' + nimi + ') · ' +
+    ladattu + ' / ' + PAIKKOJA;
+  paivitaRuudukko();
+}
+$('seis').addEventListener('click', () => {
+  if (el){ try { el.pause(); } catch(e){} }
+  S.soi = false; paivitaNapit();
+});
+
+/* ====================  jaettava tiedosto  ===============================
+   Koneeseen raahatut biisit ovat blob:-osoitteita, jotka elävät vain tässä
+   välilehdessä. Jaettavaa varten äänet leivotaan tiedoston sisään
+   data-osoitteina, jolloin yksi html on koko jukeboksi.
+
+   Base64 kasvattaa koon noin kolmanneksella, joten tämä sopii muutamalle
+   biisille. Koko katalogi kuuluu palvelimelle, jolloin paketin aani-kenttiin
+   tulee suorat osoitteet eikä mitään tarvitse upottaa.                      */
+
+const JAKO_RAJA = 160 * 1024 * 1024;        // selain ei jaksa paljon enempää
+
+function blobDataksi(url){
+  return fetch(url).then(r => r.blob()).then(bl => new Promise((res, rej) => {
+    const fr = new FileReader();
+    fr.onload = () => res(fr.result);
+    fr.onerror = rej;
+    fr.readAsDataURL(bl);
+  }));
+}
+
+async function vieJaettava(){
+  const mukaan = [];
+  for (let i = 0; i < PAIKKOJA; i++){
+    const b = BIISIT[i];
+    if (b && b.nimi) mukaan.push({ i: i, b: b });
+  }
+  if (!mukaan.length){
+    $('nyt').textContent = 'koneessa ei ole biisejä jaettavaksi';
+    return;
+  }
+
+  $('jaa').disabled = true;
+  $('nyt').textContent = 'kootaan jaettavaa tiedostoa…';
+  const data = [];
+  let koko = 0;
+  try {
+    for (let k = 0; k < mukaan.length; k++){
+      const { i, b } = mukaan[k];
+      let aani = b.aani || '';
+      if (aani.startsWith('blob:')){
+        $('nyt').textContent = 'upotetaan ' + (k + 1) + ' / ' + mukaan.length + ' — ' + b.nimi;
+        aani = await blobDataksi(aani);
+      }
+      koko += aani.length;
+      if (koko > JAKO_RAJA){
+        $('nyt').textContent = 'liikaa ääntä yhteen tiedostoon (' +
+          (koko / 1048576).toFixed(0) + ' MB) — vie vähemmän biisejä tai siirrä ne palvelimelle';
+        $('jaa').disabled = false;
+        return;
+      }
+      data.push({ paikka: i + 1, nimi: b.nimi, esittaja: b.esittaja || '', aani: aani });
+    }
+  } catch (err){
+    $('nyt').textContent = 'äänen upottaminen ei onnistunut: ' + err.message;
+    $('jaa').disabled = false;
+    return;
+  }
+
+  /* Sivusta otetaan kopio, ruudukko tyhjennetään (se rakennetaan uudelleen
+     latauksessa) ja biisit pujotetaan headiin, jotta ne ovat olemassa jo
+     ennen kuin sovelluksen oma skripti ajetaan. */
+  const kopio = document.documentElement.cloneNode(true);
+  const r = kopio.querySelector('#ruudukko'); if (r) r.innerHTML = '';
+  const pnl = kopio.querySelector('#paikat'); if (pnl) pnl.classList.add('piilossa');
+  const nyt = kopio.querySelector('#nyt'); if (nyt) nyt.textContent = 'ei valintaa';
+  /* Jakonappi jää paikalleen. Jos sen poistaisi, skriptin kuuntelija osuisi
+     tyhjään ja virhe keskeyttäisi latauksen ennen kuin biisit otetaan
+     käyttöön — ja vastaanottaja saisi tyhjän koneen. */
+
+  let html = '<!DOCTYPE html>\n' + kopio.outerHTML;
+  const pala = '<scr' + 'ipt>window.JB_UPOTETUT=' + JSON.stringify(data) + ';</scr' + 'ipt>\n';
+  html = html.replace('</head>', pala + '</head>');
+
+  const blob = new Blob([html], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'JB-2400_jukeboksi.html';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+
+  $('jaa').disabled = false;
+  $('nyt').textContent = 'jaettava tiedosto valmis · ' + data.length + ' biisiä · ' +
+    (blob.size / 1048576).toFixed(1) + ' MB';
+}
+
+$('jaa').addEventListener('click', vieJaettava);
+
+/* Upotetut biisit latauksessa. */
+function lataaUpotetut(lista){
+  for (let i = 0; i < PAIKKOJA; i++) BIISIT[i] = null;
+  mallilista = false;
+  for (const r of lista){
+    const i = (r.paikka || 0) - 1;
+    if (i < 0 || i >= PAIKKOJA) continue;
+    BIISIT[i] = { nimi: r.nimi, esittaja: r.esittaja || 'KJWhispers',
+                  aani: r.aani || '', tiedosto: '', tunnus: 'upotettu:' + i };
+  }
+  ladattu = BIISIT.filter(b => b && b.nimi).length;
+}
+
+/* ====================  24 paikan raahauspaneeli  ======================== */
+
+const AANI_PAATE = /\.(mp3|wav|m4a|ogg|oga|flac|aac)$/i;
+const onAani = f => (f.type && f.type.startsWith('audio/')) || AANI_PAATE.test(f.name);
+
+/* Ensimmäinen oma tiedosto korvaa mallilistan kokonaan. */
+function varmistaOmaLista(){
+  if (!mallilista) return;
+  for (let i = 0; i < PAIKKOJA; i++) BIISIT[i] = null;
+  mallilista = false;
+}
+
+function asetaPaikka(n, f){
+  if (n < 0 || n >= PAIKKOJA || !f) return false;
+  varmistaOmaLista();
+  if (BIISIT[n] && BIISIT[n].aani && BIISIT[n].aani.startsWith('blob:')){
+    try { URL.revokeObjectURL(BIISIT[n].aani); } catch(e){}
+  }
+  BIISIT[n] = {
+    nimi: f.name.replace(/\.[^.]+$/, '').replace(/^\d+[\s._-]+/, ''),
+    esittaja: 'KJWhispers',
+    aani: URL.createObjectURL(f),
+    tiedosto: f.name,
+    tunnus: tunnus(f)
+  };
+  return true;
+}
+
+function tyhjennaPaikka(n){
+  if (!BIISIT[n]) return;
+  if (BIISIT[n].aani && BIISIT[n].aani.startsWith('blob:')){
+    try { URL.revokeObjectURL(BIISIT[n].aani); } catch(e){}
+  }
+  BIISIT[n] = null;
+  if (S.valittu === n){
+    S.valittu = -1; S.soi = false;
+    if (el){ try { el.pause(); } catch(e){} }
+  }
+}
+
+function paikatMuuttui(viesti){
+  ladattu = BIISIT.filter(b => b && b.nimi).length;
+  paivitaRuudukko();
+  $('nyt').textContent = viesti || (ladattu + ' / ' + PAIKKOJA + ' paikkaa täynnä');
+}
+
+/* Pudotus soluun n. Useampi tiedosto täyttää siitä eteenpäin. */
+function pudota(n, tiedostot){
+  const fs = Array.from(tiedostot).filter(onAani)
+    .sort((a, b) => a.name.localeCompare(b.name, 'fi', { numeric: true }));
+  if (!fs.length){
+    $('nyt').textContent = 'vain äänitiedostot kelpaavat (mp3, wav, m4a, ogg, flac)';
+    return;
+  }
+  let i = n, asetettu = 0, yli = 0;
+  for (const f of fs){
+    if (i >= PAIKKOJA){ yli++; continue; }
+    if (asetaPaikka(i, f)) asetettu++;
+    i++;
+  }
+  aanetKayntiin();
+  ladattu = BIISIT.filter(b => b && b.nimi).length;
+  paikatMuuttui('paikkaan ' + (n + 1) + ' asetettu ' + asetettu +
+    (yli ? ' · ' + yli + ' ei mahtunut' : '') + ' · ' + ladattu + ' / ' + PAIKKOJA);
+}
+
+function paivitaRuudukko(){
+  const r = $('ruudukko');
+  for (let n = 0; n < PAIKKOJA; n++){
+    const solu = r.children[n];
+    if (!solu) continue;
+    const b = BIISIT[n];
+    const nimetty = !!(b && b.nimi);
+    const soiva = nimetty && !!b.aani;
+    solu.classList.toggle('taysi', soiva);
+    solu.classList.toggle('vajaa', nimetty && !soiva);
+    solu.classList.toggle('tyhja', !nimetty);
+    solu.querySelector('.nimi').textContent = nimetty ? b.nimi : 'tyhjä';
+    solu.title = soiva ? (b.tiedosto || b.nimi)
+      : nimetty ? 'nimi on, äänitiedosto puuttuu — raahaa se tähän'
+                : 'raahaa tiedosto tähän';
+  }
+}
+
+(function rakennaRuudukko(){
+  const r = $('ruudukko');
+  for (let n = 0; n < PAIKKOJA; n++){
+    const d = document.createElement('div');
+    d.className = 'solu tyhja';
+    d.dataset.n = n;
+    d.innerHTML = '<span class="nro">' + (n + 1) + '</span>' +
+                  '<span class="nimi">tyhjä</span>' +
+                  '<button class="x" title="tyhjennä paikka">×</button>';
+
+    d.addEventListener('dragover', e => { e.preventDefault(); d.classList.add('yli'); });
+    d.addEventListener('dragenter', e => { e.preventDefault(); d.classList.add('yli'); });
+    d.addEventListener('dragleave', () => d.classList.remove('yli'));
+    d.addEventListener('drop', e => {
+      e.preventDefault(); e.stopPropagation();
+      d.classList.remove('yli');
+      pudota(n, e.dataTransfer.files);
+    });
+    d.addEventListener('click', e => {
+      if (e.target.classList.contains('x')){
+        tyhjennaPaikka(n);
+        paikatMuuttui('paikka ' + (n + 1) + ' tyhjennetty · ' +
+          BIISIT.filter(b => b && b.nimi).length + ' / ' + PAIKKOJA);
+        return;
+      }
+      soluValinta = n;
+      $('soluTiedosto').click();
+    });
+    r.appendChild(d);
+  }
+})();
+
+let soluValinta = -1;
+$('soluTiedosto').addEventListener('change', e => {
+  if (soluValinta >= 0 && e.target.files.length) pudota(soluValinta, e.target.files);
+  soluValinta = -1;
+  e.target.value = '';
+});
+
+/* Pudotus paneelin taustalle: täyttää vapaat paikat alusta. */
+$('paikat').addEventListener('dragover', e => e.preventDefault());
+$('paikat').addEventListener('drop', e => {
+  e.preventDefault();
+  const eka = BIISIT.findIndex((b, i) => i < PAIKKOJA && (!b || !b.nimi));
+  pudota(eka < 0 ? 0 : eka, e.dataTransfer.files);
+});
+/* Selain avaisi muuten pudotetun tiedoston koko sivuna. */
+window.addEventListener('dragover', e => e.preventDefault());
+window.addEventListener('drop', e => e.preventDefault());
+
+$('paikatAuki').addEventListener('click', e => {
+  const auki = $('paikat').classList.toggle('piilossa') === false;
+  e.currentTarget.classList.toggle('on', auki);
+  if (auki) paivitaRuudukko();
+});
+$('paikatKiinni').addEventListener('click', () => {
+  $('paikat').classList.add('piilossa');
+  $('paikatAuki').classList.remove('on');
+});
+
+window.addEventListener('resize', () => { clearTimeout(window.__t); window.__t = setTimeout(piirra, 150); });
+$('valot').classList.add('on');
+/* Jaettavaan tiedostoon leivotut biisit otetaan käyttöön ennen ensimmäistä
+   piirtoa, jotta kone näyttää heti täydeltä. */
+if (window.JB_UPOTETUT && Array.isArray(window.JB_UPOTETUT)){
+  lataaUpotetut(window.JB_UPOTETUT);
+  paivitaRuudukko();
+}
+paivitaNapit();
+requestAnimationFrame(askel);
+
+/* Julkaistulla sivulla setti.json on soittimen vieressä ja se ladataan
+   itsestään. Paikallisena tiedostona fetch ei toimi eikä sen tarvitsekaan —
+   silloin biisit raahataan paneeliin käsin. */
+(function omaSetti(){
+  if (window.JB_UPOTETUT) return;
+  fetch('setti.json', { cache: 'no-cache' })
+    .then(r => r.ok ? r.json() : null)
+    .then(d => {
+      if (!d) return;
+      lataaPaketti(d, []);
+      paivitaRuudukko();
+      paivitaNapit();
+      /* Työkalupalkki on rakentajan väline, ei kävijän. Se saa näkyviin
+         lisäämällä osoitteen perään ?tyokalut. */
+      if (!/[?&]tyokalut\b/.test(location.search)){
+        const bar = $('bar'); if (bar) bar.style.display = 'none';
+        const pnl = $('paikat'); if (pnl) pnl.classList.add('piilossa');
+        document.body.style.paddingTop = '0';
+      }
+    })
+    .catch(() => {});
+})();
+</script>
+</body>
+</html>
