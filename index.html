@@ -108,10 +108,11 @@ h1 span{color:var(--amber)}
 /* leikkihuoneessa on messinkikahvat ja technossa salvat jo kuvassa */
 .lapset .luukku::after,.techno .luukku::after,
 .house .luukku::after,.balladit .luukku::after,
-.video .luukku::after{display:none}
+.video .luukku::after,.highland .luukku::after{display:none}
 
 /* Kun sisusta on kuva, teksti tarvitsee oman taustansa pysyäkseen luettavana */
-.video .sisus b,.video .sisus span{
+.video .sisus b,.video .sisus span,
+.highland .sisus b,.highland .sisus span{
   background:rgba(12,8,5,.72);padding:3px 10px;border-radius:5px;
 }
 
@@ -158,6 +159,13 @@ h1 span{color:var(--amber)}
   --oik:url("luukut/mansikkakyla-oikea.jpg");
   --hehku:radial-gradient(130% 95% at 50% 100%,#fff0c4 0%,#e8536a 46%,#45101e 100%);
 }
+.highland{
+  --kehys:#3f2d1c;
+  --vas:url("luukut/highland-vasen.jpg");
+  --oik:url("luukut/highland-oikea.jpg");
+  --sisakuva:url("luukut/highland-sisus.jpg");
+  --hehku:radial-gradient(130% 95% at 50% 100%,#ffcf8a 0%,#6a4a1e 42%,#120d06 100%);
+}
 .video{
   --kehys:#53301a;
   --vas:url("luukut/video-vasen.jpg");
@@ -178,7 +186,8 @@ h1 span{color:var(--amber)}
 .huone.kiinni .sisus{filter:saturate(.3) brightness(.42)}
 /* Kun sisusta on oikea kuva, se saa näkyä himmeänäkin — muuten koko
    kalusteen piirtäminen meni hukkaan */
-.huone.video.kiinni .sisus{filter:saturate(.62) brightness(.66)}
+.huone.video.kiinni .sisus,.huone.highland.kiinni .sisus{
+  filter:saturate(.62) brightness(.66)}
 .kyltti{
   /* ylös: keskellä tai alhaalla kyltti peittäisi juuri sen aiheen, jonka
      takia ovi ylipäätään maalattiin */
@@ -255,6 +264,15 @@ footer a{color:#8a7a66}
       </div>
       <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
     </a>
+
+    <div class="huone highland kiinni">
+      <div class="sisus">
+        <b>Highland</b>
+        <span>Pohjoisen mystiikka<br>harppu, pillit ja viulu</span>
+      </div>
+      <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
+      <span class="kyltti">Tulossa</span>
+    </div>
 
     <div class="huone video kiinni">
       <div class="sisus">
