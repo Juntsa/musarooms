@@ -101,7 +101,8 @@ h1 span{color:var(--amber)}
 .vasen::after{right:6px}
 .oikea::after{left:6px}
 /* leikkihuoneessa on messinkikahvat ja technossa salvat jo kuvassa */
-.lapset .luukku::after,.techno .luukku::after{display:none}
+.lapset .luukku::after,.techno .luukku::after,
+.house .luukku::after,.balladit .luukku::after{display:none}
 
 /* avautuminen */
 @media (hover:hover){
@@ -125,10 +126,17 @@ h1 span{color:var(--amber)}
   --oik:url("luukut/country-oikea.jpg");
   --hehku:radial-gradient(130% 95% at 50% 100%,#ffcb6a 0%,#a85a1e 44%,#2a1408 100%);
 }
-.yo{
-  --vas:url("luukut/puu-vasen.jpg");
-  --oik:url("luukut/puu-oikea.jpg");
-  --hehku:radial-gradient(130% 95% at 50% 100%,#ffcf74 0%,#8a4a12 44%,#150b05 100%);
+.house{
+  --kehys:#6a4420;
+  --vas:url("luukut/house-vasen.jpg");
+  --oik:url("luukut/house-oikea.jpg");
+  --hehku:radial-gradient(130% 95% at 50% 100%,#ffb340 0%,#b4381e 44%,#2a0a16 100%);
+}
+.balladit{
+  --kehys:#5c3a1c;
+  --vas:url("luukut/ballads-vasen.jpg");
+  --oik:url("luukut/ballads-oikea.jpg");
+  --hehku:radial-gradient(130% 95% at 50% 100%,#ffcf8a 0%,#8a2018 44%,#1a0607 100%);
 }
 .lapset{
   --vas:url("luukut/mansikkakyla-vasen.jpg");
@@ -188,6 +196,15 @@ footer a{color:#8a7a66}
       <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
     </a>
 
+    <div class="huone house kiinni">
+      <div class="sisus">
+        <b>House</b>
+        <span>Vocal, deep, soulful<br>auringonlasku ja vinyyli</span>
+      </div>
+      <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
+      <span class="kyltti">Tulossa</span>
+    </div>
+
     <div class="huone country kiinni">
       <div class="sisus">
         <b>Country</b>
@@ -197,10 +214,10 @@ footer a{color:#8a7a66}
       <span class="kyltti">Tulossa</span>
     </div>
 
-    <div class="huone yo kiinni">
+    <div class="huone balladit kiinni">
       <div class="sisus">
-        <b>Yö ja balladit</b>
-        <span>SilverDeck-räkki<br>kelanauhuri ja kasetit</span>
+        <b>Balladit</b>
+        <span>Suuret tunteet<br>flyygeli ja kynttilät</span>
       </div>
       <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
       <span class="kyltti">Tulossa</span>
