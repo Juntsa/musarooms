@@ -575,11 +575,19 @@ function etualalle(){
   if (!varjoPaalla) return Promise.resolve();
   var k = kuuluvin() || 'a';
   var t = BG.currentTime || 0;
-  BG.pause();
-  varjoPaalla = false;
   return ketjuKayntiin().then(function (){
     var d = D[k];
     try { d.el.currentTime = t; } catch (e){}
+    /* Paluu vaatii hypyn samaan kohtaan. Jos elementti ei suostu
+       hyppaamaan - palvelin ei tue Range-pyyntoja, jolloin virta on
+       hakukelvoton - paluu aloittaisi raidan alusta aanettomasti.
+       Silloin on parempi jattaa varjosoitin soittamaan: kuulija
+       menettaa EQ:n, ei kohtaa biisissa. */
+    if (Math.abs((d.el.currentTime || 0) - t) > 1.0){
+      return;
+    }
+    BG.pause();
+    varjoPaalla = false;
     return d.el.play().catch(function (){});
   });
 }
