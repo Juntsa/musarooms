@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Highland Sessions</title>
+<meta name="theme-color" content="#0d1117">
+<style>
+/* KJWhispers Highland Sessions.
+
+   Kaksi laitetta kiveen upotettuna: ylempi nayttaa, alempi valitsee.
+   Juntsan oma havainto ratkaisi laitteen - SELECT on kuvan ainoa
+   saadin jolla ei ole muuta tehtavaa, joten se on valitsin.
+
+   Ero radioon on tahallinen. Radiossa asema tarttuu heti kun neula
+   osuu, koska niin radio toimii. Valitsin ei soita kesken kaantamisen:
+   nimi vaihtuu naytolla, ja soitto alkaa kun paastat irti. */
+:root{
+  --kivi:#3b3b40; --kiviTum:#1a1a1e; --kiviVaal:#5c5c63;
+  --puu:#2b1d12; --puuVaal:#4a3221;
+  --messinki:#c08f4a; --messinkiVaal:#e8c184;
+  --hehku:#ffb347; --lasi:#0a0d10;
+  --revontuli:#5ef0b2; --revontuli2:#7cc5ff; --kanerva:#b06ab0;
+  --kerma:#f0e4d0;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{
+  background:
+    radial-gradient(130% 70% at 50% 0%, #1d3350 0%, #121a26 45%, #07090d 100%),
+    #07090d;
+  color:var(--kerma);
+  font:16px/1.4 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:8px 8px calc(8px + env(safe-area-inset-bottom));
+  overflow:hidden;
+}
+h1{
+  font:800 12px/1 "Segoe UI",system-ui,sans-serif;letter-spacing:.34em;
+  text-transform:uppercase;color:#9fc4d8;margin:0 0 10px;flex:0 0 auto;
+}
+#pino{
+  width:min(100%,560px);flex:0 1 auto;min-height:0;max-height:100%;
+  display:flex;flex-direction:column;gap:10px;
+}
+
+/* ---- kivinen runko ------------------------------------------------ */
+.kivi{
+  position:relative;border-radius:10px;padding:10px;
+  background:
+    linear-gradient(180deg,#54545b 0%,#3b3b40 18%,#2a2a2f 82%,#18181c 100%);
+  box-shadow:
+    0 1px 0 #6e6e76 inset, 0 -2px 0 #0c0c0f inset,
+    0 10px 28px #000a;
+}
+/* karkea kivipinta ilman kuvatiedostoa */
+.kivi::before{
+  content:"";position:absolute;inset:0;border-radius:10px;pointer-events:none;
+  background-image:
+    radial-gradient(1.5px 1.5px at 14% 22%, #ffffff14, transparent),
+    radial-gradient(1.8px 1.8px at 67% 12%, #0008, transparent),
+    radial-gradient(1.2px 1.2px at 38% 71%, #ffffff10, transparent),
+    radial-gradient(2.2px 2.2px at 86% 58%, #0007, transparent),
+    radial-gradient(1.4px 1.4px at 52% 38%, #ffffff0d, transparent),
+    radial-gradient(1.6px 1.6px at 23% 86%, #0006, transparent);
+  background-size:120px 90px,90px 110px,140px 70px,100px 120px,80px 80px,110px 95px;
+  opacity:.7;
+}
+
+/* ---- ylempi: näyttö ----------------------------------------------- */
+#ylalaite{flex:0 0 auto;display:flex;align-items:stretch;gap:9px}
+.medaljonki{
+  flex:0 0 auto;width:46px;align-self:center;
+  display:flex;align-items:center;justify-content:center;
+}
+.medaljonki svg{width:100%;height:auto;display:block;opacity:.92}
+#naytto{
+  flex:1 1 auto;min-width:0;border-radius:6px;position:relative;
+  background:linear-gradient(180deg,#121a16,#070b09);
+  box-shadow:0 0 0 1px #000,0 0 0 2px #4a3221,0 0 26px #5ef0b218 inset;
+  padding:8px 10px;display:flex;flex-direction:column;gap:6px;
+  height:min(26vh,150px);min-height:118px;
+}
+#merkki{
+  flex:0 0 auto;text-align:center;line-height:1.2;
+}
+#merkki b{
+  display:block;font:700 15px/1.1 Georgia,"Times New Roman",serif;
+  color:var(--messinkiVaal);
+}
+#merkki span{
+  display:block;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:#7e8f86;margin-top:2px;
+}
+#palkit{flex:1 1 auto;min-height:0;width:100%;display:block}
+#nimi{
+  flex:0 0 auto;text-align:center;font-size:13px;color:var(--revontuli);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  min-height:18px;
+}
+#nimi.selaa{color:var(--messinkiVaal)}
+#alanimi{
+  flex:0 0 auto;text-align:center;font-size:10px;color:#6f8279;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-height:13px;
+}
+
+/* ---- alempi: vahvistin -------------------------------------------- */
+#alalaite{flex:0 0 auto}
+#paneeli{
+  border-radius:7px;padding:10px 9px 8px;
+  background:linear-gradient(180deg,#2e2016,#180f09);
+  box-shadow:0 1px 0 #55402c inset,0 0 20px #ffb34710 inset;
+  display:flex;align-items:center;gap:8px;
+}
+.nuppi{
+  position:relative;border-radius:50%;flex:0 0 auto;
+  background:radial-gradient(60% 60% at 36% 30%,#e8c184,#b8854a 55%,#6b4a24);
+  box-shadow:0 2px 6px #000b,0 0 0 2px #120b06;
+  cursor:grab;touch-action:none;
+}
+.nuppi .osoitin{
+  position:absolute;left:50%;top:5px;width:3px;border-radius:2px;
+  margin-left:-1.5px;background:#2b1d12;
+}
+#aani{width:46px;height:46px}
+#aani .osoitin{height:14px}
+#valitsin{width:58px;height:58px}
+#valitsin .osoitin{height:18px}
+.selite{
+  font-weight:700;font-size:9px;line-height:1;letter-spacing:.14em;text-transform:uppercase;
+  color:#9c8569;text-align:center;margin-top:4px;
+}
+.pylvas{display:flex;flex-direction:column;align-items:center;flex:0 0 auto}
+#mittarit{
+  flex:1 1 auto;min-width:0;display:flex;align-items:center;
+  justify-content:center;gap:7px;
+}
+/* Mittarit tarvitsevat leveytta ollakseen mittareita: flex:1 1 0
+   ilman alarajaa litistaa ne siivuiksi kun nupit vievat tilan. */
+#mittarit canvas{flex:1 1 0;min-width:54px;height:54px;
+  border-radius:3px;display:block}
+#kilpi{flex:0 0 auto;text-align:center;padding:0 3px}
+#kilpi b{display:block;font:700 12px/1.2 Georgia,"Times New Roman",serif;
+  color:var(--messinkiVaal)}
+#kilpi span{display:block;font-size:8px;letter-spacing:.16em;
+  text-transform:uppercase;color:#9c8569;margin-top:2px}
+#solmu{display:block;margin:0 auto 2px;width:18px;height:18px;opacity:.85}
+
+#nyt{
+  flex:0 0 auto;text-align:center;font-size:12px;color:#8ba3b0;
+  padding-top:8px;min-height:17px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+@media (max-width:400px){
+  #paneeli{gap:6px;padding:9px 6px 7px}
+  #mittarit canvas{min-width:44px;height:48px}
+  #aani{width:40px;height:40px}
+  #valitsin{width:50px;height:50px}
+  #kilpi b{font-size:11px}
+  .medaljonki{width:36px}
+}
+</style>
+</head>
+<body>
+<h1>Highland Sessions</h1>
+
+<div id="pino">
+
+  <div id="ylalaite" class="kivi">
+    <div class="medaljonki" aria-hidden="true">
+      <svg viewBox="0 0 48 48">
+        <circle cx="24" cy="24" r="22" fill="#3a2a1a" stroke="#8a6a3e" stroke-width="1.5"/>
+        <g fill="none" stroke="#c08f4a" stroke-width="1.6" stroke-linecap="round">
+          <path d="M24 9c5 5 5 9 0 14s-5 9 0 14"/>
+          <path d="M9 24c5-5 9-5 14 0s9 5 14 0"/>
+          <circle cx="24" cy="24" r="5.5"/>
+        </g>
+      </svg>
+    </div>
+
+    <div id="naytto">
+      <div id="merkki"><b>KJWhispers</b><span>Northern Roots</span></div>
+      <canvas id="palkit" aria-hidden="true"></canvas>
+      <div id="nimi">valitse kappale</div>
+      <div id="alanimi"></div>
+    </div>
+
+    <div class="medaljonki" aria-hidden="true">
+      <svg viewBox="0 0 48 48">
+        <circle cx="24" cy="24" r="22" fill="#3a2a1a" stroke="#8a6a3e" stroke-width="1.5"/>
+        <g fill="none" stroke="#c08f4a" stroke-width="1.6" stroke-linejoin="round">
+          <path d="M24 11 33 27H15z"/><path d="M24 37 15 21h18z"/>
+          <circle cx="24" cy="24" r="4"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div id="alalaite" class="kivi">
+    <div id="paneeli">
+      <div class="pylvas">
+        <div id="aani" class="nuppi" role="slider" tabindex="0"
+             aria-label="Äänenvoimakkuus" aria-valuemin="0" aria-valuemax="100">
+          <span class="osoitin"></span>
+        </div>
+        <div class="selite">Volume</div>
+      </div>
+
+      <div id="mittarit">
+        <canvas id="vu1" aria-hidden="true"></canvas>
+        <div id="kilpi">
+          <svg id="solmu" viewBox="0 0 24 24" aria-hidden="true">
+            <g fill="none" stroke="#c08f4a" stroke-width="1.5">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 3c4 4 4 8 0 12s-4 8 0 6"/>
+              <path d="M3 12c4-4 8-4 12 0s8 4 6 0"/>
+            </g>
+          </svg>
+          <b>KJWhispers</b><span>Highland Sessions</span>
+        </div>
+        <canvas id="vu2" aria-hidden="true"></canvas>
+      </div>
+
+      <div class="pylvas">
+        <div id="valitsin" class="nuppi" role="slider" tabindex="0"
+             aria-label="Kappaleen valinta" aria-valuemin="1" aria-valuemax="1">
+          <span class="osoitin"></span>
+        </div>
+        <div class="selite">Select</div>
+      </div>
+    </div>
+    <div id="nyt">valitse kappale</div>
+  </div>
+
+</div>
+
+<script src="../soitin.js"></script>
+<script>
+'use strict';
+var $ = function (id){ return document.getElementById(id); };
+
+var BIISIT = [];
+var kohta = -1;          // soiva raita
+var osoitin = 0;         // mihin valitsin osoittaa juuri nyt
+var selaa = false;       // kaannetaanko parhaillaan
+var soi = false;
+var aaniTaso = 0.8;
+
+/* Ei Web Audiota: elementti soittaa suoraan, jotta soitto jatkuu kun
+   naytto sammuu. Palkit ja mittarit lukevat esilasketut kaistat. */
+var el = new Audio();
+el.preload = 'none';
+el.playsInline = true;
+el.volume = aaniTaso;
+
+var voimaOk = null;
+function voimakkuuttaVoiSaataa(){
+  if (voimaOk !== null) return voimaOk;
+  var koe = new Audio();
+  try { koe.volume = 0.42; voimaOk = Math.abs(koe.volume - 0.42) < 0.01; }
+  catch (e){ voimaOk = false; }
+  return voimaOk;
+}
+
+/* ====================  valot  ========================================= */
+
+var valot = null, valotOsoite = '';
+var taso = { vasen: 0.04, oikea: 0.04 };
+var PALKKEJA = 24;
+var palkit = new Float32Array(PALKKEJA);
+
+function haeValot(aani){
+  var osoite = String(aani || '');
+  if (!osoite || osoite === valotOsoite) return;
+  valotOsoite = osoite; valot = null;
+  if (/^blob:|^data:/.test(osoite)) return;
+  var url = osoite.replace(/\.(mp3|wav|m4a|ogg)(\?.*)?$/i, '.valot');
+  if (url === osoite) return;
+  fetch(url, { cache: 'force-cache' })
+    .then(function (r){ return r.ok ? r.arrayBuffer() : null; })
+    .then(function (pus){
+      if (!pus || valotOsoite !== osoite) return;
+      var t = new Uint8Array(pus);
+      if (t.length < 10 || t[0] !== 86 || t[1] !== 76 || t[2] !== 79) return;
+      var n = new DataView(pus);
+      valot = { fps: n.getUint16(4, true), kesto: n.getUint32(6, true),
+                data: t.subarray(10) };
+    })
+    .catch(function (){});
+}
+
+function lueKaistat(){
+  if (!(soi && valot)) return null;
+  var r = Math.floor(el.currentTime * valot.fps);
+  var kpl = (valot.data.length / 3) | 0;
+  var i = Math.max(0, Math.min(kpl - 1, r)) * 3;
+  return { b: valot.data[i] / 255, k: valot.data[i + 1] / 255,
+           d: valot.data[i + 2] / 255 };
+}
+
+function paivitaTasot(dt){
+  var v = lueKaistat();
+  var t = v ? { vasen: v.b * 0.65 + v.k * 0.35, oikea: v.k * 0.5 + v.d * 0.5 }
+            : { vasen: 0.04, oikea: 0.04 };
+  for (var kk in t){
+    taso[kk] += (t[kk] - taso[kk]) * (t[kk] > taso[kk] ? 0.5
+                                                       : Math.min(1, dt * 2.6));
+  }
+  /* Palkkinaytto: kolme kaistaa levitetaan 24 palkiksi. Oikeaa spektria
+     tassa ei ole eika tarvita - palkit kertovat etta musiikki elaa, ja
+     kolme kaistaa riittaa siihen kun jokainen palkki saa oman painonsa. */
+  for (var i = 0; i < PALKKEJA; i++){
+    var osuus = i / (PALKKEJA - 1);
+    var kohde = 0.03;
+    if (v){
+      /* pehmea siirtyma bassosta diskanttiin */
+      var bw = Math.max(0, 1 - Math.abs(osuus - 0.05) * 2.6);
+      var kw = Math.max(0, 1 - Math.abs(osuus - 0.45) * 2.2);
+      var dw = Math.max(0, 1 - Math.abs(osuus - 0.92) * 2.0);
+      var summa = bw + kw + dw || 1;
+      kohde = (v.b * bw + v.k * kw + v.d * dw) / summa;
+      /* hienojako: naapuripalkit eivat saa liikkua taysin yhdessa */
+      kohde *= 0.78 + 0.22 * Math.abs(Math.sin(i * 2.3 + el.currentTime * 3.1));
+    }
+    palkit[i] += (kohde - palkit[i]) *
+                 (kohde > palkit[i] ? 0.55 : Math.min(1, dt * 3.4));
+  }
+}
+
+/* ====================  soitto  ======================================== */
+
+function mmss(s){
+  if (!isFinite(s) || s < 0) return '';
+  var m = Math.floor(s / 60), x = Math.floor(s % 60);
+  return m + ':' + (x < 10 ? '0' : '') + x;
+}
+
+function soita(i){
+  if (!BIISIT.length) return;
+  kohta = ((i % BIISIT.length) + BIISIT.length) % BIISIT.length;
+  osoitin = kohta;
+  var b = BIISIT[kohta];
+  el.src = b.aani;
+  el.load();
+  haeValot(b.aani);
+  mediaTiedot(b);
+  var aloita = function (){
+    el.play().then(function (){ soi = true; paivitaTeksti(); })
+             .catch(function (){ soi = false; paivitaTeksti(); });
+  };
+  if (el.readyState >= 2) aloita();
+  else el.addEventListener('canplay', aloita, { once: true });
+  paivitaTeksti();
+}
+
+el.addEventListener('ended', function (){ soi = false; soita(kohta + 1); });
+el.addEventListener('play', function (){ mediaTila('playing'); });
+el.addEventListener('pause', function (){ mediaTila('paused'); });
+
+function mediaTiedot(b){
+  if (!('mediaSession' in navigator)) return;
+  try {
+    navigator.mediaSession.metadata = new window.MediaMetadata({
+      title: b && b.nimi ? b.nimi : 'Highland Sessions',
+      artist: b && b.alarivi ? b.alarivi : 'KJWhispers',
+      album: 'Musa Rooms · Highland'
+    });
+  } catch (e){}
+  var k = {
+    play: function (){ el.play().then(function (){ soi = true; paivitaTeksti(); })
+                                .catch(function (){}); },
+    pause: function (){ el.pause(); soi = false; paivitaTeksti(); },
+    previoustrack: function (){ soita(kohta - 1); },
+    nexttrack: function (){ soita(kohta + 1); }
+  };
+  for (var nimi in k){
+    try { navigator.mediaSession.setActionHandler(nimi, k[nimi]); }
+    catch (e){}
+  }
+}
+function mediaTila(t){
+  if (!('mediaSession' in navigator)) return;
+  try { navigator.mediaSession.playbackState = t; } catch (e){}
+}
+
+function paivitaTeksti(){
+  var nayta = selaa ? BIISIT[osoitin] : BIISIT[kohta];
+  var n = $('nimi');
+  n.classList.toggle('selaa', selaa);
+  if (!BIISIT.length){
+    n.textContent = 'ei kappaleita';
+    $('alanimi').textContent = '';
+    $('nyt').textContent = 'kokoelma on tyhjä';
+  } else if (!nayta){
+    n.textContent = 'valitse kappale';
+    $('alanimi').textContent = 'käännä SELECT-nupista';
+    $('nyt').textContent = 'valitse kappale';
+  } else {
+    n.textContent = nayta.nimi;
+    $('alanimi').textContent =
+      (selaa ? (osoitin + 1) + ' / ' + BIISIT.length
+             : (nayta.alarivi || mmss(nayta.kesto)));
+    $('nyt').textContent = selaa
+      ? 'valitse: ' + nayta.nimi
+      : (soi ? '▶ ' : '‖ ') + nayta.nimi;
+  }
+  var v = $('valitsin');
+  v.setAttribute('aria-valuemax', String(Math.max(1, BIISIT.length)));
+  v.setAttribute('aria-valuenow', String(osoitin + 1));
+  v.setAttribute('aria-valuetext', nayta ? nayta.nimi : '');
+  var osuus = BIISIT.length > 1 ? osoitin / (BIISIT.length - 1) : 0;
+  v.querySelector('.osoitin').style.transform =
+    'rotate(' + (-135 + osuus * 270).toFixed(1) + 'deg)';
+}
+
+/* ====================  piirto  ======================================== */
+
+function kanvaasi(cv, korkeus){
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  var r = cv.getBoundingClientRect();
+  var w = Math.max(40, Math.round(r.width));
+  var h = Math.max(20, Math.round(korkeus || r.height));
+  if (cv.width !== w * dpr || cv.height !== h * dpr){
+    cv.width = w * dpr; cv.height = h * dpr;
+  }
+  var c = cv.getContext('2d');
+  c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  c.clearRect(0, 0, w, h);
+  return { c: c, w: w, h: h };
+}
+
+function piirraPalkit(){
+  var k = kanvaasi($('palkit'));
+  var c = k.c, w = k.w, h = k.h;
+  if (h < 8) return;
+  var vali = 2;
+  var lev = Math.max(2, (w - vali * (PALKKEJA - 1)) / PALKKEJA);
+  for (var i = 0; i < PALKKEJA; i++){
+    var x = i * (lev + vali);
+    var korkeus = Math.max(1.5, palkit[i] * h);
+    /* revontulisavy: vihreasta siniseen ja kanervaan */
+    var g = c.createLinearGradient(0, h, 0, h - korkeus);
+    g.addColorStop(0, '#2d6b55');
+    g.addColorStop(0.55, '#5ef0b2');
+    g.addColorStop(1, i > PALKKEJA * 0.7 ? '#b06ab0' : '#7cc5ff');
+    c.fillStyle = g;
+    c.fillRect(x, h - korkeus, lev, korkeus);
+  }
+}
+
+function piirraVU(cv, arvo){
+  var k = kanvaasi(cv, 54);
+  var c = k.c, w = k.w, h = k.h;
+  var g = c.createLinearGradient(0, 0, 0, h);
+  g.addColorStop(0, '#ffd9a0'); g.addColorStop(1, '#e0a957');
+  c.fillStyle = g;
+  c.beginPath();
+  if (c.roundRect) c.roundRect(0, 0, w, h, 3); else c.rect(0, 0, w, h);
+  c.fill();
+  c.save(); c.clip();
+
+  var kx = w / 2, ky = h * 0.95, sade = Math.min(h * 0.76, w * 0.44);
+  var A0 = Math.PI * 1.17, A1 = Math.PI * 1.83;
+  for (var i = 0; i <= 10; i++){
+    var a = A0 + (A1 - A0) * (i / 10);
+    var pitka = i % 5 === 0;
+    c.beginPath();
+    c.strokeStyle = i >= 7 ? '#a8321f' : '#6b4426';
+    c.lineWidth = pitka ? 1.5 : 1;
+    c.moveTo(kx + Math.cos(a) * sade, ky + Math.sin(a) * sade);
+    c.lineTo(kx + Math.cos(a) * sade * (pitka ? 0.78 : 0.86),
+             ky + Math.sin(a) * sade * (pitka ? 0.78 : 0.86));
+    c.stroke();
+  }
+  c.beginPath(); c.strokeStyle = '#a8321f'; c.lineWidth = 1.5;
+  c.arc(kx, ky, sade, A0 + (A1 - A0) * 0.7, A1); c.stroke();
+
+  var ak = A0 + (A1 - A0) * Math.max(0, Math.min(1, arvo));
+  c.strokeStyle = '#241708'; c.lineWidth = 1.7; c.lineCap = 'round';
+  c.beginPath(); c.moveTo(kx, ky);
+  c.lineTo(kx + Math.cos(ak) * sade * 0.94, ky + Math.sin(ak) * sade * 0.94);
+  c.stroke();
+  c.beginPath(); c.fillStyle = '#241708';
+  c.arc(kx, ky, 2, 0, Math.PI * 2); c.fill();
+
+  c.restore();
+  c.strokeStyle = '#120b06'; c.lineWidth = 1.4;
+  c.beginPath();
+  if (c.roundRect) c.roundRect(0, 0, w, h, 3); else c.rect(0, 0, w, h);
+  c.stroke();
+}
+
+/* ====================  säätimet  ====================================== */
+
+function paivitaAani(){
+  var n = $('aani');
+  if (n){
+    n.querySelector('.osoitin').style.transform =
+      'rotate(' + (-135 + aaniTaso * 270).toFixed(1) + 'deg)';
+    n.setAttribute('aria-valuenow', Math.round(aaniTaso * 100));
+  }
+  el.volume = aaniTaso;
+}
+
+(function kytkeAani(){
+  if (!voimakkuuttaVoiSaataa()){
+    var p = $('aani') && $('aani').closest('.pylvas');
+    if (p) p.style.display = 'none';
+    return;
+  }
+  paivitaAani();
+  if (!window.Saadin || !$('aani')) return;
+  window.Saadin.lisaa({
+    id: 'aani', nimi: 'Äänenvoimakkuus', el: $('aani'),
+    min: 0, max: 1, askel: 0.01,
+    lue: function (){ return aaniTaso; },
+    aseta: function (v){ aaniTaso = v; paivitaAani(); },
+    piirra: paivitaAani,
+    muotoile: function (v){ return Math.round(v * 100) + ' %'; }
+  });
+})();
+
+/* SELECT. Jaettu Saadin tekee tasta kevyen puhelimella: nuppi on
+   laitteessa pieni kuten kuvassa, mutta napautus nostaa ison saatimen
+   keskelle ja veto selaa listaa nimi kerrallaan. */
+var selausKello = null;
+function merkitseSelaus(){
+  selaa = true;
+  paivitaTeksti();
+  if (selausKello) clearTimeout(selausKello);
+  /* Soitto alkaa vasta kun kaantaminen loppuu. Ilman tata jokainen
+     valissa oleva raita alkaisi soida hetkeksi, ja 22 biisin lapi
+     selaaminen olisi melua. */
+  selausKello = setTimeout(function (){
+    selaa = false;
+    if (osoitin !== kohta) soita(osoitin);
+    else paivitaTeksti();
+  }, 420);
+}
+
+(function kytkeValitsin(){
+  paivitaTeksti();
+  if (!window.Saadin || !$('valitsin')) return;
+  window.Saadin.lisaa({
+    id: 'valitsin', nimi: 'Kappale', el: $('valitsin'),
+    min: 0, max: 1, askel: 0.0001,
+    lue: function (){
+      return BIISIT.length > 1 ? osoitin / (BIISIT.length - 1) : 0;
+    },
+    aseta: function (v){
+      if (!BIISIT.length) return;
+      var uusi = Math.round(v * (BIISIT.length - 1));
+      if (uusi !== osoitin){ osoitin = uusi; }
+      merkitseSelaus();
+    },
+    piirra: paivitaTeksti,
+    muotoile: function (v){
+      if (!BIISIT.length) return '—';
+      var i = Math.round(v * (BIISIT.length - 1));
+      return (i + 1) + ' / ' + BIISIT.length + '  ·  ' + BIISIT[i].nimi;
+    }
+  });
+})();
+
+/* Nuolinäppäimet siirtävät raidasta toiseen suoraan. */
+document.addEventListener('keydown', function (e){
+  if (window.Saadin && window.Saadin.auki) return;
+  if (e.key === 'ArrowRight'){ soita(kohta + 1); e.preventDefault(); }
+  else if (e.key === 'ArrowLeft'){ soita(kohta - 1); e.preventDefault(); }
+});
+
+/* ====================  kello  ========================================= */
+
+var edellinen = 0, tekstiKello = 0;
+function askel(nyt){
+  var dt = Math.min(0.05, (nyt - edellinen) / 1000);
+  edellinen = nyt;
+  paivitaTasot(dt);
+  piirraPalkit();
+  piirraVU($('vu1'), taso.vasen);
+  piirraVU($('vu2'), taso.oikea);
+  tekstiKello += dt;
+  if (tekstiKello > 0.5){ tekstiKello = 0; if (!selaa) paivitaTeksti(); }
+  requestAnimationFrame(askel);
+}
+requestAnimationFrame(askel);
+
+/* ====================  kokoelma  ====================================== */
+
+(function haeKokoelma(){
+  if (location.protocol === 'file:') return;
+  fetch('kokoelma.json', { cache: 'no-cache' })
+    .then(function (r){ return r.ok ? r.json() : null; })
+    .then(function (d){
+      if (!d || !Array.isArray(d.raidat)) return;
+      BIISIT = d.raidat;
+      osoitin = 0;
+      paivitaTeksti();
+    })
+    .catch(function (){});
+})();
+</script>
+</body>
+</html>
