@@ -1,0 +1,12 @@
+{
+  "nimi": "Musa videot",
+  "videot": [
+    {
+      "nimi": "Endless Love",
+      "alarivi": "",
+      "kesto": 50.2,
+      "video": "https://aani.musarooms.com/video/video-01-endless-love.mp4",
+      "kansi": "https://aani.musarooms.com/video/video-01-endless-love.jpg"
+    }
+  ]
+}
