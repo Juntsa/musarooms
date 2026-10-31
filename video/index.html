@@ -37,8 +37,16 @@ h1{
   flex:1 1 auto;min-height:0;width:min(100%,460px);
   display:flex;flex-direction:column;gap:7px;
 }
+/* Tila jonka kehys saa kayttoonsa. Kehyksen oma koko lasketaan
+   JavaScriptissa klipin kuvasuhteesta: pelkka CSS ei osaa pitaa
+   kuvasuhdetta JA mahtua kahteen suuntaan yhta aikaa - max-width
+   kaventaa laatikkoa mutta jattaa korkeuden ennalleen. */
+#tila{
+  flex:1 1 auto;min-height:0;display:flex;
+  align-items:center;justify-content:center;
+}
 #kehys{
-  flex:1 1 auto;min-height:0;position:relative;border-radius:8px;padding:6px;
+  position:relative;border-radius:8px;padding:6px;
   background:linear-gradient(180deg,#5c3b22,#2e1c0e 60%,#1a0f06);
   box-shadow:0 1px 0 #7a5433 inset,0 -2px 0 #0c0704 inset,0 10px 30px #000a;
 }
@@ -69,7 +77,8 @@ video{
 #palkki i{display:block;height:100%;width:0;background:var(--messinkiVaal)}
 
 #kilpi{
-  flex:0 0 auto;border-radius:5px;padding:7px 10px;
+  display:block;width:100%;border:0;min-height:44px;
+  border-radius:5px;padding:7px 28px 7px 10px;
   background:linear-gradient(180deg,#c9a24e,#8a6a2c);
   box-shadow:0 1px 0 #eccb8a inset,0 2px 6px #0007;
   color:#2a1a0f;text-align:center;
@@ -82,6 +91,59 @@ video{
   display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
   margin-top:2px;opacity:.75;
 }
+#kilpi{cursor:pointer}
+#kilpi::after{
+  content:"BROWSE";position:absolute;right:10px;top:50%;
+  transform:translateY(-50%);
+  font-weight:700;font-size:8px;line-height:1;letter-spacing:.14em;
+  opacity:.5;
+}
+#kilpiKuori{position:relative;flex:0 0 auto}
+
+/* Klippilista. Nousee alhaalta kuten dekin BROWSE; samaa sukua, jotta
+   talo tuntuu yhdelta talolta. */
+#lista{
+  position:fixed;left:0;right:0;bottom:0;z-index:5;
+  max-height:72vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  background:linear-gradient(180deg,#2e1c0e,#1a0f06);
+  border-top:2px solid var(--messinki);
+  box-shadow:0 -10px 30px #000b;
+  transform:translateY(102%);transition:transform .22s ease;
+  padding-bottom:calc(6px + env(safe-area-inset-bottom));
+}
+#lista.auki{transform:translateY(0)}
+#listaOtsikko{
+  position:sticky;top:0;display:flex;align-items:center;gap:8px;
+  padding:8px 10px;background:#1a0f06;border-bottom:1px solid #4a2f1c;
+}
+#listaOtsikko b{
+  flex:1;font-weight:700;font-size:10px;line-height:1;letter-spacing:.24em;
+  color:#c3a271;text-transform:uppercase;
+}
+#listaKiinni{
+  min-width:44px;min-height:34px;cursor:pointer;border-radius:5px;
+  color:var(--kerma);background:#3a2516;border:1px solid #0c0704;
+}
+#lista ol{list-style:none;margin:0;padding:0}
+#lista button.rivi{
+  display:flex;align-items:center;gap:10px;width:100%;min-height:46px;
+  cursor:pointer;text-align:left;padding:6px 10px;
+  color:var(--kerma);background:transparent;border:0;
+  border-bottom:1px solid #ffffff12;
+}
+#lista button.rivi[aria-current="true"]{background:#ffffff14}
+#lista .nro{
+  flex:0 0 auto;width:22px;text-align:right;
+  font-size:11px;color:var(--himmea);
+}
+#lista .nimet{flex:1;min-width:0}
+#lista .nimet b{
+  display:block;font-weight:600;font-size:13px;line-height:1.25;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+#lista .nimet span{display:block;font-size:10px;color:var(--himmea)}
+#lista .kesto{flex:0 0 auto;font-size:11px;color:var(--himmea)}
+
 #napit{display:flex;gap:6px;flex:0 0 auto}
 #napit button{
   flex:1;min-height:46px;cursor:pointer;border-radius:6px;
@@ -100,7 +162,7 @@ video{
 <h1>Musa videot</h1>
 
 <div id="kaappi">
-  <div id="kehys">
+  <div id="tila"><div id="kehys">
     <div id="ruutu">
       <video id="video" playsinline preload="metadata"></video>
       <button id="peite" type="button" aria-label="Toista">
@@ -111,9 +173,13 @@ video{
       </button>
       <div id="palkki"><i id="palkkiTays"></i></div>
     </div>
-  </div>
+  </div></div>
 
-  <div id="kilpi"><b id="nimi">—</b><span id="alanimi"></span></div>
+  <div id="kilpiKuori">
+    <button type="button" id="kilpi" aria-label="Valitse klippi">
+      <b id="nimi">—</b><span id="alanimi"></span>
+    </button>
+  </div>
 
   <div id="napit">
     <button type="button" id="edel">&#9664;&#9664;</button>
@@ -122,6 +188,14 @@ video{
   </div>
 
   <div id="nyt">ei videoita</div>
+</div>
+
+<div id="lista" aria-hidden="true">
+  <div id="listaOtsikko">
+    <b>Browse</b>
+    <button type="button" id="listaKiinni">Sulje</button>
+  </div>
+  <ol id="listaRivit"></ol>
 </div>
 
 <script>
@@ -142,6 +216,37 @@ function mmss(s){
   return m + ':' + (x < 10 ? '0' : '') + x;
 }
 
+/* --- kuvaruudun mitoitus ---------------------------------------------
+   Klipit tulevat kolmessa muodossa: pysty 9:16, vaaka 16:9 ja nelio.
+   Kehys otetaan sen kokoiseksi kuin kuva on, ei toisin pain. Suhde
+   tulee luettelosta, jotta ruutu on oikean muotoinen jo kansikuvan
+   aikana eika hyppaa kun videon metadata saapuu.                      */
+var KEHYS = 6;                                   // puukehyksen leveys px
+
+function suhde(){
+  var b = VIDEOT[kohta];
+  if (b && b.leveys && b.korkeus) return b.leveys / b.korkeus;
+  if (v.videoWidth && v.videoHeight) return v.videoWidth / v.videoHeight;
+  return 9 / 16;
+}
+
+function mitoita(){
+  var tila = $('tila');
+  var lev = tila.clientWidth, kor = tila.clientHeight;
+  if (!lev || !kor) return;
+  var s = suhde();
+  /* Sisamitta on se joka noudattaa kuvasuhdetta; kehys tulee paalle. */
+  var sl = lev - 2 * KEHYS, sk = kor - 2 * KEHYS;
+  if (sl <= 0 || sk <= 0) return;
+  if (sl / sk > s) sl = sk * s;                  // tilaa liikaa leveyteen
+  else sk = sl / s;                              // tilaa liikaa korkeuteen
+  var e = $('kehys');
+  e.style.width  = Math.floor(sl + 2 * KEHYS) + 'px';
+  e.style.height = Math.floor(sk + 2 * KEHYS) + 'px';
+}
+window.addEventListener('resize', mitoita);
+v.addEventListener('loadedmetadata', mitoita);
+
 function valitse(i, aloita){
   if (!VIDEOT.length) return;
   kohta = ((i % VIDEOT.length) + VIDEOT.length) % VIDEOT.length;
@@ -155,6 +260,8 @@ function valitse(i, aloita){
   $('peite').classList.remove('piilossa');
   $('palkkiTays').style.width = '0%';
   mediaTiedot(b);
+  mitoita();
+  merkitseLista();
   paivita();
   if (aloita) toista(true);
 }
@@ -199,6 +306,76 @@ function paivita(){
   else if (!soi && !v.currentTime)
     $('nyt').textContent = (kohta + 1) + ' / ' + VIDEOT.length;
 }
+
+/* --- klippilista -----------------------------------------------------
+   Nimet tulevat tiedostonimista, eli kayttajan syotteesta. Rivin runko
+   on HTML, mutta nimi ja alarivi asetetaan textContent-arvoina - sama
+   linjaus kuin asemien nimissa ja house-soittimessa.                   */
+function teeLista(){
+  var ol = $('listaRivit');
+  ol.textContent = '';
+  for (var i = 0; i < VIDEOT.length; i++){
+    var b = VIDEOT[i];
+    var li = document.createElement('li');
+    var nap = document.createElement('button');
+    nap.type = 'button';
+    nap.className = 'rivi';
+    nap.setAttribute('data-kohta', String(i));
+
+    var nro = document.createElement('span');
+    nro.className = 'nro';
+    nro.textContent = String(i + 1);
+
+    var nimet = document.createElement('span');
+    nimet.className = 'nimet';
+    var vahva = document.createElement('b');
+    vahva.textContent = b.nimi || '';
+    nimet.appendChild(vahva);
+    if (b.alarivi){
+      var ala = document.createElement('span');
+      ala.textContent = b.alarivi;
+      nimet.appendChild(ala);
+    }
+
+    var kesto = document.createElement('span');
+    kesto.className = 'kesto';
+    kesto.textContent = mmss(b.kesto || 0);
+
+    nap.appendChild(nro); nap.appendChild(nimet); nap.appendChild(kesto);
+    li.appendChild(nap);
+    ol.appendChild(li);
+  }
+}
+
+function listaAuki(auki){
+  var e = $('lista');
+  if (auki === undefined) auki = !e.classList.contains('auki');
+  e.classList.toggle('auki', auki);
+  e.setAttribute('aria-hidden', auki ? 'false' : 'true');
+  if (auki){
+    var nyt = e.querySelector('[aria-current="true"]');
+    if (nyt) nyt.scrollIntoView({ block: 'center' });
+  }
+}
+
+function merkitseLista(){
+  var rivit = $('listaRivit').querySelectorAll('button.rivi');
+  for (var i = 0; i < rivit.length; i++){
+    if (i === kohta) rivit[i].setAttribute('aria-current', 'true');
+    else rivit[i].removeAttribute('aria-current');
+  }
+}
+
+$('listaRivit').addEventListener('click', function (e){
+  var nap = e.target.closest ? e.target.closest('button.rivi') : null;
+  if (!nap) return;
+  listaAuki(false);
+  valitse(parseInt(nap.getAttribute('data-kohta'), 10), false);
+});
+$('kilpi').addEventListener('click', function (){
+  if (VIDEOT.length) listaAuki();
+});
+$('listaKiinni').addEventListener('click', function (){ listaAuki(false); });
 
 function mediaTiedot(b){
   if (!('mediaSession' in navigator)) return;
@@ -246,6 +423,7 @@ document.addEventListener('keydown', function (e){
     .then(function (d){
       if (!d || !Array.isArray(d.videot) || !d.videot.length) return;
       VIDEOT = d.videot;
+      teeLista();
       valitse(0, false);
     })
     .catch(function (){});

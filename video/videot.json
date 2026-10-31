@@ -2,11 +2,157 @@
   "nimi": "Musa videot",
   "videot": [
     {
+      "nimi": "Beer Engine",
+      "alarivi": "",
+      "kesto": 59.7,
+      "video": "https://aani.musarooms.com/video/video-01-beer-engine.mp4",
+      "kansi": "https://aani.musarooms.com/video/video-01-beer-engine.jpg",
+      "leveys": 576,
+      "korkeus": 1024
+    },
+    {
+      "nimi": "Country Line at Dawn",
+      "alarivi": "",
+      "kesto": 20.2,
+      "video": "https://aani.musarooms.com/video/video-02-country-line-at-dawn.mp4",
+      "kansi": "https://aani.musarooms.com/video/video-02-country-line-at-dawn.jpg",
+      "leveys": 576,
+      "korkeus": 1020
+    },
+    {
+      "nimi": "Drops Of Love",
+      "alarivi": "",
+      "kesto": 65.0,
+      "video": "https://aani.musarooms.com/video/video-03-drops-of-love.mp4",
+      "kansi": "https://aani.musarooms.com/video/video-03-drops-of-love.jpg",
+      "leveys": 576,
+      "korkeus": 1024
+    },
+    {
       "nimi": "Endless Love",
       "alarivi": "",
       "kesto": 50.2,
-      "video": "https://aani.musarooms.com/video/video-01-endless-love.mp4",
-      "kansi": "https://aani.musarooms.com/video/video-01-endless-love.jpg"
+      "video": "https://aani.musarooms.com/video/video-04-endless-love.mp4",
+      "kansi": "https://aani.musarooms.com/video/video-04-endless-love.jpg",
+      "leveys": 1080,
+      "korkeus": 1920
+    },
+    {
+      "nimi": "For Friend",
+      "alarivi": "",
+      "kesto": 72.2,
+      "video": "https://aani.musarooms.com/video/video-05-for-friend.mp4",
+      "kansi": "https://aani.musarooms.com/video/video-05-for-friend.jpg",
+      "leveys": 1024,
+      "korkeus": 576
+    },
+    {
+      "nimi": "Happy Easter",
+      "alarivi": "",
+      "kesto": 152.9,
+      "video": "https://aani.musarooms.com/video/video-06-happy-easter.mp4",
+      "kansi": "https://aani.musarooms.com/video/video-06-happy-easter.jpg",
+      "leveys": 576,
+      "korkeus": 1024
+    },
+    {
+      "nimi": "Hot Summer Love",
+      "alarivi": "",
+      "kesto": 30.1,
+      "video": "https://aani.musarooms.com/video/video-07-hot-summer-love.mp4",
+      "kansi": "https://aani.musarooms.com/video/video-07-hot-summer-love.jpg",
+      "leveys": 576,
+      "korkeus": 1024
+    },
+    {
+      "nimi": "Last Exit Home",
+      "alarivi": "",
+      "kesto": 10.1,
+      "video": "https://aani.musarooms.com/video/video-08-last-exit-home.mp4",
+      "kansi": "https://aani.musarooms.com/video/video-08-last-exit-home.jpg",
+      "leveys": 576,
+      "korkeus": 1020
+    },
+    {
+      "nimi": "Light Follows You",
+      "alarivi": "",
+      "kesto": 60.1,
+      "video": "https://aani.musarooms.com/video/video-09-light-follows-you.mp4",
+      "kansi": "https://aani.musarooms.com/video/video-09-light-follows-you.jpg",
+      "leveys": 576,
+      "korkeus": 1024
+    },
+    {
+      "nimi": "Rumble & Light",
+      "alarivi": "",
+      "kesto": 70.5,
+      "video": "https://aani.musarooms.com/video/video-10-rumble-light.mp4",
+      "kansi": "https://aani.musarooms.com/video/video-10-rumble-light.jpg",
+      "leveys": 576,
+      "korkeus": 1020
+    },
+    {
+      "nimi": "Sheltter",
+      "alarivi": "",
+      "kesto": 80.3,
+      "video": "https://aani.musarooms.com/video/video-11-sheltter.mp4",
+      "kansi": "https://aani.musarooms.com/video/video-11-sheltter.jpg",
+      "leveys": 576,
+      "korkeus": 1024
+    },
+    {
+      "nimi": "Techno Collection",
+      "alarivi": "",
+      "kesto": 212.0,
+      "video": "https://aani.musarooms.com/video/video-12-techno-collection.mp4",
+      "kansi": "https://aani.musarooms.com/video/video-12-techno-collection.jpg",
+      "leveys": 576,
+      "korkeus": 1024
+    },
+    {
+      "nimi": "The Slab",
+      "alarivi": "",
+      "kesto": 19.9,
+      "video": "https://aani.musarooms.com/video/video-13-the-slab.mp4",
+      "kansi": "https://aani.musarooms.com/video/video-13-the-slab.jpg",
+      "leveys": 576,
+      "korkeus": 576
+    },
+    {
+      "nimi": "While There Is Time",
+      "alarivi": "",
+      "kesto": 54.7,
+      "video": "https://aani.musarooms.com/video/video-14-while-there-is-time.mp4",
+      "kansi": "https://aani.musarooms.com/video/video-14-while-there-is-time.jpg",
+      "leveys": 576,
+      "korkeus": 864
+    },
+    {
+      "nimi": "Wyoming Wind",
+      "alarivi": "",
+      "kesto": 10.0,
+      "video": "https://aani.musarooms.com/video/video-15-wyoming-wind.mp4",
+      "kansi": "https://aani.musarooms.com/video/video-15-wyoming-wind.jpg",
+      "leveys": 576,
+      "korkeus": 576
+    },
+    {
+      "nimi": "Ystävyys",
+      "alarivi": "",
+      "kesto": 72.3,
+      "video": "https://aani.musarooms.com/video/video-16-ystavyys.mp4",
+      "kansi": "https://aani.musarooms.com/video/video-16-ystavyys.jpg",
+      "leveys": 1024,
+      "korkeus": 576
+    },
+    {
+      "nimi": "Ystävälle",
+      "alarivi": "",
+      "kesto": 205.4,
+      "video": "https://aani.musarooms.com/video/video-17-ystavalle.mp4",
+      "kansi": "https://aani.musarooms.com/video/video-17-ystavalle.jpg",
+      "leveys": 1024,
+      "korkeus": 576
     }
   ]
 }
