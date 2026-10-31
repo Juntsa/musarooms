@@ -238,8 +238,44 @@ let soi = false;
 
 const el = new Audio();
 el.preload = 'none';
+el.playsInline = true;
 
 function nykyinen(){ return LAULUT[ryhma] || []; }
+
+/* Lukitusnäytön ohjaimet. Soitto jatkuu näytön sammuttua, koska tämä soitin
+   soittaa elementillä suoraan eikä Web Audion läpi — mutta ilman
+   MediaSessionia lapsi ei näe lukitusnäytöltä mikä laulu soi eivätkä
+   kuulokkeiden napit toimi. */
+function mediaTiedot(b){
+  if (!('mediaSession' in navigator)) return;
+  try {
+    navigator.mediaSession.metadata = new window.MediaMetadata({
+      title: b && b.nimi ? b.nimi : 'Leikkihuone',
+      artist: b && b.alarivi ? b.alarivi : 'Musa Rooms',
+      album: 'Leikkihuone'
+    });
+  } catch (e){}
+  const k = {
+    play: () => { el.play().then(() => { soi = true; piirraLista(); })
+                           .catch(() => {}); },
+    pause: () => { el.pause(); soi = false; piirraLista(); },
+    previoustrack: () => valitse(kohta <= 0 ? -1 : kohta - 1),
+    nexttrack: () => valitse(kohta + 1)
+  };
+  for (const nimi in k){
+    try { navigator.mediaSession.setActionHandler(nimi, k[nimi]); }
+    catch (e){}
+  }
+}
+
+el.addEventListener('play', () => {
+  if ('mediaSession' in navigator)
+    try { navigator.mediaSession.playbackState = 'playing'; } catch (e){}
+});
+el.addEventListener('pause', () => {
+  if ('mediaSession' in navigator)
+    try { navigator.mediaSession.playbackState = 'paused'; } catch (e){}
+});
 
 function piirraLista(){
   const l = nykyinen(), p = $('lista');
@@ -290,6 +326,7 @@ function valitse(i){
   const b = l[kohta];
   el.src = b.aani;
   el.load();
+  mediaTiedot(b);
   /* play() hylätään hiljaa jos sitä kutsuu ennen kuin elementti on
      valmis — sama ansa kuin jukeboksissa ja SilverDeckissä. */
   const aloita = () => el.play().then(() => { soi = true; piirraLista(); })
