@@ -1378,7 +1378,6 @@ const $ = id => document.getElementById(id);
 
 /* Piirtomuunnos talteen, jotta kosketus osataan muuttaa yksiköiksi. */
 let TM = { ox: 0, oy: 0, s: 1 };
-let gain = null;          // voimakkuussolmu, luodaan ääniketjun mukana
 let aaniTaso = 0.8;       // 0..1, ohjauspalkin nupista
 
 function piirra(){
@@ -1423,34 +1422,139 @@ function piirra(){
 
 /* ====================  ääniketju  ======================================= */
 
-let ac = null, an = null, el = null, lahde = null, fbuf = null;
+/* MUSIIKKI EI KULJE WEB AUDION LÄPI. Tämä on tarkoituksellista eikä
+   laiskuutta:
 
-/* Palauttaa aina täyttyvän lupauksen: jos ääniketju ei jostain syystä
-   lähde käyntiin, kuvan pitää silti toimia. */
+   createMediaElementSource ohjaa elementin äänen pysyvästi Web Audio
+   -graafiin — spesifikaation mukaan sitä ei saa takaisin elementin omaan
+   ulostuloon. Jos AudioContext siis keskeytyy taustalla, koko soitto
+   hiljenee, ja laite näyttää yhä soittavansa. Puhelin tekee juuri niin
+   kun näyttö sammuu. Vika on äänetön, joten sitä ei huomaa testatessa.
+
+   Siksi: el soittaa suoraan, ja ac on olemassa vain laitteen omia
+   naksahduksia varten. Valot eivät kaipaa analysaattoria — kolme kaistaa
+   luetaan valmiiksi lasketusta .valot-tiedostosta (ks. kaistat()). */
+let ac = null, el = null;
+
+/* Esilasketut valot: VLO1-tiedoston purettu sisältö soivalle raidalle. */
+let valot = null;              // { fps, kesto, data } tai null
+let valotOsoite = '';          // mille osoitteelle valot on haettu
+
+/* Elementti luodaan heti. Se ei vaadi käyttäjän elettä — vain play() vaatii,
+   ja se tulee napin kautta. */
+function elementti(){
+  if (el) return el;
+  el = new Audio();
+  el.preload = 'auto';
+  el.playsInline = true;
+  el.volume = aaniTaso;
+  el.addEventListener('ended', () => { S.soi = false; paivitaNapit(); });
+  el.addEventListener('play',  () => mediaTila('playing'));
+  el.addEventListener('pause', () => mediaTila('paused'));
+  return el;
+}
+
+/* Palauttaa aina täyttyvän lupauksen: jos naksahdukset eivät jostain syystä
+   lähde käyntiin, soiton ja kuvan pitää silti toimia. */
 function aanetKayntiin(){
-  try { return aanetKayntiinOikeasti().catch(() => {}); }
+  elementti();
+  try { return naksahduksetKayntiin().catch(() => {}); }
   catch (e){ return Promise.resolve(); }
 }
 
-function aanetKayntiinOikeasti(){
+function naksahduksetKayntiin(){
   if (ac) return ac.state === 'running' ? Promise.resolve() : ac.resume();
   ac = new (window.AudioContext || window.webkitAudioContext)();
-  an = ac.createAnalyser();
-  an.fftSize = 2048;
-  an.smoothingTimeConstant = 0.72;
-  fbuf = new Uint8Array(an.frequencyBinCount);
-  /* Voimakkuus omana solmunaan analysaattorin JÄLKEEN: iOS ohittaa
-     elementin volume-arvon, ja analysaattorin edessä säädin hiljentäisi
-     myös valot. Nyt valot elävät vaikka ääni olisi vedetty nollaan. */
-  gain = ac.createGain();
-  gain.gain.value = aaniTaso;
-  an.connect(gain).connect(ac.destination);
-  el = new Audio();
-  el.preload = 'auto';
-  el.addEventListener('ended', () => { S.soi = false; paivitaNapit(); });
-  lahde = ac.createMediaElementSource(el);
-  lahde.connect(an);
   return ac.resume();
+}
+
+/* Voiko elementin volume-arvoa säätää lainkaan? iOS ohittaa sen ja jättää
+   arvon ykköseen — siellä äänenvoimakkuus on laitteen omissa napeissa.
+   Testataan kokeilemalla, ei selaintunnistuksella. */
+let voimakkuusToimii = null;
+function voimakkuuttaVoiSaataa(){
+  if (voimakkuusToimii !== null) return voimakkuusToimii;
+  const koe = new Audio();
+  try {
+    koe.volume = 0.42;
+    voimakkuusToimii = Math.abs(koe.volume - 0.42) < 0.01;
+  } catch (e){ voimakkuusToimii = false; }
+  return voimakkuusToimii;
+}
+
+/* ====================  lukitusnäytön ohjaimet  ========================== */
+
+/* MediaSession kertoo käyttöjärjestelmälle että tämä on mediasoitin: raidan
+   nimi näkyy lukitusnäytöllä, ja kuulokkeiden napit toimivat. Se myös
+   parantaa taustasoiton säilymistä. */
+function mediaTiedot(b){
+  if (!('mediaSession' in navigator)) return;
+  try {
+    navigator.mediaSession.metadata = new window.MediaMetadata({
+      title: b && b.nimi ? b.nimi : 'JB-2400',
+      artist: b && b.esittaja ? b.esittaja : 'KJWhispers',
+      album: 'Musa Rooms · Fifties'
+    });
+  } catch (e){}
+  const k = {
+    play: () => { if (el) el.play().then(() => { S.soi = true; paivitaNapit(); })
+                                   .catch(() => {}); },
+    pause: () => { if (el){ el.pause(); S.soi = false; paivitaNapit(); } },
+    previoustrack: () => siirry(-1),
+    nexttrack: () => siirry(1)
+  };
+  for (const nimi in k){
+    try { navigator.mediaSession.setActionHandler(nimi, k[nimi]); }
+    catch (e){}
+  }
+}
+
+function mediaTila(tila){
+  if (!('mediaSession' in navigator)) return;
+  try { navigator.mediaSession.playbackState = tila; } catch (e){}
+}
+
+/* Edellinen ja seuraava täytetty paikka. Lukitusnäytön napit tarvitsevat
+   tämän, ja samaa käytetään kun raita loppuu. */
+function siirry(suunta){
+  const taytetyt = [];
+  for (let i = 0; i < BIISIT.length; i++)
+    if (BIISIT[i] && BIISIT[i].nimi) taytetyt.push(i);
+  if (!taytetyt.length) return;
+  const nyt = taytetyt.indexOf(S.valittu);
+  const seur = nyt < 0 ? 0
+    : (nyt + suunta + taytetyt.length) % taytetyt.length;
+  valitse(taytetyt[seur]);
+}
+
+/* ====================  valot tiedostosta  =============================== */
+
+/* VLO1: "VLO1", uint16 ruutua/s, uint32 kesto ms, sitten kolme tavua per
+   ruutu (basso, keski, diskantti). _valot.py tekee nämä. */
+function haeValot(aaniOsoite){
+  const osoite = String(aaniOsoite || '');
+  if (!osoite || osoite === valotOsoite) return;
+  valotOsoite = osoite;
+  valot = null;
+  /* blob:-osoite on koneelta raahattu tiedosto; sille ei ole valoja eikä
+     tarvitse olla. Silloin valot jäävät tasaiselle hehkulle. */
+  if (/^blob:|^data:/.test(osoite)) return;
+  const url = osoite.replace(/\.(mp3|wav|m4a|ogg)(\?.*)?$/i, '.valot');
+  if (url === osoite) return;
+  fetch(url, { cache: 'force-cache' })
+    .then(r => r.ok ? r.arrayBuffer() : null)
+    .then(puskuri => {
+      if (!puskuri || valotOsoite !== osoite) return;
+      const t = new Uint8Array(puskuri);
+      if (t.length < 10 || t[0] !== 86 || t[1] !== 76 || t[2] !== 79) return;
+      const nak = new DataView(puskuri);
+      valot = {
+        fps: nak.getUint16(4, true),
+        kesto: nak.getUint32(6, true),
+        data: t.subarray(10)
+      };
+    })
+    .catch(() => {});
 }
 
 /* Mekaaninen naksahdus: terävä kohina ja matala tömähdys.
@@ -1532,6 +1636,8 @@ function vaihtoValmis(){
        kuin SilverDeckin ääniketjussa. */
     el.src = b.aani;
     el.load();
+    haeValot(b.aani);
+    mediaTiedot(b);
     const aloita = () => el.play()
       .then(() => { S.soi = true;  paivitaNapit(); })
       .catch(() => { S.soi = false; paivitaNapit(); });
@@ -1643,16 +1749,23 @@ window.addEventListener('keydown', e => {
 let edellinen = performance.now();
 
 function kaistat(dt){
-  if (!an || !S.valotPaalla){
+  /* Lepotila: ei soivaa raitaa, ei valotietoa, tai valot kytketty pois.
+     Tasot valuvat hiljaa kohti himmeää hehkua. */
+  const kaynnissa = S.soi && S.valotPaalla && valot && el;
+  if (!kaynnissa){
     for (const k of ['basso','keski','diskantti'])
       S.taso[k] += (0.16 - S.taso[k]) * Math.min(1, dt * 3);
     S.taso.isku *= Math.max(0, 1 - dt * 4);
     return;
   }
-  an.getByteFrequencyData(fbuf);
-  const ka = (a, b) => { let s = 0; for (let i = a; i < b; i++) s += fbuf[i]; return s / (b - a) / 255; };
-  /* noin 23 Hz per lokero 48 kHz:n näytteenotolla */
-  const uusi = { basso: ka(1, 8), keski: ka(8, 60), diskantti: ka(60, 260) };
+  /* Ruutu luetaan soittoajasta. Jos raita on kelattu tai valotiedosto on
+     lyhyempi kuin ääni, otetaan viimeinen ruutu — ei nollata valoja. */
+  const r = Math.floor(el.currentTime * valot.fps);
+  const kpl = (valot.data.length / 3) | 0;
+  const i = Math.max(0, Math.min(kpl - 1, r)) * 3;
+  const uusi = { basso:     valot.data[i]     / 255,
+                 keski:     valot.data[i + 1] / 255,
+                 diskantti: valot.data[i + 2] / 255 };
   for (const k of ['basso','keski','diskantti']){
     const u = uusi[k];
     /* nousu nopeasti, lasku hitaasti — näin isku näkyy mutta ei välky */
@@ -2147,11 +2260,20 @@ function paivitaAani(){
   const a = $('aaniArvo');
   if (a) a.textContent = Math.round(aaniTaso * 100) + ' %';
   if (el2) el2.setAttribute('aria-valuenow', Math.round(aaniTaso * 100));
-  if (gain) gain.gain.value = aaniTaso;
-  else if (el) el.volume = aaniTaso;
+  if (el) el.volume = aaniTaso;
 }
 
 (function kytkeAani(){
+  /* iOS ei anna säätää elementin voimakkuutta ohjelmallisesti. Nuppi joka ei
+     tee mitään on pahempi kuin puuttuva nuppi, joten se piilotetaan ja
+     tilalle tulee rivi joka kertoo missä säädin on. */
+  if (!voimakkuuttaVoiSaataa()){
+    const n = $('aani');
+    if (n) n.style.display = 'none';
+    const s = document.querySelector('#ohjaus .selite');
+    if (s) s.innerHTML = '<b>Ääni</b><span>puhelimen napeista</span>';
+    return;
+  }
   paivitaAani();
   if (!window.Saadin || !$('aani')) return;
   Saadin.lisaa({
