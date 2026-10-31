@@ -163,7 +163,9 @@ a.dl:hover{border-color:var(--green)}
     background:linear-gradient(180deg,#19140f,#0d0a07);border-top:1px solid #3a2d1e;
   }
   .bar .chips{display:flex;gap:7px}
-  .bar .chips button{flex:1;padding:10px 4px;font-size:12px}
+  /* 36 px on sormelle pieni; 44 on tavallinen alaraja. Kuljetinnapit
+     ovat jo 51 px, joten naiden pitaa olla samaa luokkaa. */
+  .bar .chips button{flex:1;padding:10px 4px;font-size:12px;min-height:44px}
   .bar .chips button.on{background:linear-gradient(180deg,#5a3a12,#3a2409);
     border-color:#7a5420;color:#ffd9a0;box-shadow:none}
   .bar .tr{display:flex;gap:9px}
