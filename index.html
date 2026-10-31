@@ -34,6 +34,22 @@ h1 span{color:var(--amber)}
   margin:0 0 46px;text-align:center;
 }
 
+/* ---- ohjerivi oven alla ----------------------------------------------
+   Jokainen huone on eri laite, eika yksi yleinen ohje kata niita. Rivi
+   nimeaa sen eleen jota ilman laite nayttaa rikkinaiselta: jukeboksissa
+   biisi valitaan kortista eika napeista, Technossa dekin naytolta eika
+   jogista. Rivi on oven ALLA eika sen takana, koska ovien takana sita ei
+   lue kukaan - puhelimessa ovet eivat aukea ennen kuin niita painaa. */
+.ovi{display:flex;flex-direction:column;gap:9px}
+.ovi .huone{flex:0 0 auto}
+.ohje{
+  margin:0;text-align:center;
+  font-size:12px;line-height:1.35;color:var(--dim);
+  text-wrap:balance;
+}
+/* Suljetun huoneen ohje olisi neuvo laitteeseen johon ei paase. */
+.ovi:has(.kiinni) .ohje{display:none}
+
 /* ---- käytävä ---------------------------------------------------------- */
 .kaytava{
   display:grid;gap:30px 26px;width:100%;max-width:1060px;
@@ -235,69 +251,93 @@ footer a{color:#8a7a66}
 
   <div class="kaytava">
 
-    <a class="huone fifties" href="jukebox/" data-soitin>
-      <div class="sisus">
-        <b>Fifties</b>
-        <span>JB-2400 jukeboksi<br>KJWhispers — 23 raitaa</span>
-      </div>
-      <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
-    </a>
+    <div class="ovi">
+      <a class="huone fifties" href="jukebox/" data-soitin>
+        <div class="sisus">
+          <b>Fifties</b>
+          <span>JB-2400 jukeboksi<br>KJWhispers — 23 raitaa</span>
+        </div>
+        <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
+      </a>
+      <p class="ohje">Valitse kortti &mdash; koko lista aukeaa napauttamalla</p>
+    </div>
 
-    <a class="huone house" href="house/" data-soitin>
-      <div class="sisus">
-        <b>House</b>
-        <span>Vocal, deep, soulful<br>auringonlasku ja vinyyli</span>
-      </div>
-      <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
-    </a>
+    <div class="ovi">
+      <a class="huone house" href="house/" data-soitin>
+        <div class="sisus">
+          <b>House</b>
+          <span>Vocal, deep, soulful<br>auringonlasku ja vinyyli</span>
+        </div>
+        <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
+      </a>
+      <p class="ohje">STREAM selaa, PHONO pudottaa neulan</p>
+    </div>
 
-    <a class="huone country" href="country/" data-soitin>
-      <div class="sisus">
-        <b>Country</b>
-        <span>Viritä asema<br>punaisella neulalla</span>
-      </div>
-      <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
-    </a>
+    <div class="ovi">
+      <a class="huone country" href="country/" data-soitin>
+        <div class="sisus">
+          <b>Country</b>
+          <span>Viritä asema<br>punaisella neulalla</span>
+        </div>
+        <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
+      </a>
+      <p class="ohje">K&auml;&auml;nn&auml; viisaria ja etsi asema</p>
+    </div>
 
-    <a class="huone dekki" href="dekki/" data-soitin>
-      <div class="sisus">
-        <b>Dekki</b>
-        <span>Kela, kasetti A ja B<br>power · välimaasto · balladit</span>
-      </div>
-      <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
-    </a>
+    <div class="ovi">
+      <a class="huone dekki" href="dekki/" data-soitin>
+        <div class="sisus">
+          <b>Dekki</b>
+          <span>Kela, kasetti A ja B<br>power · välimaasto · balladit</span>
+        </div>
+        <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
+      </a>
+      <p class="ohje">Valitse kela tai kasetti, sitten biisi listasta</p>
+    </div>
 
-    <a class="huone lapset" href="leikki/" data-soitin>
-      <div class="sisus">
-        <b>Leikkihuone</b>
-        <span>Lastenlaulut<br>toiminta · uni · iloiset</span>
-      </div>
-      <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
-    </a>
+    <div class="ovi">
+      <a class="huone lapset" href="leikki/" data-soitin>
+        <div class="sisus">
+          <b>Leikkihuone</b>
+          <span>Lastenlaulut<br>toiminta · uni · iloiset</span>
+        </div>
+        <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
+      </a>
+      <p class="ohje">Kolme ryhm&auml;&auml;: toiminta, uni, iloiset</p>
+    </div>
 
-    <a class="huone highland" href="highland/" data-soitin>
-      <div class="sisus">
-        <b>Highland</b>
-        <span>Pohjoisen mystiikka<br>käännä valitsinta</span>
-      </div>
-      <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
-    </a>
+    <div class="ovi">
+      <a class="huone highland" href="highland/" data-soitin>
+        <div class="sisus">
+          <b>Highland</b>
+          <span>Pohjoisen mystiikka<br>käännä valitsinta</span>
+        </div>
+        <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
+      </a>
+      <p class="ohje">K&auml;&auml;nn&auml; SELECT-nuppia, se valitsee biisin</p>
+    </div>
 
-    <a class="huone video" href="video/" data-soitin>
-      <div class="sisus">
-        <b>Musa videot</b>
-        <span>Klipit alle minuutin<br>pystykuva puukehyksessä</span>
-      </div>
-      <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
-    </a>
+    <div class="ovi">
+      <a class="huone video" href="video/" data-soitin>
+        <div class="sisus">
+          <b>Musa videot</b>
+          <span>Klipit alle minuutin<br>pystykuva puukehyksessä</span>
+        </div>
+        <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
+      </a>
+      <p class="ohje">Nimikilpi avaa klippilistan</p>
+    </div>
 
-    <a class="huone techno" href="techno/" data-soitin>
-      <div class="sisus">
-        <b>Gym</b>
-        <span>Kaksi dekkiä ja mikseri<br>valitse näytöltä</span>
-      </div>
-      <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
-    </a>
+    <div class="ovi">
+      <a class="huone techno" href="techno/" data-soitin>
+        <div class="sisus">
+          <b>Techno</b>
+          <span>Kaksi dekkiä ja mikseri<br>valitse dekin näytöltä</span>
+        </div>
+        <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
+      </a>
+      <p class="ohje">Napauta dekin n&auml;ytt&ouml;&auml; &mdash; sielt&auml; valitaan, ei jogista</p>
+    </div>
 
   </div>
 
