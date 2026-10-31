@@ -240,7 +240,7 @@ h1{
         </div>
         <div class="selite">Filter</div>
       </div>
-      <button type="button" id="kirjastoNappi">KIRJASTO</button>
+      <button type="button" id="kirjastoNappi">BROWSE</button>
       <div class="pylvas">
         <div id="aani" class="nuppi" role="slider" tabindex="0"
              aria-label="Master" aria-valuemin="0" aria-valuemax="100">
@@ -254,10 +254,10 @@ h1{
   <div id="nyt">valitse kappale dekin näytöltä</div>
 </div>
 
-<div id="kirjasto" role="dialog" aria-modal="true" aria-label="Kappalekirjasto">
+<div id="kirjasto" role="dialog" aria-modal="true" aria-label="Kappaleet">
   <div id="kirjastoSisus">
     <div id="kirjastoYla">
-      <b>Kirjasto</b><span id="kohdeKilpi">&rarr; A</span>
+      <b>Kappaleet</b><span id="kohdeKilpi">&rarr; A</span>
       <button type="button" id="kirjastoKiinni">Sulje</button>
     </div>
     <div id="lista" role="listbox" aria-label="Kappaleet"></div>
@@ -563,7 +563,7 @@ function piirraLista(){
   var p = $('lista');
   if (!BIISIT.length){
     p.innerHTML = '<div style="padding:20px;color:#6b7489;font-size:13px">'
-                + 'Kirjasto on vielä tyhjä.</div>';
+                + 'Täällä ei ole vielä kappaleita.</div>';
     return;
   }
   var osat = [];
