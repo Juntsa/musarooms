@@ -57,6 +57,24 @@ h1{
   font-weight:800;font-size:10px;line-height:1;letter-spacing:.2em;color:currentColor;
 }
 .tunnus .bpm{margin-left:auto;color:var(--himmea);font-weight:600;letter-spacing:.06em}
+
+/* ---- padit ---------------------------------------------------------- */
+#padit{display:flex;gap:6px;flex:0 0 auto;margin-top:7px}
+.pad{
+  flex:1 1 0;min-width:0;min-height:46px;cursor:pointer;border-radius:7px;
+  font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--teksti);background:linear-gradient(180deg,#232836,#13161e);
+  border:1px solid var(--reuna);
+  box-shadow:0 1px 0 #2f3645 inset,0 2px 6px #0007;
+  transition:transform .05s ease, box-shadow .05s ease;
+}
+/* Pad painuu kun se laukeaa - sormi peittaa padin, joten palaute on
+   luettava myos reunoista. */
+.pad.lyo{
+  transform:translateY(1px);
+  box-shadow:0 0 0 1px var(--vihrea),0 0 10px #45e08a55;
+  background:linear-gradient(180deg,#2c3342,#171b24);
+}
 .ruutu{
   flex:0 0 auto;border-radius:5px;padding:6px;cursor:pointer;
   background:#05070a;box-shadow:0 0 0 1px #000,0 0 0 1px #222936;
@@ -243,6 +261,7 @@ h1{
         <div class="selite">Filter</div>
       </div>
       <button type="button" id="kirjastoNappi">BROWSE</button>
+
       <div class="pylvas">
         <div id="aani" class="nuppi" role="slider" tabindex="0"
              aria-label="Master" aria-valuemin="0" aria-valuemax="100">
@@ -250,6 +269,13 @@ h1{
         </div>
         <div class="selite">Master</div>
       </div>
+    </div>
+
+    <div id="padit" role="group" aria-label="Soundit">
+      <button type="button" class="pad" data-aani="kick">Kick</button>
+      <button type="button" class="pad" data-aani="clap">Clap</button>
+      <button type="button" class="pad" data-aani="hat">Hat</button>
+      <button type="button" class="pad" data-aani="rise">Rise</button>
     </div>
   </div>
 
@@ -317,6 +343,141 @@ function ketjuKayntiin(){
   paivitaSuodin();
   return ac.resume();
 }
+
+/* ====================  padit  ========================================
+   Nelja soundia, kaikki syntetisoituja: siniaalto ja kohina, ei
+   yhtaan nauhoitettua naytetta. Se on tassa talossa periaate - kaikki
+   mika kuuluu on omaa - ja se on myos kaytannollista: nelja padia
+   maksaa muutaman kymmenen rivia koodia eika yhtaan latausta.
+
+   Padit menevat suoraan masteriin, ristihaivyttimen ja suotimen ohi.
+   Oikeassakin pöydassa sampleri on oma kanavansa: jos padi kulkisi
+   haivyttimen lapi, se vaikenisi juuri silloin kun fader on toisella
+   dekilla - eli silloin kun sita eniten tarvitaan.                   */
+
+var kohinaPuskuri = null;
+var padiGain = null;
+
+function kohina(){
+  /* Yksi sekunti valkoista kohinaa, tehdaan kerran ja soitetaan
+     uudelleen. Lyhyempi pätkä alkaisi kuulostaa silmukalta. */
+  if (!kohinaPuskuri){
+    var n = Math.floor(ac.sampleRate);
+    kohinaPuskuri = ac.createBuffer(1, n, ac.sampleRate);
+    var d = kohinaPuskuri.getChannelData(0);
+    for (var i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+  }
+  var s = ac.createBufferSource();
+  s.buffer = kohinaPuskuri;
+  s.loop = true;
+  return s;
+}
+
+function padiUlos(){
+  if (!padiGain){
+    padiGain = ac.createGain();
+    padiGain.gain.value = 0.9;
+    padiGain.connect(master);
+  }
+  return padiGain;
+}
+
+function lyo(nimi){
+  return ketjuKayntiin().then(function (){
+    if (!ac || !master) return;
+    var t = ac.currentTime + 0.001;
+    var ulos = padiUlos();
+
+    if (nimi === 'kick'){
+      // Taajuus putoaa 150:sta 45:een: juuri se pudotus tekee
+      // siniaallosta bassorummun eika piippauksen.
+      var o = ac.createOscillator(), g = ac.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(150, t);
+      o.frequency.exponentialRampToValueAtTime(45, t + 0.11);
+      g.gain.setValueAtTime(1.0, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.30);
+      o.connect(g).connect(ulos);
+      o.start(t); o.stop(t + 0.32);
+      return;
+    }
+
+    if (nimi === 'hat'){
+      var s = kohina(), hp = ac.createBiquadFilter(), hg = ac.createGain();
+      hp.type = 'highpass'; hp.frequency.value = 7000;
+      hg.gain.setValueAtTime(0.5, t);
+      hg.gain.exponentialRampToValueAtTime(0.001, t + 0.045);
+      s.connect(hp).connect(hg).connect(ulos);
+      s.start(t); s.stop(t + 0.06);
+      return;
+    }
+
+    if (nimi === 'clap'){
+      /* Taputus ei ole yksi isku vaan kourallinen hieman eri aikaan
+         osuvia kasia. Kolme lyhytta purskahdusta ja yksi pidempi hanta
+         tekee sen; yksi purske kuulostaisi tikulta. */
+      var bp = ac.createBiquadFilter();
+      bp.type = 'bandpass'; bp.frequency.value = 1500; bp.Q.value = 1.2;
+      bp.connect(ulos);
+      [0, 0.010, 0.022].forEach(function (viive){
+        var cs = kohina(), cg = ac.createGain();
+        cg.gain.setValueAtTime(0.55, t + viive);
+        cg.gain.exponentialRampToValueAtTime(0.001, t + viive + 0.018);
+        cs.connect(cg).connect(bp);
+        cs.start(t + viive); cs.stop(t + viive + 0.03);
+      });
+      var hs = kohina(), hgain = ac.createGain();
+      hgain.gain.setValueAtTime(0.35, t + 0.030);
+      hgain.gain.exponentialRampToValueAtTime(0.001, t + 0.200);
+      hs.connect(hgain).connect(bp);
+      hs.start(t + 0.030); hs.stop(t + 0.22);
+      return;
+    }
+
+    if (nimi === 'rise'){
+      /* Nouseva kohina: kaistanpaastosuotimen taajuus kiipeaa 300:sta
+         8000:een ja voimakkuus kasvaa mukana. Tama on se jolla
+         siirrytaan dekilta toiselle. */
+      var rs = kohina(), rb = ac.createBiquadFilter(), rg = ac.createGain();
+      rb.type = 'bandpass'; rb.Q.value = 2.5;
+      rb.frequency.setValueAtTime(300, t);
+      rb.frequency.exponentialRampToValueAtTime(8000, t + 1.20);
+      rg.gain.setValueAtTime(0.06, t);
+      rg.gain.linearRampToValueAtTime(0.55, t + 1.15);
+      rg.gain.exponentialRampToValueAtTime(0.001, t + 1.45);
+      rs.connect(rb).connect(rg).connect(ulos);
+      rs.start(t); rs.stop(t + 1.5);
+      return;
+    }
+  });
+}
+
+(function padienKytkenta(){
+  var p = $('padit');
+  if (!p) return;
+  var napit = p.querySelectorAll('.pad');
+  for (var i = 0; i < napit.length; i++){
+    (function (nappi){
+      var nimi = nappi.getAttribute('data-aani');
+      var merkitse = function (){
+        nappi.classList.add('lyo');
+        setTimeout(function (){ nappi.classList.remove('lyo'); }, 90);
+      };
+      /* pointerdown eika click: padi laukeaa kun sormi osuu, ei kun
+         se nousee. Ero on pieni luvussa ja iso soittaessa. */
+      nappi.addEventListener('pointerdown', function (e){
+        e.preventDefault();
+        merkitse(); lyo(nimi);
+      });
+      // Nappaimisto ja apuvalineet kayttavat clickia; pointerdown on jo
+      // vienyt kosketuksen, joten tassa laukaistaan vain naita varten.
+      nappi.addEventListener('click', function (e){
+        if (e.detail) return;              // hiiri tai sormi: jo soitettu
+        merkitse(); lyo(nimi);
+      });
+    })(napit[i]);
+  }
+})();
 
 /* Yhtatehoinen haivytys: keskella molemmat kuuluvat tayteen, eika
    aanenvoimakkuus notkahda siirtyman puolivalissa. */
