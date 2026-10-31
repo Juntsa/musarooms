@@ -125,10 +125,23 @@ h1 span{color:var(--amber)}
 .huone.auki .vasen{transform:rotateY(-84deg);filter:brightness(.5)}
 .huone.auki .oikea{transform:rotateY(84deg);filter:brightness(.7)}
 
-/* kosketusnäytöllä ei ole hoveria: luukut ovat valmiiksi raollaan */
+/* Kosketusnäytöllä ei ole hoveria, joten luukut jätetään hitusen
+   raolleen: muuten mikään ei kerro että ne aukeavat.
+
+   Rako on 6 astetta eikä 26. Ero on olennainen, koska huoneen nimi on
+   MAALATTU oveen ja sauma halkaisee sen: 26 asteella rako on 39 px ja
+   lukee "MUSA V    IDEOT", 6 asteella pari pikseliä ja sana pysyy
+   kokonaisena. Raosta näkyy enää viiru valoa, ja juuri sen se saakin
+   kertoa — että takana on jotain.
+
+   Sisustan oma teksti piilotetaan silti: se on alalaidassa keskellä eli
+   täsmälleen sauman kohdalla, ja jos rakoa joskus levennetään, se
+   alkaisi taas vuotaa katkelmina oven päälle. */
 @media (hover:none){
-  .vasen{transform:rotateY(-26deg);filter:brightness(.78)}
-  .oikea{transform:rotateY(26deg);filter:brightness(.88)}
+  .vasen{transform:rotateY(-6deg);filter:brightness(.88)}
+  .oikea{transform:rotateY(6deg);filter:brightness(.94)}
+  .sisus b,.sisus span{opacity:0;transition:opacity .3s ease .15s}
+  .huone.auki .sisus b,.huone.auki .sisus span{opacity:1}
 }
 
 /* ---- huoneiden luukut ja sisävalot ------------------------------------ */
