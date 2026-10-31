@@ -1,4 +1,113 @@
 {
   "nimi": "Deep House Essentials",
-  "raidat": []
+  "raidat": [
+    {
+      "nimi": "BEFORE SHE HAD A NAME - EN",
+      "alarivi": "power",
+      "kesto": 207.7,
+      "aani": "https://aani.musarooms.com/house/house-01-before-she-had-a-name-en-power.mp3"
+    },
+    {
+      "nimi": "Boston Queen Dna",
+      "alarivi": "",
+      "kesto": 218.4,
+      "aani": "https://aani.musarooms.com/house/house-02-boston-queen-dna.mp3"
+    },
+    {
+      "nimi": "Drops of Love Under the Rainbow",
+      "alarivi": "",
+      "kesto": 250.0,
+      "aani": "https://aani.musarooms.com/house/house-03-drops-of-love-under-the-rainbow.mp3"
+    },
+    {
+      "nimi": "EASTER - We're Coming In",
+      "alarivi": "",
+      "kesto": 181.5,
+      "aani": "https://aani.musarooms.com/house/house-04-easter-we-re-coming-in.mp3"
+    },
+    {
+      "nimi": "Endless Love Runs Down the Hall",
+      "alarivi": "",
+      "kesto": 204.9,
+      "aani": "https://aani.musarooms.com/house/house-05-endless-love-runs-down-the-hall.mp3"
+    },
+    {
+      "nimi": "Ethe River Still Knows",
+      "alarivi": "",
+      "kesto": 415.2,
+      "aani": "https://aani.musarooms.com/house/house-06-ethe-river-still-knows.mp3"
+    },
+    {
+      "nimi": "Four Super Dogs",
+      "alarivi": "",
+      "kesto": 256.8,
+      "aani": "https://aani.musarooms.com/house/house-07-four-super-dogs.mp3"
+    },
+    {
+      "nimi": "I Am Home I Find You",
+      "alarivi": "Vol 1 · remastered",
+      "kesto": 198.0,
+      "aani": "https://aani.musarooms.com/house/house-08-i-am-home-i-find-you-vol-1-remastered.mp3"
+    },
+    {
+      "nimi": "I Am Home I Find You",
+      "alarivi": "Vol 2",
+      "kesto": 198.0,
+      "aani": "https://aani.musarooms.com/house/house-09-i-am-home-i-find-you-vol-2.mp3"
+    },
+    {
+      "nimi": "I am home I find you",
+      "alarivi": "Vol 3",
+      "kesto": 267.5,
+      "aani": "https://aani.musarooms.com/house/house-10-i-am-home-i-find-you-vol-3.mp3"
+    },
+    {
+      "nimi": "Rain in the river",
+      "alarivi": "",
+      "kesto": 230.0,
+      "aani": "https://aani.musarooms.com/house/house-11-rain-in-the-river.mp3"
+    },
+    {
+      "nimi": "Summer In Your Eyes",
+      "alarivi": "",
+      "kesto": 229.8,
+      "aani": "https://aani.musarooms.com/house/house-12-summer-in-your-eyes.mp3"
+    },
+    {
+      "nimi": "Summer time",
+      "alarivi": "",
+      "kesto": 198.2,
+      "aani": "https://aani.musarooms.com/house/house-13-summer-time.mp3"
+    },
+    {
+      "nimi": "The Flower of The Rocky Lake",
+      "alarivi": "",
+      "kesto": 157.3,
+      "aani": "https://aani.musarooms.com/house/house-14-the-flower-of-the-rocky-lake.mp3"
+    },
+    {
+      "nimi": "The Light of Your Eyes",
+      "alarivi": "",
+      "kesto": 169.5,
+      "aani": "https://aani.musarooms.com/house/house-15-the-light-of-your-eyes.mp3"
+    },
+    {
+      "nimi": "The Shelter",
+      "alarivi": "suoja",
+      "kesto": 244.5,
+      "aani": "https://aani.musarooms.com/house/house-16-the-shelter-suoja.mp3"
+    },
+    {
+      "nimi": "VOL 3 - The Weigh Station",
+      "alarivi": "",
+      "kesto": 246.9,
+      "aani": "https://aani.musarooms.com/house/house-17-vol-3-the-weigh-station.mp3"
+    },
+    {
+      "nimi": "Warm Like The Sea House",
+      "alarivi": "",
+      "kesto": 269.8,
+      "aani": "https://aani.musarooms.com/house/house-18-warm-like-the-sea-house.mp3"
+    }
+  ]
 }

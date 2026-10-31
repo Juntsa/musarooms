@@ -4,233 +4,413 @@
   "biisit": [
     {
       "id": "raita-01",
+      "nimi": "Amor De Verano Beach Dance Latino",
+      "versio": "",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 191.9,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-01-amor-de-verano-beach-dance-latino.mp3"
+    },
+    {
+      "id": "raita-02",
+      "nimi": "Beach Dance Tonight",
+      "versio": "88 group",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 184.9,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-02-beach-dance-tonight-88-group.mp3"
+    },
+    {
+      "id": "raita-03",
+      "nimi": "Blue Velvet Coast",
+      "versio": "Vol 1",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 250.0,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-03-blue-velvet-coast-vol-1.mp3"
+    },
+    {
+      "id": "raita-04",
+      "nimi": "Blue Velvet Coast",
+      "versio": "Vol 2 · Short Edit single 50s",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 185.0,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-04-blue-velvet-coast-vol-2-short-edit-single-50s.mp3"
+    },
+    {
+      "id": "raita-05",
+      "nimi": "Blue Velvet Coast",
+      "versio": "Vol 3 · sax",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 250.0,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-05-blue-velvet-coast-vol-3-sax.mp3"
+    },
+    {
+      "id": "raita-06",
+      "nimi": "Burn the Manual",
+      "versio": "",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 255.0,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-06-burn-the-manual.mp3"
+    },
+    {
+      "id": "raita-07",
+      "nimi": "Butterflies & Chrome",
+      "versio": "",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 169.9,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-07-butterflies-chrome.mp3"
+    },
+    {
+      "id": "raita-08",
+      "nimi": "Cruisin the Block",
+      "versio": "free",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 201.6,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-08-cruisin-the-block-free.mp3"
+    },
+    {
+      "id": "raita-09",
+      "nimi": "Drive-In Moonlight",
+      "versio": "ballad",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 284.4,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-09-drive-in-moonlight-ballad.mp3"
+    },
+    {
+      "id": "raita-10",
+      "nimi": "Find My Groove",
+      "versio": "",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 197.2,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-10-find-my-groove.mp3"
+    },
+    {
+      "id": "raita-11",
       "nimi": "Golden Flame",
-      "versio": "Dance Mix",
+      "versio": "Vol 1 · radio edit",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 192.8,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-11-golden-flame-vol-1-radio-edit.mp3"
+    },
+    {
+      "id": "raita-12",
+      "nimi": "Golden Flame",
+      "versio": "Vol 2",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 166.6,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-12-golden-flame-vol-2.mp3"
+    },
+    {
+      "id": "raita-13",
+      "nimi": "Golden Flame Dance Mix 01",
+      "versio": "",
       "albumi": "Time Travel to a Hot Summer",
       "esittaja": "KJWhispers",
       "genre": "1950s",
       "kesto": 163.3,
-      "tiedosto": "biisit/01-golden-flame-dance-mix.mp3"
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-13-golden-flame-dance-mix-01.mp3"
     },
     {
-      "id": "raita-02",
-      "nimi": "Golden Flame",
-      "versio": "Radio Edit",
+      "id": "raita-14",
+      "nimi": "Golden Shore Forever",
+      "versio": "radio edit",
       "albumi": "Time Travel to a Hot Summer",
       "esittaja": "KJWhispers",
       "genre": "1950s",
-      "kesto": 192.8,
-      "tiedosto": "biisit/02-golden-flame-radio-edit.mp3"
+      "kesto": 201.9,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-14-golden-shore-forever-radio-edit.mp3"
     },
     {
-      "id": "raita-03",
-      "nimi": "Golden Summer Love",
-      "versio": "Sunset Version",
+      "id": "raita-15",
+      "nimi": "Golden Summer Love 50",
+      "versio": "radio edit",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 309.8,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-15-golden-summer-love-50-radio-edit.mp3"
+    },
+    {
+      "id": "raita-16",
+      "nimi": "Golden Summer Love Sunset Version 03",
+      "versio": "",
       "albumi": "Time Travel to a Hot Summer",
       "esittaja": "KJWhispers",
       "genre": "1950s",
       "kesto": 307.0,
-      "tiedosto": "biisit/03-golden-summer-love-sunset.mp3"
-    },
-    {
-      "id": "raita-04",
-      "nimi": "Hot Summer Love",
-      "versio": "Classic Mix",
-      "albumi": "Time Travel to a Hot Summer",
-      "esittaja": "KJWhispers",
-      "genre": "1950s",
-      "kesto": 192.8,
-      "tiedosto": "biisit/04-hot-summer-love-classic-mix.mp3"
-    },
-    {
-      "id": "raita-05",
-      "nimi": "Hot Summer Love",
-      "versio": "Doo-Wop Version",
-      "albumi": "Time Travel to a Hot Summer",
-      "esittaja": "KJWhispers",
-      "genre": "1950s",
-      "kesto": 273.0,
-      "tiedosto": "biisit/05-hot-summer-love-doo-wop.mp3"
-    },
-    {
-      "id": "raita-06",
-      "nimi": "Hot Summer Love",
-      "versio": "Rockabilly Pop",
-      "albumi": "Time Travel to a Hot Summer",
-      "esittaja": "KJWhispers",
-      "genre": "1950s",
-      "kesto": 240.0,
-      "tiedosto": "biisit/06-hot-summer-love-rockabilly-pop.mp3"
-    },
-    {
-      "id": "raita-07",
-      "nimi": "Hot Summer Love",
-      "versio": "Rockabilly Version",
-      "albumi": "Time Travel to a Hot Summer",
-      "esittaja": "KJWhispers",
-      "genre": "1950s",
-      "kesto": 221.2,
-      "tiedosto": "biisit/07-hot-summer-love-rockabilly.mp3"
-    },
-    {
-      "id": "raita-08",
-      "nimi": "Hot Summer Love",
-      "versio": "Sax Night Version",
-      "albumi": "Time Travel to a Hot Summer",
-      "esittaja": "KJWhispers",
-      "genre": "1950s",
-      "kesto": 259.9,
-      "tiedosto": "biisit/08-hot-summer-love-sax-night.mp3"
-    },
-    {
-      "id": "raita-09",
-      "nimi": "Hot Summer Love",
-      "versio": "Drama Version",
-      "albumi": "Time Travel to a Hot Summer",
-      "esittaja": "KJWhispers",
-      "genre": "1950s",
-      "kesto": 251.2,
-      "tiedosto": "biisit/09-hot-summer-love-drama.mp3"
-    },
-    {
-      "id": "raita-10",
-      "nimi": "Hot Summer Love",
-      "versio": "Classic 1950s Doo-Wop",
-      "albumi": "Time Travel to a Hot Summer",
-      "esittaja": "KJWhispers",
-      "genre": "1950s",
-      "kesto": 260.0,
-      "tiedosto": "biisit/10-hot-summer-love-classic-1950s.mp3"
-    },
-    {
-      "id": "raita-11",
-      "nimi": "Hot Summer Love",
-      "versio": "Instrumental",
-      "albumi": "Time Travel to a Hot Summer",
-      "esittaja": "KJWhispers",
-      "genre": "1950s",
-      "kesto": 199.8,
-      "tiedosto": "biisit/11-hot-summer-love-instrumental.mp3"
-    },
-    {
-      "id": "raita-12",
-      "nimi": "Butterflies & Chrome",
-      "versio": "",
-      "albumi": "Single",
-      "esittaja": "KJWhispers",
-      "genre": "1950s",
-      "kesto": 260.5,
-      "tiedosto": "biisit/12-butterflies-and-chrome.mp3"
-    },
-    {
-      "id": "raita-13",
-      "nimi": "Golden Shore Forever",
-      "versio": "",
-      "albumi": "Single",
-      "esittaja": "KJWhispers",
-      "genre": "1950s",
-      "kesto": 201.9,
-      "tiedosto": "biisit/13-golden-shore-forever.mp3"
-    },
-    {
-      "id": "raita-14",
-      "nimi": "El Sol de California",
-      "versio": "Latin Heat",
-      "albumi": "Single",
-      "esittaja": "KJWhispers",
-      "genre": "1950s",
-      "kesto": 247.2,
-      "tiedosto": "biisit/14-el-sol-de-california.mp3"
-    },
-    {
-      "id": "raita-15",
-      "nimi": "My Love",
-      "versio": "",
-      "albumi": "Single",
-      "esittaja": "KJWhispers",
-      "genre": "1950s",
-      "kesto": 147.6,
-      "tiedosto": "biisit/15-my-love.mp3"
-    },
-    {
-      "id": "raita-16",
-      "nimi": "Route 66",
-      "versio": "",
-      "albumi": "Single",
-      "esittaja": "KJWhispers",
-      "genre": "1950s",
-      "kesto": 202.1,
-      "tiedosto": "biisit/16-route-66.mp3"
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-16-golden-summer-love-sunset-version-03.mp3"
     },
     {
       "id": "raita-17",
       "nimi": "Hot Summer Love",
-      "versio": "50's Version",
-      "albumi": "Single",
+      "versio": "Vol 1 · 50s",
+      "albumi": "Time Travel to a Hot Summer",
       "esittaja": "KJWhispers",
       "genre": "1950s",
-      "kesto": 309.9,
-      "tiedosto": "biisit/17-hot-summer-love-matt-santiago.mp3"
+      "kesto": 310.0,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-17-hot-summer-love-vol-1-50s.mp3"
     },
     {
       "id": "raita-18",
-      "nimi": "Drive-In Moonlight",
-      "versio": "Ballad",
-      "albumi": "Single",
+      "nimi": "Hot Summer Love",
+      "versio": "Vol 2 · slow",
+      "albumi": "Time Travel to a Hot Summer",
       "esittaja": "KJWhispers",
       "genre": "1950s",
-      "kesto": 284.4,
-      "tiedosto": "biisit/18-drive-in-moonlight.mp3"
+      "kesto": 259.9,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-18-hot-summer-love-vol-2-slow.mp3"
     },
     {
       "id": "raita-19",
-      "nimi": "Jukebox & Milkshake",
-      "versio": "Rockabilly",
-      "albumi": "Single",
+      "nimi": "Hot Summer Love",
+      "versio": "Vol 3 · lisätty sax",
+      "albumi": "Time Travel to a Hot Summer",
       "esittaja": "KJWhispers",
       "genre": "1950s",
-      "kesto": 179.9,
-      "tiedosto": "biisit/19-jukebox-and-milkshake.mp3"
+      "kesto": 273.0,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-19-hot-summer-love-vol-3-lisatty-sax.mp3"
     },
     {
       "id": "raita-20",
-      "nimi": "Cruisin’ the Block",
-      "versio": "",
-      "albumi": "Single",
+      "nimi": "Hot Summer Love",
+      "versio": "Vol 4 · Elvis",
+      "albumi": "Time Travel to a Hot Summer",
       "esittaja": "KJWhispers",
       "genre": "1950s",
-      "kesto": 201.6,
-      "tiedosto": "biisit/20-cruisin-the-block.mp3"
+      "kesto": 212.2,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-20-hot-summer-love-vol-4-elvis.mp3"
     },
     {
       "id": "raita-21",
-      "nimi": "Starlight Summer Girl",
-      "versio": "Remastered",
-      "albumi": "Single",
+      "nimi": "Hot Summer Love",
+      "versio": "Vol 5 · slow",
+      "albumi": "Time Travel to a Hot Summer",
       "esittaja": "KJWhispers",
       "genre": "1950s",
-      "kesto": 270.0,
-      "tiedosto": "biisit/21-starlight-summer-girl-remastered.mp3"
+      "kesto": 224.8,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-21-hot-summer-love-vol-5-slow.mp3"
     },
     {
       "id": "raita-22",
-      "nimi": "Starlight Summer Girl",
-      "versio": "’88",
-      "albumi": "Single",
+      "nimi": "Hot Summer Love",
+      "versio": "Vol 6 · Energetic rockabilly",
+      "albumi": "Time Travel to a Hot Summer",
       "esittaja": "KJWhispers",
       "genre": "1950s",
-      "kesto": 194.7,
-      "tiedosto": "biisit/22-starlight-summer-girl-88.mp3"
+      "kesto": 221.2,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-22-hot-summer-love-vol-6-energetic-rockabilly.mp3"
     },
     {
       "id": "raita-23",
-      "nimi": "Amor De Verano",
-      "versio": "Beach Latino",
-      "albumi": "Single",
+      "nimi": "Hot Summer Love",
+      "versio": "Vol 7 · Drama Version 09",
+      "albumi": "Time Travel to a Hot Summer",
       "esittaja": "KJWhispers",
       "genre": "1950s",
-      "kesto": 191.9,
-      "tiedosto": "biisit/23-amor-de-verano.mp3"
+      "kesto": 251.1,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-23-hot-summer-love-vol-7-drama-version-09.mp3"
+    },
+    {
+      "id": "raita-24",
+      "nimi": "Hot Summer Love",
+      "versio": "Vol 8 · Instrumental 11",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 199.8,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-24-hot-summer-love-vol-8-instrumental-11.mp3"
+    },
+    {
+      "id": "raita-25",
+      "nimi": "Hot Summer Love",
+      "versio": "Vol 9 · Classic Mix 04",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 192.8,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-25-hot-summer-love-vol-9-classic-mix-04.mp3"
+    },
+    {
+      "id": "raita-26",
+      "nimi": "Hot Summer Love",
+      "versio": "Vol 10 · Night Version 08 sax",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 259.9,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-26-hot-summer-love-vol-10-night-version-08-sax.mp3"
+    },
+    {
+      "id": "raita-27",
+      "nimi": "Hot Summer Love",
+      "versio": "Vol 11 · Version 07 rockabilly",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 221.2,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-27-hot-summer-love-vol-11-version-07-rockabilly.mp3"
+    },
+    {
+      "id": "raita-28",
+      "nimi": "Hot Summer Love",
+      "versio": "Vol 12 · Pop 06 rockabilly",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 240.0,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-28-hot-summer-love-vol-12-pop-06-rockabilly.mp3"
+    },
+    {
+      "id": "raita-29",
+      "nimi": "Hot Summer Love",
+      "versio": "Vol 13 · Version 05 doo wop",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 273.0,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-29-hot-summer-love-vol-13-version-05-doo-wop.mp3"
+    },
+    {
+      "id": "raita-30",
+      "nimi": "Hot Summer Love",
+      "versio": "Vol 14 · Classic 1950s 10 doo wop",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 260.0,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-30-hot-summer-love-vol-14-classic-1950s-10-doo-wop.mp3"
+    },
+    {
+      "id": "raita-31",
+      "nimi": "Jukebox & Milkshake",
+      "versio": "rockabilly",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 179.9,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-31-jukebox-milkshake-rockabilly.mp3"
+    },
+    {
+      "id": "raita-32",
+      "nimi": "Neon Rain on Beale Street",
+      "versio": "",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 160.0,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-32-neon-rain-on-beale-street.mp3"
+    },
+    {
+      "id": "raita-33",
+      "nimi": "Route 66",
+      "versio": "Vol 1 · remastered 50s",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 280.0,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-33-route-66-vol-1-remastered-50s.mp3"
+    },
+    {
+      "id": "raita-34",
+      "nimi": "Route 66",
+      "versio": "Vol 2",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 202.1,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-34-route-66-vol-2.mp3"
+    },
+    {
+      "id": "raita-35",
+      "nimi": "Silver Screen & You",
+      "versio": "radio",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 171.2,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-35-silver-screen-you-radio.mp3"
+    },
+    {
+      "id": "raita-36",
+      "nimi": "Starlight Summer Girl",
+      "versio": "Vol 1 · 50's",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 264.8,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-36-starlight-summer-girl-vol-1-50-s.mp3"
+    },
+    {
+      "id": "raita-37",
+      "nimi": "Starlight Summer Girl",
+      "versio": "Vol 2 · remastered 50's",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 270.0,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-37-starlight-summer-girl-vol-2-remastered-50-s.mp3"
+    },
+    {
+      "id": "raita-38",
+      "nimi": "Starlight Summer Girl",
+      "versio": "Vol 3 · 88",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 194.7,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-38-starlight-summer-girl-vol-3-88.mp3"
+    },
+    {
+      "id": "raita-39",
+      "nimi": "Starlight Summer Girl",
+      "versio": "Vol 4 · remastered 50's",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 270.0,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-39-starlight-summer-girl-vol-4-remastered-50-s.mp3"
+    },
+    {
+      "id": "raita-40",
+      "nimi": "Under The Sky Of Stars",
+      "versio": "Vol 1",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 356.3,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-40-under-the-sky-of-stars-vol-1.mp3"
+    },
+    {
+      "id": "raita-41",
+      "nimi": "Under The Sky Of Stars",
+      "versio": "Vol 2",
+      "albumi": "Time Travel to a Hot Summer",
+      "esittaja": "KJWhispers",
+      "genre": "1950s",
+      "kesto": 270.0,
+      "tiedosto": "https://aani.musarooms.com/fifties/fifties-41-under-the-sky-of-stars-vol-2.mp3"
     }
   ]
 }
