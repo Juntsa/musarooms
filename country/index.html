@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Country-radio</title>
+<meta name="theme-color" content="#2a1a0e">
+<style>
+/* KJW Country-radio.
+
+   Biisiä ei valita listasta vaan virittämällä: jokainen raita on oma
+   asemansa asteikolla, ja punainen neula haetaan sen kohdalle. Asemien
+   välissä kohisee. Se on koko laitteen idea, ja siksi asteikko saa
+   näytöstä eniten tilaa.
+
+   Kaappi, ovet ja levysoitin ovat huoneen kuvassa; tässä tiedostossa on
+   vain se osa jota käytetään. */
+:root{
+  --puu:#3a2415; --puuTum:#1d1109; --puuVaal:#6b4426;
+  --messinki:#c9a24e; --hehku:#ffb84d; --lasi:#1a1208;
+  --kerma:#f6e6c8; --neula:#e8482c;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{
+  background:radial-gradient(130% 90% at 50% -10%,#4a2f1a 0%,#140c06 72%),#140c06;
+  color:var(--kerma);
+  font:16px/1.4 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:8px 8px calc(8px + env(safe-area-inset-bottom));
+  overflow:hidden;
+}
+h1{
+  font:800 13px/1 "Segoe UI",system-ui,sans-serif;letter-spacing:.34em;
+  text-transform:uppercase;color:#e7c389;margin:4px 0 8px;flex:0 0 auto;
+}
+/* Kaappi ei veny ruudun korkuiseksi. Radion etulevy on leveä eikä korkea,
+   ja täyteen venytettynä lasiin jää vain tyhjää asteikon ylä- ja
+   alapuolelle. Laite istuu ruudun keskellä kuten huoneessakin. */
+#kaappi{
+  position:relative;flex:0 1 auto;min-height:0;max-height:100%;
+  width:min(100%,560px);display:flex;flex-direction:column;
+  border-radius:12px;
+  background:linear-gradient(180deg,#4a2f1a,#2a1a0e 60%,#1d1109);
+  box-shadow:0 2px 0 #6b4426 inset,0 -2px 0 #0c0704 inset,0 18px 40px #0008;
+  padding:10px;gap:8px;
+}
+#lasi{
+  flex:0 0 auto;height:min(58vh,440px);min-height:260px;
+  position:relative;border-radius:8px;
+  background:linear-gradient(180deg,#241708,#120b04);
+  box-shadow:0 0 0 2px #0a0603,0 0 0 3px var(--messinki),
+             0 0 40px #ff9a2e22 inset;
+  overflow:hidden;
+}
+#naytto{width:100%;height:100%;display:block;touch-action:none}
+
+/* ---- alapalkki: viritysnuppi ja tieto ---------------------------- */
+#palkki{
+  flex:0 0 auto;display:flex;align-items:center;gap:12px;
+  padding:2px 4px 0;
+}
+.nuppi{
+  position:relative;width:54px;height:54px;border-radius:50%;flex:0 0 auto;
+  background:radial-gradient(60% 60% at 38% 32%,#d9d2c6,#8e867a 58%,#4a443c);
+  box-shadow:0 2px 6px #0009,0 0 0 2px #241708;
+  cursor:grab;touch-action:none;
+}
+.nuppi .osoitin{
+  position:absolute;left:50%;top:6px;width:3px;height:17px;margin-left:-1.5px;
+  border-radius:2px;background:#2a1a0e;
+}
+.selite{display:flex;flex-direction:column;line-height:1.25;min-width:0}
+.selite b{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#e7c389}
+.selite span{font-size:13px;color:#cbb08a;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#kaista{
+  margin-left:auto;display:flex;gap:4px;flex:0 0 auto;
+}
+#kaista button{
+  font:700 12px/1 inherit;letter-spacing:.12em;color:#cbb08a;
+  background:linear-gradient(180deg,#3a2415,#241708);
+  border:1px solid #0a0603;border-radius:6px;padding:9px 12px;cursor:pointer;
+  min-height:38px;
+}
+#kaista button[aria-pressed="true"]{
+  color:#1d1109;background:linear-gradient(180deg,#ffcf7a,#d99a33);
+  border-color:#8a5f1c;
+}
+#nyt{
+  flex:0 0 auto;font-size:13px;color:#cbb08a;padding:2px 4px 0;
+  min-height:19px;width:100%;text-align:center;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+@media (max-width:420px){
+  #palkki{gap:9px}
+  .nuppi{width:48px;height:48px}
+}
+</style>
+</head>
+<body>
+<h1>KJW Country</h1>
+
+<div id="kaappi">
+  <div id="lasi"><canvas id="naytto"></canvas></div>
+
+  <div id="palkki">
+    <div id="viritin" class="nuppi" role="slider" tabindex="0"
+         aria-label="Viritys" aria-valuemin="0" aria-valuemax="100">
+      <span class="osoitin"></span>
+    </div>
+    <div class="selite"><b>Viritys</b><span id="taajuus">—</span></div>
+    <div id="kaista">
+      <button type="button" data-kaista="fm" aria-pressed="true">FM</button>
+      <button type="button" data-kaista="am" aria-pressed="false">AM</button>
+    </div>
+  </div>
+  <div id="nyt">viritä asema</div>
+</div>
+
+<script src="../soitin.js"></script>
+<script>
+'use strict';
+var $ = function (id){ return document.getElementById(id); };
+
+/* ==================================================================
+ * Asemat
+ *
+ * Jokainen raita on oma asemansa. Taajuus jaetaan tasavälein kaistan
+ * asteikolle, jotta asemat eivät kasaannu toistensa päälle silloinkaan
+ * kun niitä on paljon. Asemien väliin jää aina kohinaa - se on osa
+ * laitetta, ei puute.
+ * ================================================================== */
+
+var KAISTAT = {
+  fm: { nimi: 'FM', min: 88,  max: 108,  yksikko: 'MHz', tarkkuus: 1 },
+  am: { nimi: 'AM', min: 540, max: 1600, yksikko: 'kHz', tarkkuus: 0 }
+};
+
+var ASEMAT = { fm: [], am: [] };
+var kaista = 'fm';
+var taajuus = KAISTAT.fm.min;
+var soiva = null;          // asema joka soi juuri nyt
+var soi = false;
+
+/* Kuinka läheltä asema tarttuu. Osuus kaistan leveydestä, ei kiinteä
+   luku: AM:n asteikko on 53 kertaa FM:ää leveämpi. */
+var TARTTUMA = 0.012;
+
+function kaistaNyt(){ return KAISTAT[kaista]; }
+
+function asemat(){ return ASEMAT[kaista] || []; }
+
+function sijoitaAsemat(){
+  /* Reunoille jätetään tilaa, jottei ensimmäinen ja viimeinen asema jää
+     kiinni asteikon päähän - oikeassakin radiossa päät ovat tyhjiä. */
+  for (var k in ASEMAT){
+    var lista = ASEMAT[k], K = KAISTAT[k];
+    var leveys = K.max - K.min;
+    var reuna = leveys * 0.06;
+    for (var i = 0; i < lista.length; i++){
+      var osuus = lista.length === 1 ? 0.5 : i / (lista.length - 1);
+      lista[i].taajuus = K.min + reuna + osuus * (leveys - 2 * reuna);
+    }
+  }
+}
+
+/* Lähin asema ja etäisyys siihen osuutena kaistan leveydestä. */
+function lahin(t){
+  var lista = asemat(), K = kaistaNyt();
+  var paras = null, ero = Infinity;
+  for (var i = 0; i < lista.length; i++){
+    var d = Math.abs(lista[i].taajuus - t);
+    if (d < ero){ ero = d; paras = lista[i]; }
+  }
+  return { asema: paras, ero: paras ? ero / (K.max - K.min) : Infinity };
+}
+
+/* ==================================================================
+ * Ääni
+ *
+ * Musiikki soi <audio>-elementillä suoraan, EI Web Audion läpi: jos
+ * elementti kytketään AudioContextiin, soitto hiljenee kun puhelimen
+ * näyttö sammuu, eikä siitä jää mitään merkkiä ruudulle.
+ *
+ * Kohina on eri asia. Se kuuluu vain kun sormi on nupilla, eli sivu on
+ * varmasti esillä. Siksi se saa tulla AudioContextista.
+ * ================================================================== */
+
+var el = new Audio();
+el.preload = 'none';
+el.playsInline = true;
+
+var ac = null, kohinaLahde = null, kohinaVoima = null;
+
+function kohinaKayntiin(){
+  if (ac) return;
+  try {
+    ac = new (window.AudioContext || window.webkitAudioContext)();
+  } catch (e){ ac = null; return; }
+  var pituus = Math.floor(ac.sampleRate * 2);
+  var pus = ac.createBuffer(1, pituus, ac.sampleRate);
+  var d = pus.getChannelData(0);
+  /* Vaaleanpunainen kohina on lähempänä radion sihinää kuin valkoinen:
+     korkeat eivät kirskahda. Yksinkertainen suodatus riittää. */
+  var b0 = 0, b1 = 0, b2 = 0;
+  for (var i = 0; i < pituus; i++){
+    var v = Math.random() * 2 - 1;
+    b0 = 0.99765 * b0 + v * 0.0990460;
+    b1 = 0.96300 * b1 + v * 0.2965164;
+    b2 = 0.57000 * b2 + v * 1.0526913;
+    d[i] = (b0 + b1 + b2 + v * 0.1848) * 0.22;
+  }
+  kohinaLahde = ac.createBufferSource();
+  kohinaLahde.buffer = pus;
+  kohinaLahde.loop = true;
+  kohinaVoima = ac.createGain();
+  kohinaVoima.gain.value = 0;
+  kohinaLahde.connect(kohinaVoima).connect(ac.destination);
+  try { kohinaLahde.start(); } catch (e){}
+}
+
+function kohina(taso){
+  if (!ac || !kohinaVoima) return;
+  if (ac.state !== 'running') ac.resume().catch(function (){});
+  var nyt = ac.currentTime;
+  kohinaVoima.gain.cancelScheduledValues(nyt);
+  kohinaVoima.gain.setTargetAtTime(Math.max(0, Math.min(0.5, taso)),
+                                   nyt, 0.05);
+}
+
+/* ==================================================================
+ * Valot: esilasketut kaistat VU-mittareille
+ * ================================================================== */
+
+var valot = null, valotOsoite = '';
+var taso = { vasen: 0.05, oikea: 0.05 };
+
+function haeValot(aani){
+  var osoite = String(aani || '');
+  if (!osoite || osoite === valotOsoite) return;
+  valotOsoite = osoite; valot = null;
+  if (/^blob:|^data:/.test(osoite)) return;
+  var url = osoite.replace(/\.(mp3|wav|m4a|ogg)(\?.*)?$/i, '.valot');
+  if (url === osoite) return;
+  fetch(url, { cache: 'force-cache' })
+    .then(function (r){ return r.ok ? r.arrayBuffer() : null; })
+    .then(function (pus){
+      if (!pus || valotOsoite !== osoite) return;
+      var t = new Uint8Array(pus);
+      if (t.length < 10 || t[0] !== 86 || t[1] !== 76 || t[2] !== 79) return;
+      var nak = new DataView(pus);
+      valot = { fps: nak.getUint16(4, true), kesto: nak.getUint32(6, true),
+                data: t.subarray(10) };
+    })
+    .catch(function (){});
+}
+
+/* VU-mittarit: vasen saa basson ja keskialueen, oikea keskialueen ja
+   diskantin. Oikea VU-mittari ei mittaa stereokanavaa vaan taajuutta -
+   mutta neulat liikkuvat eri tahtiin, ja juuri se tekee mittareista
+   katsottavia. */
+function paivitaTasot(dt){
+  var t = { vasen: 0.05, oikea: 0.05 };
+  if (soi && valot && el){
+    var r = Math.floor(el.currentTime * valot.fps);
+    var kpl = (valot.data.length / 3) | 0;
+    var i = Math.max(0, Math.min(kpl - 1, r)) * 3;
+    var b = valot.data[i] / 255, k = valot.data[i + 1] / 255,
+        d = valot.data[i + 2] / 255;
+    t.vasen = b * 0.65 + k * 0.35;
+    t.oikea = k * 0.5 + d * 0.5;
+  }
+  for (var kk in t){
+    /* Nousu nopeasti, lasku hitaasti - VU-neula on raskas. */
+    taso[kk] += (t[kk] - taso[kk]) * (t[kk] > taso[kk] ? 0.5
+                                                       : Math.min(1, dt * 2.6));
+  }
+}
+
+/* ==================================================================
+ * Viritys
+ * ================================================================== */
+
+var viimeksiLukittu = null;
+
+function viritaTaajuuteen(t, kayttajaKaansi){
+  var K = kaistaNyt();
+  taajuus = Math.max(K.min, Math.min(K.max, t));
+  var l = lahin(taajuus);
+  var lukossa = l.asema && l.ero < TARTTUMA;
+
+  if (lukossa && l.asema !== soiva){
+    aloita(l.asema);
+  } else if (!lukossa && soiva){
+    lopeta();
+  }
+  /* Kohina sitä kovempaa mitä kauempana lähin asema on, mutta vain kun
+     käyttäjä kääntää. Pysähtyneenä hiljaisella asemalla ei saa sihistä. */
+  if (kayttajaKaansi){
+    kohinaKayntiin();
+    var etaisyys = Math.min(1, l.ero / (TARTTUMA * 6));
+    kohina(lukossa ? 0.02 : 0.05 + etaisyys * 0.22);
+  }
+  paivitaTeksti();
+}
+
+function aloita(asema){
+  soiva = asema;
+  viimeksiLukittu = asema;
+  el.src = asema.aani;
+  el.load();
+  haeValot(asema.aani);
+  mediaTiedot(asema);
+  var aloitaSoitto = function (){
+    el.play().then(function (){ soi = true; paivitaTeksti(); })
+             .catch(function (){ soi = false; paivitaTeksti(); });
+  };
+  if (el.readyState >= 2) aloitaSoitto();
+  else el.addEventListener('canplay', aloitaSoitto, { once: true });
+}
+
+function lopeta(){
+  soiva = null; soi = false;
+  try { el.pause(); } catch (e){}
+  paivitaTeksti();
+}
+
+/* Raita loppui: neula liukuu seuraavalle asemalle itsestään. Oikeassa
+   radiossa asema jatkaa; tässä jokainen asema on yksi biisi, joten
+   jatkaminen tarkoittaa seuraavaa asemaa. */
+var liuku = null;
+el.addEventListener('ended', function (){
+  soi = false;
+  var lista = asemat();
+  if (!lista.length) return;
+  var i = lista.indexOf(soiva);
+  var seur = lista[(i + 1 + lista.length) % lista.length];
+  liuku = { mista: taajuus, minne: seur.taajuus, t: 0 };
+});
+
+function paivitaTeksti(){
+  var K = kaistaNyt();
+  $('taajuus').textContent = taajuus.toFixed(K.tarkkuus) + ' ' + K.yksikko;
+  if (soiva){
+    $('nyt').textContent = (soi ? '▶ ' : '‖ ') + soiva.nimi
+      + (soiva.alarivi ? '  ·  ' + soiva.alarivi : '');
+  } else if (!asemat().length){
+    $('nyt').textContent = 'tällä kaistalla ei ole vielä asemia';
+  } else {
+    $('nyt').textContent = 'kohinaa — käännä nupista';
+  }
+  var osuus = (taajuus - K.min) / (K.max - K.min);
+  $('viritin').setAttribute('aria-valuenow', Math.round(osuus * 100));
+  $('viritin').setAttribute('aria-valuetext',
+    taajuus.toFixed(K.tarkkuus) + ' ' + K.yksikko
+    + (soiva ? ', ' + soiva.nimi : ', kohinaa'));
+  var kulma = -135 + osuus * 270;
+  $('viritin').querySelector('.osoitin').style.transform =
+    'rotate(' + kulma.toFixed(1) + 'deg)';
+}
+
+/* ==================================================================
+ * Lukitusnäyttö
+ * ================================================================== */
+
+function mediaTiedot(a){
+  if (!('mediaSession' in navigator)) return;
+  try {
+    navigator.mediaSession.metadata = new window.MediaMetadata({
+      title: a && a.nimi ? a.nimi : 'KJW Country',
+      artist: a && a.alarivi ? a.alarivi : 'KJWhispers',
+      album: 'Musa Rooms · Country'
+    });
+  } catch (e){}
+  var k = {
+    play: function (){ el.play().then(function (){ soi = true; paivitaTeksti(); })
+                                .catch(function (){}); },
+    pause: function (){ el.pause(); soi = false; paivitaTeksti(); },
+    previoustrack: function (){ hyppaa(-1); },
+    nexttrack: function (){ hyppaa(1); }
+  };
+  for (var nimi in k){
+    try { navigator.mediaSession.setActionHandler(nimi, k[nimi]); }
+    catch (e){}
+  }
+}
+el.addEventListener('play', function (){ mediaTila('playing'); });
+el.addEventListener('pause', function (){ mediaTila('paused'); });
+function mediaTila(t){
+  if (!('mediaSession' in navigator)) return;
+  try { navigator.mediaSession.playbackState = t; } catch (e){}
+}
+
+/* Hyppy asemasta toiseen ilman kääntämistä: kuulokkeiden napit ja
+   näppäimistön nuolet. */
+function hyppaa(suunta){
+  var lista = asemat();
+  if (!lista.length) return;
+  var nyt = soiva || viimeksiLukittu;
+  var i = nyt ? lista.indexOf(nyt) : -1;
+  if (i < 0){
+    /* Ei aiempaa asemaa: otetaan lähin siitä mihin neula jäi. */
+    i = lista.indexOf(lahin(taajuus).asema);
+    if (i < 0) i = 0;
+    else i -= suunta;        // jotta seuraava askel osuu lähimpään
+  }
+  var seur = lista[(i + suunta + lista.length) % lista.length];
+  liuku = { mista: taajuus, minne: seur.taajuus, t: 0 };
+}
+
+/* ==================================================================
+ * Piirto
+ * ================================================================== */
+
+var cv = $('naytto'), ctx = cv.getContext('2d');
+var L = 0, K = 0;            // leveys ja korkeus yksiköissä
+
+function mitat(){
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  var r = cv.parentNode.getBoundingClientRect();
+  L = Math.max(200, Math.round(r.width));
+  K = Math.max(120, Math.round(r.height));
+  if (cv.width !== L * dpr || cv.height !== K * dpr){
+    cv.width = L * dpr; cv.height = K * dpr;
+  }
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+/* VU-mittari. Neulan akseli on laatikon sisällä alareunassa, ei sen
+   alapuolella — muuten neula piirtyy laatikon ulkopuolelle ja mittari
+   näyttää rikkinäiseltä. */
+function vuMittari(x, y, w, h, arvo, otsikko){
+  ctx.save();
+  ctx.translate(x, y);
+  var g = ctx.createLinearGradient(0, 0, 0, h);
+  g.addColorStop(0, '#f8dca6'); g.addColorStop(1, '#d9a94e');
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  if (ctx.roundRect) ctx.roundRect(0, 0, w, h, 4);
+  else ctx.rect(0, 0, w, h);
+  ctx.fill();
+  ctx.save(); ctx.clip();
+
+  var kx = w / 2, ky = h * 0.94, sade = Math.min(h * 0.74, w * 0.46);
+  var A0 = Math.PI * 1.16, A1 = Math.PI * 1.84;     // vasemmalta oikealle
+
+  for (var i = 0; i <= 10; i++){
+    var a = A0 + (A1 - A0) * (i / 10);
+    var pitka = i % 5 === 0;
+    var r2 = sade - sade * (pitka ? 0.22 : 0.14);
+    ctx.beginPath();
+    ctx.strokeStyle = i >= 7 ? '#b3351f' : '#6b4426';
+    ctx.lineWidth = pitka ? 1.6 : 1;
+    ctx.moveTo(kx + Math.cos(a) * sade, ky + Math.sin(a) * sade);
+    ctx.lineTo(kx + Math.cos(a) * r2, ky + Math.sin(a) * r2);
+    ctx.stroke();
+  }
+  /* punainen kaari yläpäähän */
+  ctx.beginPath();
+  ctx.strokeStyle = '#b3351f'; ctx.lineWidth = 1.6;
+  ctx.arc(kx, ky, sade, A0 + (A1 - A0) * 0.7, A1);
+  ctx.stroke();
+
+  var ak = A0 + (A1 - A0) * Math.max(0, Math.min(1, arvo));
+  ctx.strokeStyle = '#241708'; ctx.lineWidth = 1.8; ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(kx, ky);
+  ctx.lineTo(kx + Math.cos(ak) * sade * 0.95, ky + Math.sin(ak) * sade * 0.95);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.fillStyle = '#241708';
+  ctx.arc(kx, ky, Math.max(1.6, h * 0.045), 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = '#7a5a30';
+  ctx.font = '700 ' + Math.max(7, h * 0.18).toFixed(0) + 'px system-ui,sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(otsikko, w / 2, h * 0.76);
+
+  ctx.restore();
+  ctx.strokeStyle = '#2a1a0e'; ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  if (ctx.roundRect) ctx.roundRect(0, 0, w, h, 4); else ctx.rect(0, 0, w, h);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function piirra(){
+  mitat();
+  ctx.clearRect(0, 0, L, K);
+
+  /* hehku lasin takana */
+  var hg = ctx.createRadialGradient(L / 2, K * 0.45, 0, L / 2, K * 0.45, L * 0.7);
+  hg.addColorStop(0, '#5a3a14'); hg.addColorStop(1, '#140c04');
+  ctx.fillStyle = hg; ctx.fillRect(0, 0, L, K);
+
+  /* Sommittelu seuraa lasin korkeutta, jottei alaosa jää tyhjäksi
+     pitkällä puhelimen näytöllä: mittarit ylös, asteikko keskelle niin
+     isona kuin se mahtuu, ja aseman nimi lasiin alalaitaan. */
+  var reuna = Math.max(10, L * 0.035);
+  var vuK = Math.max(38, Math.min(K * 0.21, 68));
+  var vuL = Math.min(L * 0.28, 116);
+  var nimiK = Math.max(38, Math.min(K * 0.16, 90));   // tila aseman nimelle
+
+  /* Asteikolla on oma luonteva korkeutensa. Jos sen annetaan täyttää koko
+     lasi, pitkällä puhelimen näytöllä laatikkoon jää valtavat tyhjät
+     alueet viivaston ylä- ja alapuolelle. Korkeus rajataan, ja koko pino
+     keskitetään lasiin. */
+  var ak = Math.max(96, Math.min(K * 0.40, 300));
+  var vali = Math.max(10, K * 0.035);
+  var pino = vuK + vali + ak + nimiK;
+  var yla = Math.max(reuna, (K - pino) / 2);
+
+  vuMittari(reuna, yla, vuL, vuK, taso.vasen, 'VU');
+  vuMittari(L - reuna - vuL, yla, vuL, vuK, taso.oikea, 'VU');
+
+  ctx.fillStyle = '#e7c389';
+  ctx.textAlign = 'center';
+  ctx.font = '700 ' + Math.max(11, L * 0.036).toFixed(0)
+           + 'px Georgia,"Times New Roman",serif';
+  ctx.fillText('KJWhispers', L / 2, yla + vuK * 0.46);
+  ctx.fillStyle = '#9c7b4e';
+  ctx.font = '600 ' + Math.max(8, L * 0.021).toFixed(0) + 'px system-ui,sans-serif';
+  ctx.fillText('COUNTRY MUSIC LIVES HERE', L / 2, yla + vuK * 0.84);
+
+  /* --- asteikko --- */
+  var ay = yla + vuK + vali;
+  var ax = reuna, al = L - reuna * 2;
+
+  ctx.fillStyle = '#120b04';
+  ctx.beginPath();
+  if (ctx.roundRect) ctx.roundRect(ax, ay, al, ak, 6); else ctx.rect(ax, ay, al, ak);
+  ctx.fill();
+  ctx.strokeStyle = '#6b4426'; ctx.lineWidth = 1; ctx.stroke();
+
+  var Kb = kaistaNyt();
+  var paikka = function (t){
+    return ax + 10 + (t - Kb.min) / (Kb.max - Kb.min) * (al - 20);
+  };
+
+  /* Asteikon rivit: asemamerkit ylös, viivasto keskelle, lukemat alas.
+     Kaikki kolme suhteessa asteikon korkeuteen, jotta sommittelu kestää
+     sekä matalan että korkean näytön. */
+  var yAsemat = ay + ak * 0.26;
+  var yViiva  = ay + ak * 0.44;
+  var yLuvut  = ay + ak * 0.86;
+
+  var lukemat = kaista === 'fm' ? [88, 92, 96, 100, 104, 108]
+                                : [540, 700, 900, 1100, 1300, 1600];
+  /* hienojako */
+  ctx.strokeStyle = '#6b4426'; ctx.lineWidth = 1;
+  var valeja = kaista === 'fm' ? 40 : 53;
+  for (var j = 0; j <= valeja; j++){
+    var xx = ax + 10 + (j / valeja) * (al - 20);
+    ctx.beginPath();
+    ctx.moveTo(xx, yViiva); ctx.lineTo(xx, yViiva + ak * 0.1);
+    ctx.stroke();
+  }
+  /* lukemat ja niiden pitkät viivat */
+  ctx.textAlign = 'center';
+  ctx.font = '600 ' + Math.max(9, L * 0.024).toFixed(0) + 'px system-ui,sans-serif';
+  for (var i = 0; i < lukemat.length; i++){
+    var x = paikka(lukemat[i]);
+    ctx.strokeStyle = '#a8864e'; ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.moveTo(x, yViiva - ak * 0.06); ctx.lineTo(x, yViiva + ak * 0.21);
+    ctx.stroke();
+    ctx.fillStyle = '#c3a271';
+    ctx.fillText(String(lukemat[i]), x, yLuvut);
+  }
+  /* kaistan nimi */
+  ctx.fillStyle = '#e7c389'; ctx.textAlign = 'left';
+  ctx.font = '700 ' + Math.max(10, L * 0.028).toFixed(0) + 'px system-ui,sans-serif';
+  ctx.fillText(Kb.nimi, ax + 10, ay + ak * 0.14);
+
+  /* Asemat merkkeinä: kävijä näkee mistä kannattaa etsiä. Ilman näitä
+     virittäminen olisi umpimähkäistä hakemista, ja 27 biisin kohdalla
+     se olisi kiusallista eikä hauskaa. */
+  var lista = asemat();
+  for (var s = 0; s < lista.length; s++){
+    var sx = paikka(lista[s].taajuus);
+    var lukossa = lista[s] === soiva;
+    ctx.beginPath();
+    ctx.fillStyle = lukossa ? '#ffcf7a' : '#9c7b4e';
+    ctx.arc(sx, yAsemat, lukossa ? 4 : 2.4, 0, Math.PI * 2);
+    ctx.fill();
+    if (lukossa){
+      ctx.strokeStyle = '#ffcf7a'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(sx, yAsemat, 7.5, 0, Math.PI * 2); ctx.stroke();
+    }
+  }
+
+  /* neula */
+  var nx = paikka(taajuus);
+  ctx.save();
+  ctx.shadowColor = '#ff5a33'; ctx.shadowBlur = 10;
+  ctx.strokeStyle = '#e8482c'; ctx.lineWidth = 2.4; ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(nx, ay + 6); ctx.lineTo(nx, ay + ak - 6);
+  ctx.stroke();
+  ctx.restore();
+
+  /* --- aseman nimi lasiin, iso --- */
+  var ny = ay + ak + nimiK * 0.52;
+  ctx.textAlign = 'center';
+  if (soiva){
+    ctx.fillStyle = '#ffd79a';
+    ctx.font = '700 ' + Math.max(15, L * 0.046).toFixed(0)
+             + 'px Georgia,"Times New Roman",serif';
+    ctx.fillText(soiva.nimi, L / 2, ny);
+    if (soiva.alarivi){
+      ctx.fillStyle = '#9c7b4e';
+      ctx.font = '600 ' + Math.max(9, L * 0.024).toFixed(0)
+               + 'px system-ui,sans-serif';
+      ctx.fillText(soiva.alarivi, L / 2, ny + nimiK * 0.3);
+    }
+  } else {
+    ctx.fillStyle = '#6b5436';
+    ctx.font = '600 ' + Math.max(11, L * 0.03).toFixed(0)
+             + 'px system-ui,sans-serif';
+    ctx.fillText(lista.length ? '· · ·  kohinaa  · · ·'
+                              : 'ei asemia',
+                 L / 2, ny);
+  }
+}
+
+/* ==================================================================
+ * Ohjaus
+ * ================================================================== */
+
+/* Asteikkoa voi vetää suoraan sormella: se on isoin kohde ruudulla ja
+   siksi luontevin. Nuppi on silti olemassa, koska laitteessa on nuppi -
+   ja jaettu Saadin nostaa siitä ison säätimen puhelimessa. */
+(function vetoAsteikolla(){
+  var vedossa = false;
+
+  function taajuusPisteesta(clientX){
+    var r = cv.getBoundingClientRect();
+    var reuna = Math.max(10, r.width * 0.035);
+    var ax = reuna + 10, al = r.width - reuna * 2 - 20;
+    var osuus = (clientX - r.left - ax) / al;
+    var Kb = kaistaNyt();
+    return Kb.min + Math.max(0, Math.min(1, osuus)) * (Kb.max - Kb.min);
+  }
+
+  cv.addEventListener('pointerdown', function (e){
+    vedossa = true; liuku = null;
+    try { cv.setPointerCapture(e.pointerId); } catch (err){}
+    viritaTaajuuteen(taajuusPisteesta(e.clientX), true);
+    e.preventDefault();
+  });
+  cv.addEventListener('pointermove', function (e){
+    if (!vedossa) return;
+    viritaTaajuuteen(taajuusPisteesta(e.clientX), true);
+  });
+  function loppu(){
+    if (!vedossa) return;
+    vedossa = false;
+    kohina(soiva ? 0 : 0.04);
+    if (!soiva) kohina(0);
+  }
+  cv.addEventListener('pointerup', loppu);
+  cv.addEventListener('pointercancel', loppu);
+})();
+
+/* Nuppi jaettuun rekisteriin. Arvo on 0..1 kaistan yli, jotta sama nuppi
+   kelpaa molemmille kaistoille ilman muunnoksia. */
+(function kytkeNuppi(){
+  paivitaTeksti();
+  if (!window.Saadin || !$('viritin')) return;
+  window.Saadin.lisaa({
+    id: 'viritin', nimi: 'Viritys', el: $('viritin'),
+    min: 0, max: 1, askel: 0.0005,
+    lue: function (){
+      var Kb = kaistaNyt();
+      return (taajuus - Kb.min) / (Kb.max - Kb.min);
+    },
+    aseta: function (v){
+      var Kb = kaistaNyt();
+      liuku = null;
+      viritaTaajuuteen(Kb.min + v * (Kb.max - Kb.min), true);
+    },
+    piirra: paivitaTeksti,
+    muotoile: function (v){
+      var Kb = kaistaNyt();
+      return (Kb.min + v * (Kb.max - Kb.min)).toFixed(Kb.tarkkuus)
+             + ' ' + Kb.yksikko;
+    }
+  });
+})();
+
+/* Kaistan vaihto */
+Array.prototype.forEach.call(
+  document.querySelectorAll('#kaista button'), function (b){
+    b.addEventListener('click', function (){
+      var uusi = b.getAttribute('data-kaista');
+      if (uusi === kaista) return;
+      lopeta();
+      kaista = uusi;
+      liuku = null;
+      taajuus = kaistaNyt().min;
+      Array.prototype.forEach.call(
+        document.querySelectorAll('#kaista button'), function (x){
+          x.setAttribute('aria-pressed',
+            String(x.getAttribute('data-kaista') === kaista));
+        });
+      kohina(0);
+      paivitaTeksti();
+    });
+  });
+
+/* Nuolinäppäimet hyppäävät asemasta toiseen. */
+document.addEventListener('keydown', function (e){
+  if (window.Saadin && window.Saadin.auki) return;
+  if (e.key === 'ArrowRight'){ hyppaa(1); e.preventDefault(); }
+  else if (e.key === 'ArrowLeft'){ hyppaa(-1); e.preventDefault(); }
+});
+
+/* ==================================================================
+ * Kello
+ * ================================================================== */
+
+var edellinen = 0;
+function askel(nyt){
+  var dt = Math.min(0.05, (nyt - edellinen) / 1000);
+  edellinen = nyt;
+
+  if (liuku){
+    liuku.t += dt / 0.9;
+    var p = Math.min(1, liuku.t);
+    /* pehmeä alku ja loppu, jotta neula ei nyi */
+    var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+    viritaTaajuuteen(liuku.mista + (liuku.minne - liuku.mista) * e, false);
+    if (p >= 1) liuku = null;
+  }
+
+  paivitaTasot(dt);
+  piirra();
+  requestAnimationFrame(askel);
+}
+requestAnimationFrame(askel);
+window.addEventListener('resize', piirra);
+
+/* ==================================================================
+ * Asemalista palvelimelta
+ * ================================================================== */
+
+(function haeAsemat(){
+  if (location.protocol === 'file:') return;
+  fetch('asemat.json', { cache: 'no-cache' })
+    .then(function (r){ return r.ok ? r.json() : null; })
+    .then(function (d){
+      if (!d) return;
+      ASEMAT.fm = Array.isArray(d.fm) ? d.fm : [];
+      ASEMAT.am = Array.isArray(d.am) ? d.am : [];
+      sijoitaAsemat();
+      /* Avataan se kaista jolla on asemia, jottei huone näytä tyhjältä. */
+      if (!ASEMAT[kaista].length && ASEMAT[kaista === 'fm' ? 'am' : 'fm'].length){
+        kaista = kaista === 'fm' ? 'am' : 'fm';
+        taajuus = kaistaNyt().min;
+        Array.prototype.forEach.call(
+          document.querySelectorAll('#kaista button'), function (x){
+            x.setAttribute('aria-pressed',
+              String(x.getAttribute('data-kaista') === kaista));
+          });
+      }
+      paivitaTeksti();
+    })
+    .catch(function (){});
+})();
+</script>
+</body>
+</html>
