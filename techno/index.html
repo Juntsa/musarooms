@@ -171,6 +171,8 @@ h1{
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #lista .nimet span{display:block;font-size:11px;color:var(--himmea);
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#lista .tempo{flex:0 0 auto;width:42px;text-align:right;
+  color:#8fa0c0;font-size:11px;font-variant-numeric:tabular-nums}
 #lista .kesto{flex:0 0 auto;color:var(--himmea);font-size:11px;
   font-variant-numeric:tabular-nums}
 #lista button[data-paalla="a"]{box-shadow:inset 3px 0 0 var(--a)}
@@ -442,9 +444,22 @@ function haeValot(k){
       if (!pus || d.valotOsoite !== osoite) return;
       var t = new Uint8Array(pus);
       if (t.length < 10 || t[0] !== 86 || t[1] !== 76 || t[2] !== 79) return;
+      /* VLO1:n otsake on 10 tavua, VLO2:n 12 - jalkimmaisessa on tahtilaji
+         mukana. Vanhat tiedostot kelpaavat sellaisenaan: niita on jo
+         varastossa, eika niita kannata tehda uudelleen pelkan otsakkeen
+         takia. */
+      var kakkonen = t[3] === 50;                // "VLO2"
+      var otsake = kakkonen ? 12 : 10;
+      if (t.length < otsake) return;
       var n = new DataView(pus);
       d.valot = { fps: n.getUint16(4, true), kesto: n.getUint32(6, true),
-                  data: t.subarray(10) };
+                  bpm: kakkonen ? n.getUint16(10, true) / 10 : 0,
+                  data: t.subarray(otsake) };
+      /* Jos katalogi ei kertonut tempoa, se tulee tassa. */
+      if (d.valot.bpm && d.nro >= 0 && !BIISIT[d.nro].bpm){
+        BIISIT[d.nro].bpm = d.valot.bpm;
+        naytaBpm(k);
+      }
     })
     .catch(function (){});
 }
@@ -455,6 +470,20 @@ function mmss(s){
   if (!isFinite(s) || s < 0) return '—';
   var m = Math.floor(s / 60), x = Math.floor(s % 60);
   return m + ':' + (x < 10 ? '0' : '') + x;
+}
+
+/* Tempo kirjoitetaan yhdella desimaalilla. DJ ei tarvitse kymmenystä
+   mihinkaan, mutta pyoristys kokonaisluvuksi saisi kaksi 127,6:n ja
+   128,4:n raitaa nayttamaan samalta - ja juuri se ero on se mita
+   ristihaivytyksessa joutuu korjaamaan. */
+function bpmTeksti(b){
+  return b && b.bpm ? b.bpm.toFixed(1) + ' BPM' : '';
+}
+
+function naytaBpm(k){
+  var d = D[k];
+  $('bpm' + k.toUpperCase()).textContent =
+    d.nro >= 0 ? bpmTeksti(BIISIT[d.nro]) : '';
 }
 
 function lataa(k, i, aloita){
@@ -469,7 +498,7 @@ function lataa(k, i, aloita){
   haeValot(k);
   $('nimi' + k.toUpperCase()).textContent = b.nimi;
   $('nimi' + k.toUpperCase()).classList.remove('tyhja');
-  $('bpm' + k.toUpperCase()).textContent = b.bpm ? Math.round(b.bpm) + ' BPM' : '';
+  naytaBpm(k);
   paivitaNapit();
   paivitaTeksti();
   if (aloita) toista(k, true);
@@ -573,6 +602,10 @@ function piirraLista(){
       + (paalla ? ' data-paalla="' + paalla + '"' : '')
       + '><span class="nro">' + (i + 1) + '</span>'
       + '<span class="nimet"><b></b><span></span></span>'
+      /* Tempo listaan: seuraava raita valitaan sen perusteella, ei
+         nimen. Siksi se nakyy ennen kuin raita on ladattu dekkiin. */
+      + '<span class="tempo">'
+      + (BIISIT[i].bpm ? BIISIT[i].bpm.toFixed(1) : '') + '</span>'
       + '<span class="kesto">' + mmss(BIISIT[i].kesto) + '</span></button>');
   }
   p.innerHTML = osat.join('');

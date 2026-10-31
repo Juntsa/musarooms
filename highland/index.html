@@ -282,9 +282,16 @@ function haeValot(aani){
       if (!pus || valotOsoite !== osoite) return;
       var t = new Uint8Array(pus);
       if (t.length < 10 || t[0] !== 86 || t[1] !== 76 || t[2] !== 79) return;
+      /* VLO1:n otsake on 10 tavua, VLO2:n 12 - jalkimmaisessa on
+         tahtilaji mukana. Molemmat kelpaavat: varastossa on jo
+         VLO1-tiedostoja, eika niita kannata tehda uudelleen
+         pelkan otsakkeen takia. */
+      var otsake = t[3] === 50 ? 12 : 10;   // "VLO2" vai "VLO1"
+      if (t.length < otsake) return;
       var n = new DataView(pus);
       valot = { fps: n.getUint16(4, true), kesto: n.getUint32(6, true),
-                data: t.subarray(10) };
+                bpm: otsake === 12 ? n.getUint16(10, true) / 10 : 0,
+                data: t.subarray(otsake) };
     })
     .catch(function (){});
 }
