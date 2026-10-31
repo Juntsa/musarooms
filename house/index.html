@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>House Edition</title>
+<meta name="theme-color" content="#14100c">
+<style>
+/* KJWhispers House Edition.
+
+   Kuunteluhuone, ei esiintymislava. Kaksi laitetta päällekkäin:
+   virtaussoitin kosketusnäytöllä ja vahvistin VU-mittareilla.
+
+   Lähdevalitsin on tämän soittimen idea. Se ei vaihda biisiä vaan
+   kuuntelutapaa:
+
+     STREAM   selattava kokoelma, valitse mitä haluat
+     PHONO    levysoitin - neula putoaa ja puoli soi läpi
+
+   Samat 18 biisiä, kaksi eri tapaa kuunnella. LINE, AUX ja TAPE ovat
+   pimeinä, koska niihin ei ole kytketty mitään - niin on oikeassakin
+   vahvistimessa, eikä sitä tarvitse selittää. */
+:root{
+  --runko:#14100c; --panee:#1b1714; --panee2:#0d0b09;
+  --messinki:#c9a24e; --hehku:#f0b65a;
+  --kerma:#efe3cf; --harmaa:#8e8276; --puu:#4a3324;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{
+  background:
+    radial-gradient(120% 80% at 50% -10%,#2e241b 0%,#0b0907 70%),#0b0907;
+  color:var(--kerma);
+  font:16px/1.4 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:8px 8px calc(8px + env(safe-area-inset-bottom));
+  overflow:hidden;
+}
+h1{
+  font:800 12px/1 "Segoe UI",system-ui,sans-serif;letter-spacing:.36em;
+  text-transform:uppercase;color:#d8b887;margin:0 0 8px;flex:0 0 auto;
+}
+#pino{
+  width:min(100%,560px);flex:0 1 auto;min-height:0;max-height:100%;
+  display:flex;flex-direction:column;gap:8px;
+}
+
+/* ---- virtaussoitin ------------------------------------------------ */
+#soitin{
+  flex:0 0 auto;border-radius:10px;padding:9px;
+  background:linear-gradient(180deg,#201b16,#100d0a);
+  box-shadow:0 1px 0 #413527 inset,0 10px 26px #0009;
+}
+#ruutu{
+  position:relative;border-radius:7px;overflow:hidden;
+  background:#07060a;
+  box-shadow:0 0 0 1px #000,0 0 0 2px #2b2520;
+  height:min(34vh,216px);min-height:168px;
+  display:flex;flex-direction:column;
+}
+#ruutuYla{
+  flex:0 0 auto;display:flex;align-items:center;gap:8px;
+  padding:7px 9px;border-bottom:1px solid #1b1720;
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:#6f6a7d;
+}
+#ruutuYla b{color:#cfc6dd;font-size:11px;letter-spacing:.14em}
+#muoto{margin-left:auto;color:#5d5869;font-size:10px}
+#ruutuSisus{flex:1 1 auto;min-height:0;display:flex}
+
+/* vasen: lista */
+#lista{
+  flex:1 1 auto;min-width:0;overflow-y:auto;overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+}
+#lista button{
+  display:flex;align-items:center;gap:9px;width:100%;
+  background:none;border:0;border-bottom:1px solid #15121b;
+  color:#b9b2c6;font:inherit;font-size:13px;text-align:left;
+  padding:0 10px;min-height:46px;cursor:pointer;
+}
+#lista button:last-child{border-bottom:0}
+#lista button[aria-current="true"]{
+  background:linear-gradient(90deg,#2a2033,#17131f);color:#f3e7d2;
+}
+#lista .nro{
+  flex:0 0 auto;width:20px;font-variant-numeric:tabular-nums;
+  color:#5d5869;font-size:11px;
+}
+#lista button[aria-current="true"] .nro{color:var(--hehku)}
+#lista .nimet{flex:1 1 auto;min-width:0}
+#lista .nimi{
+  display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+#lista .ala{
+  display:block;font-size:11px;color:#6f6a7d;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+#lista .kesto{flex:0 0 auto;color:#5d5869;font-size:11px;
+  font-variant-numeric:tabular-nums}
+
+/* oikea: taso */
+#tasoPuoli{
+  flex:0 0 36%;max-width:150px;border-left:1px solid #1b1720;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:6px;padding:6px;
+}
+#rengas{width:100%;max-width:112px;aspect-ratio:1;display:block}
+#tasoLuku{font-size:15px;color:#cfc6dd;font-variant-numeric:tabular-nums}
+#tasoLuku span{font-size:10px;color:#6f6a7d;margin-left:2px}
+
+/* levysoittimen näkymä korvaa listan PHONO-lähteellä */
+#levy{
+  flex:1 1 auto;min-width:0;display:none;
+  flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  padding:10px;text-align:center;
+}
+#levy.nakyy{display:flex}
+#lista.piilossa{display:none}
+#levySvg{width:min(100%,128px);aspect-ratio:1}
+#levyNimi{font-size:14px;color:#f3e7d2;max-width:100%;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#levyAla{font-size:11px;color:#6f6a7d}
+
+/* ---- vahvistin ---------------------------------------------------- */
+#vahvari{
+  flex:0 0 auto;border-radius:10px;
+  background:linear-gradient(180deg,#201b16,#0d0b09);
+  box-shadow:0 1px 0 #413527 inset,0 10px 26px #0009;
+  padding:10px;display:flex;flex-direction:column;gap:9px;
+}
+#mittarit{display:flex;align-items:center;gap:9px}
+#mittarit canvas{
+  flex:1 1 0;min-width:0;height:62px;border-radius:4px;display:block;
+}
+#kilpi{
+  flex:0 0 auto;text-align:center;padding:0 2px;
+}
+#kilpi b{display:block;font:700 13px/1.2 Georgia,"Times New Roman",serif;
+  color:#e3c796}
+#kilpi span{display:block;font-size:9px;letter-spacing:.2em;
+  text-transform:uppercase;color:#8e8276;margin-top:2px}
+#aani{
+  position:relative;width:52px;height:52px;border-radius:50%;flex:0 0 auto;
+  background:
+    radial-gradient(62% 62% at 36% 30%,#cfc6b6,#8a8172 52%,#4b443b 100%);
+  box-shadow:0 2px 7px #000a,0 0 0 2px #15110d,0 0 0 3px #6b5f4c;
+  cursor:grab;touch-action:none;
+}
+#aani .osoitin{
+  position:absolute;left:50%;top:5px;width:3px;height:16px;margin-left:-1.5px;
+  border-radius:2px;background:#241f1a;
+}
+#lahteet{
+  display:flex;gap:6px;align-items:center;flex-wrap:wrap;
+  border-top:1px solid #2b2520;padding-top:9px;
+}
+#lahteet button{
+  flex:1 1 auto;min-width:64px;min-height:44px;cursor:pointer;
+  font:700 11px/1 inherit;letter-spacing:.14em;
+  color:#6a6158;background:linear-gradient(180deg,#1d1814,#121008);
+  border:1px solid #0a0806;border-radius:6px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:5px;
+}
+#lahteet button .led{
+  width:6px;height:6px;border-radius:50%;background:#2a2420;
+  box-shadow:0 0 0 1px #0a0806 inset;
+}
+#lahteet button[aria-pressed="true"]{color:#f3e7d2}
+#lahteet button[aria-pressed="true"] .led{
+  background:#ff8a3c;box-shadow:0 0 7px #ff8a3c,0 0 2px #ffd9b0 inset;
+}
+#lahteet button[disabled]{opacity:.45;cursor:default}
+#nyt{
+  flex:0 0 auto;text-align:center;font-size:13px;color:#a2988a;
+  padding-top:6px;min-height:19px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+@media (max-width:400px){
+  #tasoPuoli{flex-basis:32%}
+  #lahteet button{min-width:54px;letter-spacing:.08em}
+  #kilpi b{font-size:12px}
+}
+</style>
+</head>
+<body>
+<h1>KJWhispers House Edition</h1>
+
+<div id="pino">
+  <div id="soitin">
+    <div id="ruutu">
+      <div id="ruutuYla">
+        <b id="otsikko">Deep House Essentials</b>
+        <span id="muoto">—</span>
+      </div>
+      <div id="ruutuSisus">
+        <div id="lista" role="listbox" aria-label="Kokoelma"></div>
+        <div id="levy">
+          <svg id="levySvg" viewBox="0 0 100 100" aria-hidden="true">
+            <defs>
+              <radialGradient id="vinyyli" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#2a2430"/>
+                <stop offset="100%" stop-color="#0c0a10"/>
+              </radialGradient>
+            </defs>
+            <circle cx="50" cy="50" r="48" fill="url(#vinyyli)"/>
+            <g stroke="#3a3346" stroke-width=".7" fill="none" opacity=".85">
+              <circle cx="50" cy="50" r="43"/><circle cx="50" cy="50" r="39"/>
+              <circle cx="50" cy="50" r="35"/><circle cx="50" cy="50" r="31"/>
+              <circle cx="50" cy="50" r="27"/><circle cx="50" cy="50" r="23"/><circle cx="50" cy="50" r="41"/><circle cx="50" cy="50" r="37"/><circle cx="50" cy="50" r="33"/><circle cx="50" cy="50" r="29"/>
+            </g>
+            <circle cx="50" cy="50" r="17" fill="#c9742a"/>
+            <circle cx="50" cy="50" r="17" fill="none" stroke="#8a4d16"
+                    stroke-width=".8"/>
+            <circle cx="50" cy="50" r="2.4" fill="#0c0a10"/>
+          </svg>
+          <b id="levyNimi">—</b>
+          <span id="levyAla"></span>
+        </div>
+        <div id="tasoPuoli">
+          <canvas id="rengas"></canvas>
+          <div id="tasoLuku">—<span>dB</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="vahvari">
+    <div id="mittarit">
+      <canvas id="vu1" aria-hidden="true"></canvas>
+      <div id="kilpi"><b>KJWhispers</b><span>House Edition</span></div>
+      <canvas id="vu2" aria-hidden="true"></canvas>
+      <div id="aani" role="slider" tabindex="0" aria-label="Äänenvoimakkuus"
+           aria-valuemin="0" aria-valuemax="100"><span class="osoitin"></span></div>
+    </div>
+    <div id="lahteet">
+      <button type="button" data-lahde="phono" aria-pressed="false">
+        <span class="led"></span>PHONO</button>
+      <button type="button" data-lahde="line" disabled aria-pressed="false">
+        <span class="led"></span>LINE</button>
+      <button type="button" data-lahde="stream" aria-pressed="true">
+        <span class="led"></span>STREAM</button>
+      <button type="button" data-lahde="aux" disabled aria-pressed="false">
+        <span class="led"></span>AUX</button>
+      <button type="button" data-lahde="tape" disabled aria-pressed="false">
+        <span class="led"></span>TAPE</button>
+    </div>
+    <div id="nyt">valitse kappale</div>
+  </div>
+</div>
+
+<script src="../soitin.js"></script>
+<script>
+'use strict';
+var $ = function (id){ return document.getElementById(id); };
+
+var BIISIT = [];
+var kohta = -1;
+var soi = false;
+var lahde = 'stream';
+var aaniTaso = 0.8;
+
+/* ==================================================================
+ * Ääni
+ *
+ * Elementti soittaa suoraan, ei Web Audion läpi. Jos elementti
+ * kytketään AudioContextiin, soitto hiljenee näytön sammuessa eikä
+ * siitä jää merkkiä ruudulle. Tässä soittimessa ei ole naksahduksia
+ * eikä kohinaa, joten AudioContextia ei tarvita lainkaan.
+ * ================================================================== */
+
+var el = new Audio();
+el.preload = 'none';
+el.playsInline = true;
+el.volume = aaniTaso;
+
+/* iOS ohittaa elementin volume-arvon. Nuppi joka ei tee mitään on
+   pahempi kuin puuttuva nuppi, joten se piilotetaan siellä. */
+var voimaOk = null;
+function voimakkuuttaVoiSaataa(){
+  if (voimaOk !== null) return voimaOk;
+  var koe = new Audio();
+  try { koe.volume = 0.42; voimaOk = Math.abs(koe.volume - 0.42) < 0.01; }
+  catch (e){ voimaOk = false; }
+  return voimaOk;
+}
+
+/* ==================================================================
+ * Valot
+ * ================================================================== */
+
+var valot = null, valotOsoite = '';
+var taso = { vasen: 0.04, oikea: 0.04 };
+
+function haeValot(aani){
+  var osoite = String(aani || '');
+  if (!osoite || osoite === valotOsoite) return;
+  valotOsoite = osoite; valot = null;
+  if (/^blob:|^data:/.test(osoite)) return;
+  var url = osoite.replace(/\.(mp3|wav|m4a|ogg)(\?.*)?$/i, '.valot');
+  if (url === osoite) return;
+  fetch(url, { cache: 'force-cache' })
+    .then(function (r){ return r.ok ? r.arrayBuffer() : null; })
+    .then(function (pus){
+      if (!pus || valotOsoite !== osoite) return;
+      var t = new Uint8Array(pus);
+      if (t.length < 10 || t[0] !== 86 || t[1] !== 76 || t[2] !== 79) return;
+      var n = new DataView(pus);
+      valot = { fps: n.getUint16(4, true), kesto: n.getUint32(6, true),
+                data: t.subarray(10) };
+    })
+    .catch(function (){});
+}
+
+function paivitaTasot(dt){
+  var t = { vasen: 0.04, oikea: 0.04 };
+  if (soi && valot){
+    var r = Math.floor(el.currentTime * valot.fps);
+    var kpl = (valot.data.length / 3) | 0;
+    var i = Math.max(0, Math.min(kpl - 1, r)) * 3;
+    var b = valot.data[i] / 255, k = valot.data[i + 1] / 255,
+        d = valot.data[i + 2] / 255;
+    t.vasen = b * 0.65 + k * 0.35;
+    t.oikea = k * 0.5 + d * 0.5;
+  }
+  for (var kk in t){
+    taso[kk] += (t[kk] - taso[kk]) * (t[kk] > taso[kk] ? 0.5
+                                                       : Math.min(1, dt * 2.6));
+  }
+}
+
+/* ==================================================================
+ * Soitto
+ * ================================================================== */
+
+function mmss(s){
+  if (!isFinite(s) || s < 0) return '—';
+  var m = Math.floor(s / 60), x = Math.floor(s % 60);
+  return m + ':' + (x < 10 ? '0' : '') + x;
+}
+
+function valitse(i, aloitaHeti){
+  if (!BIISIT.length) return;
+  kohta = (i + BIISIT.length) % BIISIT.length;
+  var b = BIISIT[kohta];
+  el.src = b.aani;
+  el.load();
+  haeValot(b.aani);
+  mediaTiedot(b);
+  var kaynnista = function (){
+    el.play().then(function (){ soi = true; piirraLista(); paivitaTeksti(); })
+             .catch(function (){ soi = false; piirraLista(); paivitaTeksti(); });
+  };
+  if (aloitaHeti === false){ piirraLista(); paivitaTeksti(); return; }
+  if (el.readyState >= 2) kaynnista();
+  else el.addEventListener('canplay', kaynnista, { once: true });
+  piirraLista();
+  paivitaTeksti();
+}
+
+el.addEventListener('ended', function (){
+  soi = false;
+  /* Molemmissa lähteissä jatketaan seuraavaan: STREAM soittaa kokoelman
+     läpi, PHONO soittaa levyn puolen loppuun. Ero on siinä mistä
+     aloitetaan ja näkyykö lista. */
+  if (lahde === 'phono' && kohta === BIISIT.length - 1){
+    /* Levyn puoli loppui. Neula nousee eikä ala alusta itsestään. */
+    piirraLista(); paivitaTeksti();
+    $('nyt').textContent = 'levyn puoli soitettu — paina PHONO uudelleen';
+    return;
+  }
+  valitse(kohta + 1);
+});
+el.addEventListener('play', function (){ mediaTila('playing'); });
+el.addEventListener('pause', function (){ mediaTila('paused'); });
+
+function mediaTiedot(b){
+  if (!('mediaSession' in navigator)) return;
+  try {
+    navigator.mediaSession.metadata = new window.MediaMetadata({
+      title: b && b.nimi ? b.nimi : 'House Edition',
+      artist: b && b.alarivi ? b.alarivi : 'KJWhispers',
+      album: 'Musa Rooms · House'
+    });
+  } catch (e){}
+  var k = {
+    play: function (){ el.play().then(function (){
+            soi = true; piirraLista(); paivitaTeksti(); }).catch(function (){}); },
+    pause: function (){ el.pause(); soi = false; piirraLista(); paivitaTeksti(); },
+    previoustrack: function (){ valitse(kohta - 1); },
+    nexttrack: function (){ valitse(kohta + 1); }
+  };
+  for (var nimi in k){
+    try { navigator.mediaSession.setActionHandler(nimi, k[nimi]); }
+    catch (e){}
+  }
+}
+function mediaTila(t){
+  if (!('mediaSession' in navigator)) return;
+  try { navigator.mediaSession.playbackState = t; } catch (e){}
+}
+
+/* ==================================================================
+ * Lähdevalitsin
+ * ================================================================== */
+
+function vaihdaLahde(uusi){
+  var nappi = document.querySelector('#lahteet button[data-lahde="' + uusi + '"]');
+  if (!nappi || nappi.disabled) return;
+  lahde = uusi;
+  Array.prototype.forEach.call(
+    document.querySelectorAll('#lahteet button'), function (b){
+      b.setAttribute('aria-pressed',
+        String(b.getAttribute('data-lahde') === lahde));
+    });
+
+  var onPhono = lahde === 'phono';
+  $('levy').classList.toggle('nakyy', onPhono);
+  $('lista').classList.toggle('piilossa', onPhono);
+  $('otsikko').textContent = onPhono ? 'Levysoitin' : 'Deep House Essentials';
+
+  if (onPhono && BIISIT.length){
+    /* Neula putoaa satunnaiseen kohtaan levyn puolta, kuten levyä
+       laskiessa käy. Siitä eteenpäin soitetaan järjestyksessä. */
+    valitse(Math.floor(Math.random() * BIISIT.length));
+  }
+  paivitaTeksti();
+}
+
+Array.prototype.forEach.call(
+  document.querySelectorAll('#lahteet button'), function (b){
+    b.addEventListener('click', function (){
+      vaihdaLahde(b.getAttribute('data-lahde'));
+    });
+  });
+
+/* ==================================================================
+ * Piirto: lista, rengas, VU-mittarit
+ * ================================================================== */
+
+function piirraLista(){
+  var p = $('lista');
+  if (!BIISIT.length){
+    p.innerHTML = '<div style="padding:18px;color:#6f6a7d;font-size:13px">'
+                + 'Kokoelma on vielä tyhjä.</div>';
+    return;
+  }
+  var osat = [];
+  for (var i = 0; i < BIISIT.length; i++){
+    var b = BIISIT[i];
+    osat.push('<button type="button" role="option" data-i="' + i + '"'
+      + ' aria-current="' + (i === kohta) + '">'
+      + '<span class="nro">' + (i + 1) + '</span>'
+      + '<span class="nimet"><span class="nimi"></span>'
+      + '<span class="ala"></span></span>'
+      + '<span class="kesto">' + mmss(b.kesto) + '</span></button>');
+  }
+  p.innerHTML = osat.join('');
+  /* Nimet asetetaan tekstinä eikä HTML:nä: ne tulevat tiedostonimistä,
+     ja tiedostonimi on käyttäjän syötettä. */
+  var napit = p.querySelectorAll('button');
+  for (var j = 0; j < napit.length; j++){
+    napit[j].querySelector('.nimi').textContent = BIISIT[j].nimi;
+    napit[j].querySelector('.ala').textContent = BIISIT[j].alarivi || '';
+    napit[j].addEventListener('click', function (){
+      valitse(parseInt(this.getAttribute('data-i'), 10));
+    });
+  }
+  var nyt = p.querySelector('[aria-current="true"]');
+  if (nyt && nyt.scrollIntoView) nyt.scrollIntoView({ block: 'nearest' });
+}
+
+function paivitaTeksti(){
+  var b = BIISIT[kohta];
+  $('nyt').textContent = b
+    ? (soi ? '▶ ' : '‖ ') + b.nimi
+      + (b.alarivi ? '  ·  ' + b.alarivi : '')
+    : (BIISIT.length ? 'valitse kappale' : 'kokoelma on tyhjä');
+  $('muoto').textContent = b ? 'MP3 192' : '—';
+  $('levyNimi').textContent = b ? b.nimi : '—';
+  $('levyAla').textContent = b ? (b.alarivi || '') : '';
+  var db = taso.vasen > 0.02 ? (-60 + taso.vasen * 60) : -60;
+  $('tasoLuku').innerHTML = (soi ? db.toFixed(0) : '—')
+                          + '<span>dB</span>';
+}
+
+function kanvaasi(cv, korkeus){
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  var r = cv.getBoundingClientRect();
+  var w = Math.max(40, Math.round(r.width));
+  var h = Math.max(20, Math.round(korkeus || r.height));
+  if (cv.width !== w * dpr || cv.height !== h * dpr){
+    cv.width = w * dpr; cv.height = h * dpr;
+  }
+  var c = cv.getContext('2d');
+  c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  c.clearRect(0, 0, w, h);
+  return { c: c, w: w, h: h };
+}
+
+/* Virtaussoittimen tasorengas: katkoviiva ympyrän kehällä. */
+function piirraRengas(){
+  var k = kanvaasi($('rengas'));
+  var c = k.c, w = k.w, h = k.h;
+  var kx = w / 2, ky = h / 2, sade = Math.min(w, h) * 0.42;
+  var pisteita = 44;
+  var osuus = soi ? Math.max(0, Math.min(1, taso.vasen)) : 0;
+  for (var i = 0; i < pisteita; i++){
+    var a = -Math.PI * 0.5 + (i / pisteita) * Math.PI * 2;
+    var paalla = i / pisteita < osuus;
+    c.beginPath();
+    c.fillStyle = paalla ? '#f0b65a' : '#2a2430';
+    c.arc(kx + Math.cos(a) * sade, ky + Math.sin(a) * sade,
+          paalla ? 2 : 1.4, 0, Math.PI * 2);
+    c.fill();
+  }
+  /* edistyminen ohuena kaarena sisäpuolella */
+  if (soi && el.duration){
+    var p = Math.max(0, Math.min(1, el.currentTime / el.duration));
+    c.beginPath();
+    c.strokeStyle = '#6f6a7d'; c.lineWidth = 1.6; c.lineCap = 'round';
+    c.arc(kx, ky, sade * 0.72, -Math.PI * 0.5,
+          -Math.PI * 0.5 + p * Math.PI * 2);
+    c.stroke();
+  }
+}
+
+/* Vahvistimen VU-mittari. Akseli on laatikon sisällä alareunassa. */
+function piirraVU(cv, arvo){
+  var k = kanvaasi(cv, 62);
+  var c = k.c, w = k.w, h = k.h;
+  var g = c.createLinearGradient(0, 0, 0, h);
+  g.addColorStop(0, '#f6d9a0'); g.addColorStop(1, '#d9a94e');
+  c.fillStyle = g;
+  c.beginPath();
+  if (c.roundRect) c.roundRect(0, 0, w, h, 3); else c.rect(0, 0, w, h);
+  c.fill();
+  c.save(); c.clip();
+
+  var kx = w / 2, ky = h * 0.95, sade = Math.min(h * 0.76, w * 0.44);
+  var A0 = Math.PI * 1.17, A1 = Math.PI * 1.83;
+  for (var i = 0; i <= 10; i++){
+    var a = A0 + (A1 - A0) * (i / 10);
+    var pitka = i % 5 === 0;
+    c.beginPath();
+    c.strokeStyle = i >= 7 ? '#b3351f' : '#6b4426';
+    c.lineWidth = pitka ? 1.5 : 1;
+    c.moveTo(kx + Math.cos(a) * sade, ky + Math.sin(a) * sade);
+    c.lineTo(kx + Math.cos(a) * sade * (pitka ? 0.78 : 0.86),
+             ky + Math.sin(a) * sade * (pitka ? 0.78 : 0.86));
+    c.stroke();
+  }
+  c.beginPath();
+  c.strokeStyle = '#b3351f'; c.lineWidth = 1.5;
+  c.arc(kx, ky, sade, A0 + (A1 - A0) * 0.7, A1);
+  c.stroke();
+
+  var ak = A0 + (A1 - A0) * Math.max(0, Math.min(1, arvo));
+  c.strokeStyle = '#241708'; c.lineWidth = 1.7; c.lineCap = 'round';
+  c.beginPath();
+  c.moveTo(kx, ky);
+  c.lineTo(kx + Math.cos(ak) * sade * 0.94, ky + Math.sin(ak) * sade * 0.94);
+  c.stroke();
+  c.beginPath(); c.fillStyle = '#241708';
+  c.arc(kx, ky, 2, 0, Math.PI * 2); c.fill();
+
+  c.fillStyle = '#7a5a30'; c.textAlign = 'center';
+  c.font = '700 ' + Math.max(7, h * 0.16).toFixed(0) + 'px system-ui,sans-serif';
+  c.fillText('VU', w / 2, h * 0.68);
+
+  c.restore();
+  c.strokeStyle = '#2a1a0e'; c.lineWidth = 1.4;
+  c.beginPath();
+  if (c.roundRect) c.roundRect(0, 0, w, h, 3); else c.rect(0, 0, w, h);
+  c.stroke();
+}
+
+/* ==================================================================
+ * Äänenvoimakkuus
+ * ================================================================== */
+
+function paivitaAani(){
+  var n = $('aani');
+  if (n){
+    n.querySelector('.osoitin').style.transform =
+      'rotate(' + (-135 + aaniTaso * 270).toFixed(1) + 'deg)';
+    n.setAttribute('aria-valuenow', Math.round(aaniTaso * 100));
+  }
+  el.volume = aaniTaso;
+}
+
+(function kytkeAani(){
+  if (!voimakkuuttaVoiSaataa()){
+    var n = $('aani');
+    if (n) n.style.display = 'none';
+    return;
+  }
+  paivitaAani();
+  if (!window.Saadin || !$('aani')) return;
+  window.Saadin.lisaa({
+    id: 'aani', nimi: 'Äänenvoimakkuus', el: $('aani'),
+    min: 0, max: 1, askel: 0.01,
+    lue: function (){ return aaniTaso; },
+    aseta: function (v){ aaniTaso = v; paivitaAani(); },
+    piirra: paivitaAani,
+    muotoile: function (v){ return Math.round(v * 100) + ' %'; }
+  });
+})();
+
+/* ==================================================================
+ * Kello
+ * ================================================================== */
+
+var edellinen = 0, levyKulma = 0, tekstiKello = 0;
+function askel(nyt){
+  var dt = Math.min(0.05, (nyt - edellinen) / 1000);
+  edellinen = nyt;
+
+  paivitaTasot(dt);
+  piirraRengas();
+  piirraVU($('vu1'), taso.vasen);
+  piirraVU($('vu2'), taso.oikea);
+
+  if (lahde === 'phono' && soi){
+    levyKulma += dt * 3.49;            // 33 1/3 kierrosta minuutissa
+    var s = $('levySvg');
+    if (s) s.style.transform = 'rotate(' + levyKulma.toFixed(2) + 'rad)';
+  }
+
+  /* dB-luku ei päivity joka ruudulla: se vilkkuisi lukukelvottomaksi. */
+  tekstiKello += dt;
+  if (tekstiKello > 0.25){ tekstiKello = 0; paivitaTeksti(); }
+
+  requestAnimationFrame(askel);
+}
+requestAnimationFrame(askel);
+
+/* ==================================================================
+ * Kokoelma palvelimelta
+ * ================================================================== */
+
+(function haeKokoelma(){
+  piirraLista();
+  if (location.protocol === 'file:') return;
+  fetch('kokoelma.json', { cache: 'no-cache' })
+    .then(function (r){ return r.ok ? r.json() : null; })
+    .then(function (d){
+      if (!d || !Array.isArray(d.raidat)) return;
+      BIISIT = d.raidat;
+      if (d.nimi) $('otsikko').textContent = d.nimi;
+      piirraLista();
+      paivitaTeksti();
+    })
+    .catch(function (){});
+})();
+</script>
+</body>
+</html>
