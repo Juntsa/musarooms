@@ -282,12 +282,17 @@ el.playsInline = true;
 var valot = null, valotOsoite = '';
 var taso = { basso: 0, keski: 0, diskantti: 0 };
 
-/* Asteikon kaupungit. Nama ovat koristetta - oikeassa valveradiossa
+/* Asteikon asemat. Nama ovat koristetta - oikeassa valveradiossa
    lasiin on painettu asemien nimet, ja ilman niita asteikko on tyhja
    lasilevy. Laulut eivat sijoitu naiden kohdalle; viisari kulkee
-   koskettimien mukaan. */
-var KAUPUNGIT = ['Helsinki', 'Lahti', 'Tampere', 'Oulu', 'Rovaniemi'];
-var KAUKO = ['Stockholm', 'Oslo', 'Hilversum', 'Wien'];
+   koskettimien mukaan.
+
+   Nimet ovat 1950-luvun asemia, eivat nykyisia kaupunkeja. "Suomi yht."
+   oli Yleisradion yhteisohjelma ja "Helsinki I" oma lahettimensa -
+   juuri nain ne lukevat aikakauden radion asteikkolasissa. Pelkka
+   kaupunkilista olisi kartta, ei radio. */
+var KOTIMAA = ['Suomi yht.', 'Helsinki I', 'Lahti', 'Turku I', 'Vaasa'];
+var KAUKO = ['Stockholm', 'Motala', 'Luleå', 'Tromsø'];
 
 function mmss(s){
   if (!isFinite(s) || s < 0) return '0:00';
@@ -302,7 +307,7 @@ function piirraAsteikko(){
   p.textContent = '';
   var rivit = [
     { ylos: 30, nimet: KAUKO,     kaista: 'KV' },
-    { ylos: 56, nimet: KAUPUNGIT, kaista: 'ULA' }
+    { ylos: 56, nimet: KOTIMAA, kaista: 'ULA' }
   ];
   rivit.forEach(function (r){
     var viiva = document.createElement('div');
