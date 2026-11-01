@@ -2,6 +2,13 @@
   "nimi": "Suomi",
   "raidat": [
     {
+      "nimi": "Elämäni Makeus",
+      "alarivi": "",
+      "kesto": 302.7,
+      "aani": "https://aani.musarooms.com/suomi/suomi-08-elamani-makeus.mp3",
+      "bpm": 64.8
+    },
+    {
       "nimi": "Ikävä toisen luo",
       "alarivi": "",
       "kesto": 235.0,
