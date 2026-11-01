@@ -209,6 +209,13 @@ h1 span{color:var(--amber)}
   --hehku:radial-gradient(130% 95% at 50% 100%,#ffd28a 0%,#9a5a1e 42%,#1a1008 100%);
 }
 .suomi .luukku::after{display:none}   /* vetimet ovat jo kaiverruksessa */
+.tilaus{
+  --kehys:#4a2317;
+  --vas:url("luukut/tilaus-vasen.jpg");
+  --oik:url("luukut/tilaus-oikea.jpg");
+  --hehku:radial-gradient(130% 95% at 50% 100%,#ffd9a0 0%,#8d4a1c 42%,#190d06 100%);
+}
+.tilaus .luukku::after{display:none}  /* messinkivetimet ovat kuvassa */
 .techno{
   --kehys:#3b4048;              /* laukun alumiini, ei puukehystä */
   --vas:url("luukut/techno-vasen.jpg");
@@ -346,6 +353,21 @@ footer a{color:#8a7a66}
         <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
       </a>
       <p class="ohje">Paina kosketinta &mdash; jokainen on oma laulunsa</p>
+    </div>
+
+    <!-- Tilaushuone on ainoa ovi jonka takana ei ole soitinta vaan palvelu.
+         Se on viimeisenä tarkoituksella: vieras kuuntelee ensin mit&auml;
+         talossa tehd&auml;&auml;n, ja vasta sitten n&auml;kee ett&auml;
+         samanlaisen voi tilata omakseen. -->
+    <div class="ovi">
+      <a class="huone tilaus" href="tilaus/" data-soitin>
+        <div class="sisus">
+          <b>Tilaushuone</b>
+          <span>Oma laulu omasta tarinasta<br>25&ndash;89 &euro; &middot; tarjous maksutta</span>
+        </div>
+        <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
+      </a>
+      <p class="ohje">Kerro tilaisuus ja tarina &mdash; saat kiinte&auml;n hinnan ennen maksua</p>
     </div>
 
   </div>
