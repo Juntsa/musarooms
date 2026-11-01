@@ -49,6 +49,9 @@ h1{
 
 /* ---- kaappi ---------------------------------------------------------- */
 #radio{
+  /* position: laululista asettuu tämän sisään. Ilman tätä se
+     ankkuroituisi sivuun ja leijuisi laitteen ulkopuolella. */
+  position:relative;
   width:min(100%,460px);flex:0 1 auto;min-height:0;max-height:100%;
   display:flex;flex-direction:column;gap:9px;
   border-radius:14px 14px 9px 9px;padding:11px;
@@ -75,9 +78,15 @@ h1{
 }
 
 /* ---- lasiasteikko ---------------------------------------------------- */
+/* ---- laululista ------------------------------------------------------
+   Koskettimissa on kolmen kirjaimen lyhenteet (EM, ITL, KV), eikä niistä
+   voi päätellä mitään. Ilman listaa laulun löytäminen on painelua.
+   Lasi on oikea paikka avata se: aidossa radiossa asteikkolasiin on
+   painettu mitä mistäkin kohdasta kuuluu. Sama ele kuin jukeboksissa ja
+   videohuoneessa — nimikilpi avaa listan. */
 #asteikko{
   flex:0 0 auto;position:relative;height:122px;border-radius:5px;
-  overflow:hidden;cursor:default;
+  overflow:hidden;cursor:pointer;
   background:linear-gradient(180deg,#241808,var(--lasi) 40%,#0d0904);
   box-shadow:0 0 0 3px #8a6632,0 0 14px #ffbe4a26 inset,0 3px 9px #0009;
 }
@@ -115,6 +124,61 @@ h1{
   font:700 13px/1.25 Georgia,"Times New Roman",serif;color:var(--hehku);
   text-shadow:0 0 12px #ffbe4a8c;
   padding:0 12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+#avaaLista{                       /* kaiverrus lasin kulmassa */
+  position:absolute;right:9px;top:6px;z-index:2;
+  padding:5px 7px;min-height:24px;border:0;border-radius:3px;
+  background:#f3e2b412;color:#f3e2b4c0;cursor:pointer;
+  font-weight:700;font-size:8px;line-height:1;letter-spacing:.16em;
+}
+#avaaLista:hover{background:#f3e2b426;color:var(--hehku)}
+
+#lista{
+  position:absolute;inset:7px;z-index:5;display:flex;flex-direction:column;
+  border-radius:6px;overflow:hidden;
+  /* Umpinainen, ei läpikuultava: asteikko ja koskettimet kuultaisivat
+     läpi ja listasta tulisi lukukelvoton sekamelska. */
+  background:linear-gradient(180deg,#1d1206,#0e0803);
+  box-shadow:0 0 0 2px #8a6632,0 10px 30px #000c;
+}
+.listaRivi:focus-visible{
+  outline:2px solid var(--hehku,#ffd9a0);outline-offset:-3px;
+}
+#lista[hidden]{display:none}
+#listaYla{
+  flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;
+  gap:10px;padding:9px 11px;border-bottom:1px solid #8a663266;
+}
+#listaYla b{
+  font-weight:700;font-size:9px;letter-spacing:.2em;color:#f3e2b4b0;
+}
+#suljeLista{
+  border:0;background:#f3e2b41a;color:#f3e2b4;border-radius:4px;
+  min-height:30px;min-width:34px;padding:6px 10px;cursor:pointer;font-size:13px;
+}
+#suljeLista:hover{background:#f3e2b433}
+#listaSisus{flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.listaRivi{
+  display:flex;align-items:center;gap:11px;width:100%;
+  padding:9px 11px;min-height:46px;border:0;cursor:pointer;
+  background:transparent;color:var(--teksti,#f0e4cc);text-align:left;
+  border-bottom:1px solid #8a663226;
+}
+.listaRivi:hover{background:#f3e2b414}
+.listaRivi[aria-current="true"]{background:#ffbe4a1f}
+.listaRivi .nro{
+  flex:0 0 auto;width:26px;height:26px;border-radius:3px;
+  background:var(--kosketin,#efe6d2);color:#3a2a14;
+  font:700 12px/26px Georgia,serif;text-align:center;
+}
+.listaRivi .teksti{min-width:0;flex:1 1 auto}
+.listaRivi .nimi{
+  display:block;font:600 14px/1.25 Georgia,"Times New Roman",serif;
+  color:var(--hehku,#ffd9a0);overflow-wrap:anywhere;
+}
+.listaRivi .ala{
+  display:block;font-size:10.5px;letter-spacing:.08em;color:#f3e2b47d;
+  margin-top:2px;
 }
 #alanimi{
   position:absolute;left:0;right:0;bottom:4px;text-align:center;
@@ -235,6 +299,16 @@ h1{
     <div id="viisari"></div>
     <div id="nyt">—</div>
     <div id="alanimi"></div>
+    <button type="button" id="avaaLista"
+            aria-expanded="false" aria-controls="lista">LAULUT</button>
+  </div>
+
+  <div id="lista" hidden role="dialog" aria-label="Laulut">
+    <div id="listaYla">
+      <b>LAULUT</b>
+      <button type="button" id="suljeLista" aria-label="Sulje lista">&times;</button>
+    </div>
+    <div id="listaSisus" role="listbox" aria-label="Valitse laulu"></div>
   </div>
 
   <div id="paneeli">
@@ -455,6 +529,79 @@ $('koskettimet').addEventListener('click', function (e){
   var i = parseInt(nap.getAttribute('data-kohta'), 10);
   if (i === kohta && soi){ pysayta(); return; }
   soita(i);
+});
+
+/* ====================  laululista  =================================== */
+
+function teeLista(){
+  var s = $('listaSisus');
+  while (s.firstChild) s.removeChild(s.firstChild);
+  LAULUT.forEach(function (b, i){
+    var r = document.createElement('button');
+    r.type = 'button';
+    r.className = 'listaRivi';
+    r.setAttribute('role', 'option');
+    r.setAttribute('data-kohta', String(i));
+    r.setAttribute('aria-current', i === kohta ? 'true' : 'false');
+
+    var n = document.createElement('span');
+    n.className = 'nro';
+    n.textContent = String(i + 1);
+
+    var t = document.createElement('span');
+    t.className = 'teksti';
+    var nimi = document.createElement('span');
+    nimi.className = 'nimi';
+    nimi.textContent = b.nimi;              /* teksti, ei merkintää */
+    t.appendChild(nimi);
+    if (b.alarivi){
+      var ala = document.createElement('span');
+      ala.className = 'ala';
+      ala.textContent = b.alarivi;
+      t.appendChild(ala);
+    }
+    r.appendChild(n); r.appendChild(t);
+    s.appendChild(r);
+  });
+}
+
+function listaAuki(){ return !$('lista').hidden; }
+
+function avaaLista(){
+  if (!LAULUT.length) return;
+  teeLista();
+  $('lista').hidden = false;
+  $('avaaLista').setAttribute('aria-expanded', 'true');
+  var nyt = $('listaSisus').querySelector('[aria-current="true"]');
+  (nyt || $('listaSisus').firstChild || $('suljeLista')).focus();
+}
+
+function suljeLista(){
+  $('lista').hidden = true;
+  $('avaaLista').setAttribute('aria-expanded', 'false');
+  $('avaaLista').focus();
+}
+
+/* Koko lasi avaa listan — aidossa radiossa asteikkolasi kertoo mitä
+   mistäkin kohdasta kuuluu, ja tässä se on ainoa paikka josta näkee
+   mitä kolmen kirjaimen lyhenteet tarkoittavat. */
+$('asteikko').addEventListener('click', function (e){
+  if (listaAuki()) return;
+  if (e.target.closest && e.target.closest('#lista')) return;
+  avaaLista();
+});
+$('suljeLista').addEventListener('click', function (e){
+  e.stopPropagation();
+  suljeLista();
+});
+$('listaSisus').addEventListener('click', function (e){
+  var r = e.target.closest ? e.target.closest('.listaRivi') : null;
+  if (!r) return;
+  suljeLista();
+  soita(parseInt(r.getAttribute('data-kohta'), 10));
+});
+document.addEventListener('keydown', function (e){
+  if (e.key === 'Escape' && listaAuki()) suljeLista();
 });
 
 /* ====================  soitto  ======================================= */
