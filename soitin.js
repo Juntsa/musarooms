@@ -75,7 +75,11 @@
         '-webkit-user-select:none;user-select:none}',
       '#isoSaadin.auki{display:flex}',
       '#isoSaadin .is-tausta{position:absolute;inset:0;background:rgba(6,5,4,.82);',
-        'backdrop-filter:blur(3px)}',
+        /* -webkit- tarvitaan: Safari tuki sumennusta vain
+           etuliitteella iOS 18:aan asti. Ilman tata vanhemmassa
+           iPhonessa sumennus jaa pois - tausta on silti
+           lapinakymaton, joten teksti pysyy luettavana. */
+        '-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}',
       '#isoSaadin .is-paneeli{position:relative;display:flex;flex-direction:column;',
         'align-items:center;gap:14px;padding:22px 26px 18px;border-radius:18px;',
         'background:linear-gradient(180deg,#2a211a,#15100c);',
@@ -277,7 +281,7 @@
         'width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,235,200,.3);',
         'background:rgba(10,9,8,.62);color:#f0e4d2;cursor:pointer;',
         'display:flex;align-items:center;justify-content:center;',
-        'backdrop-filter:blur(4px)}',
+        '-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}',
       '#huonenakyma .hn-takaisin:active{background:rgba(10,9,8,.85)}'
     ].join('');
     document.head.appendChild(css);
