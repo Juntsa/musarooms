@@ -104,7 +104,20 @@ canvas{touch-action:manipulation}
   text-transform:uppercase}
 #ohjaus .selite span{color:#ffb63f;font:700 15px/1 "Segoe UI",sans-serif;
   font-variant-numeric:tabular-nums}
-#ohjaus button{margin-left:auto;min-height:44px}
+#kuljetus{display:flex;gap:7px;margin-left:auto}
+#kuljetus button{
+  margin:0;min-width:48px;min-height:48px;padding:0;
+  border:1px solid #4a3a28;border-radius:9px;
+  background:linear-gradient(180deg,#352a1d,#1d1610);
+  color:#ffd9a0;font-size:17px;line-height:1;cursor:pointer;
+}
+#kuljetus button:hover{border-color:#8a6c3e;color:#fff0d2}
+#kuljetus button:disabled{opacity:.4;cursor:default}
+#kuljetus #soitaNappi[aria-pressed="true"]{
+  background:linear-gradient(180deg,#ffb63f,#c98518);color:#241c13;
+  border-color:#ffb63f;
+}
+#ohjaus > button{margin-left:9px;min-height:44px}
 #lava{flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;padding:16px}
 /* puhelimessa soitin täyttää koko leveyden: 16 px reunusta on
    390 px:n näytöllä 8 % kuvasta, ja juuri leveys on se mikä
@@ -139,6 +152,17 @@ canvas{border-radius:4px;box-shadow:0 30px 80px rgba(0,0,0,.75),0 0 0 1px rgba(2
     <span class="osoitin"></span>
   </div>
   <div class="selite"><b>Ääni</b><span id="aaniArvo">80 %</span></div>
+
+  <!-- Kuljetusnapit. Jukeboksin omat painikkeet taulussa valitsevat
+       biisin, mutta niillä ei pysäytetä eikä hypätä - oikeassa
+       laitteessa ei ollutkaan mihin. Ruudulla se on puute: kun biisi
+       on väärä, ainoa keino oli avata lista uudelleen. -->
+  <div id="kuljetus" role="group" aria-label="Soitto">
+    <button id="edel" type="button" aria-label="Edellinen biisi">&#9198;</button>
+    <button id="soitaNappi" type="button" aria-label="Soita">&#9654;</button>
+    <button id="seur" type="button" aria-label="Seuraava biisi">&#9197;</button>
+  </div>
+
   <button id="listaAuki" type="button">Biisilista</button>
 </div>
 
@@ -1632,6 +1656,10 @@ function valitse(n){
     S.soi = false;
     if (el){ try { el.pause(); } catch(e){} }
     vaihtoKaynnissa = true; vaihtoAlku = -1; vaihtoAanet = 0; S.vaihto = 0;
+    /* Nimikilpi heti, ei vasta kun ääni lähtee. Levynvaihto kestää
+       2,6 sekuntia, ja sen ajan kilvessä luki "24 / 24 paikkaa täynnä"
+       — painallus näytti tehottomalta vaikka mekanismi liikkui. */
+    paivitaNapit();
   });
 }
 
@@ -1672,6 +1700,23 @@ function paivitaNapit(){
   }
   $('nyt').textContent = (S.valittu + 1) + '  ' + (b ? b.nimi : '—') +
     (S.soi ? '' : ' · pysäytetty');
+  paivitaKuljetus();
+}
+
+/* Kuljetusnapit seuraavat soittotilaa. Napin kuva ja aria-label
+   vaihtuvat yhdessä: pelkkä kuvan vaihto jättäisi ruudunlukijan
+   sanomaan "soita" silloinkin kun nappi pysäyttää. */
+function paivitaKuljetus(){
+  const n = $('soitaNappi');
+  if (!n) return;
+  const onBiiseja = BIISIT.some(b => b && b.nimi);
+  n.textContent = S.soi ? '⏸' : '▶';
+  n.setAttribute('aria-label', S.soi ? 'Tauko' : 'Soita');
+  n.setAttribute('aria-pressed', S.soi ? 'true' : 'false');
+  n.disabled = !onBiiseja;
+  const e = $('edel'), s = $('seur');
+  if (e) e.disabled = !onBiiseja;
+  if (s) s.disabled = !onBiiseja;
 }
 
 /* ====================  kosketus  ======================================== */
@@ -2297,6 +2342,31 @@ function paivitaAani(){
 (function kytkeLista(){
   const b = $('listaAuki');
   if (b && typeof avaaLista === 'function') b.addEventListener('click', avaaLista);
+})();
+
+(function kytkeKuljetus(){
+  const e = $('edel'), s = $('seur'), n = $('soitaNappi');
+  if (e) e.addEventListener('click', () => siirry(-1));
+  if (s) s.addEventListener('click', () => siirry(1));
+  if (n) n.addEventListener('click', () => {
+    /* Ennen ensimmäistä valintaa soittonappi aloittaa ensimmäisestä
+       biisistä. Ehto katsoo VALINTAA eikä äänielementtiä: elementti on
+       olemassa heti sivun avauduttua, joten pelkkä sen tarkistus jätti
+       napin tekemättä mitään ennen kuin listasta oli valittu jotain. */
+    if (S.valittu < 0 || !el){
+      siirry(1);
+      return;
+    }
+    if (S.soi){ el.pause(); }
+    else { el.play().catch(() => {}); }
+  });
+  /* Tila voi muuttua muualtakin - lukitusnäytöstä, raidan loppumisesta,
+     puhelun keskeytyksestä - joten napit seuraavat elementtiä eivätkä
+     vain omia painalluksiaan. */
+  document.addEventListener('play',  paivitaKuljetus, true);
+  document.addEventListener('pause', paivitaKuljetus, true);
+  document.addEventListener('ended', paivitaKuljetus, true);
+  paivitaKuljetus();
 })();
 $('valot').classList.add('on');
 /* Jaettavaan tiedostoon leivotut biisit otetaan käyttöön ennen ensimmäistä
