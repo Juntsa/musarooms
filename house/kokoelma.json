@@ -62,10 +62,29 @@
       "aani": "https://aani.musarooms.com/house/house-10-i-am-home-i-find-you-vol-3.mp3"
     },
     {
+      "nimi": "Inside My Soul",
+      "alarivi": "",
+      "kesto": 279.7,
+      "aani": "https://aani.musarooms.com/house/house-21-inside-my-soul.mp3"
+    },
+    {
+      "nimi": "Key In The River",
+      "alarivi": "Vol 1",
+      "kesto": 230.0,
+      "aani": "https://aani.musarooms.com/house/house-22-key-in-the-river-vol-1.mp3"
+    },
+    {
       "nimi": "Rain in the river",
       "alarivi": "",
       "kesto": 230.0,
       "aani": "https://aani.musarooms.com/house/house-11-rain-in-the-river.mp3"
+    },
+    {
+      "nimi": "Skyborn CN",
+      "alarivi": "gym",
+      "kesto": 198.0,
+      "aani": "https://aani.musarooms.com/house/house-19-skyborn-cn-gym.mp3",
+      "bpm": 132.6
     },
     {
       "nimi": "Summer In Your Eyes",
@@ -78,6 +97,13 @@
       "alarivi": "",
       "kesto": 198.2,
       "aani": "https://aani.musarooms.com/house/house-13-summer-time.mp3"
+    },
+    {
+      "nimi": "Summer Time EN + CN Mix",
+      "alarivi": "",
+      "kesto": 179.9,
+      "aani": "https://aani.musarooms.com/house/house-20-summer-time-en-cn-mix.mp3",
+      "bpm": 125.6
     },
     {
       "nimi": "The Flower of The Rocky Lake",

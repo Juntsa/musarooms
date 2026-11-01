@@ -1,0 +1,47 @@
+{
+  "nimi": "Suomi",
+  "raidat": [
+    {
+      "nimi": "Ikävä toisen luo",
+      "alarivi": "",
+      "kesto": 235.0,
+      "aani": "https://aani.musarooms.com/suomi/suomi-01-ikava-toisen-luo.mp3"
+    },
+    {
+      "nimi": "Kultainen Valo",
+      "alarivi": "",
+      "kesto": 322.7,
+      "aani": "https://aani.musarooms.com/suomi/suomi-02-kultainen-valo.mp3"
+    },
+    {
+      "nimi": "Pieni Makeus",
+      "alarivi": "",
+      "kesto": 239.2,
+      "aani": "https://aani.musarooms.com/suomi/suomi-03-pieni-makeus.mp3"
+    },
+    {
+      "nimi": "Sateenkaaren alla rakkaus sataa",
+      "alarivi": "",
+      "kesto": 197.9,
+      "aani": "https://aani.musarooms.com/suomi/suomi-04-sateenkaaren-alla-rakkaus-sataa.mp3"
+    },
+    {
+      "nimi": "Tässä on hyvä olla",
+      "alarivi": "",
+      "kesto": 184.5,
+      "aani": "https://aani.musarooms.com/suomi/suomi-05-tassa-on-hyva-olla.mp3"
+    },
+    {
+      "nimi": "Valo Seuraa Sinua",
+      "alarivi": "",
+      "kesto": 252.5,
+      "aani": "https://aani.musarooms.com/suomi/suomi-06-valo-seuraa-sinua.mp3"
+    },
+    {
+      "nimi": "Ystävälle Kyynelten balladi",
+      "alarivi": "",
+      "kesto": 268.5,
+      "aani": "https://aani.musarooms.com/suomi/suomi-07-ystavalle-kyynelten-balladi.mp3"
+    }
+  ]
+}

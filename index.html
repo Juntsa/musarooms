@@ -202,6 +202,13 @@ h1 span{color:var(--amber)}
   --sisakuva:url("luukut/video-sisus.jpg");
   --hehku:radial-gradient(130% 95% at 50% 100%,#ffcf8a 0%,#7a4518 44%,#1d1007 100%);
 }
+.suomi{
+  --kehys:#6b4a24;
+  --vas:url("luukut/suomi-vasen.jpg");
+  --oik:url("luukut/suomi-oikea.jpg");
+  --hehku:radial-gradient(130% 95% at 50% 100%,#ffd28a 0%,#9a5a1e 42%,#1a1008 100%);
+}
+.suomi .luukku::after{display:none}   /* vetimet ovat jo kaiverruksessa */
 .techno{
   --kehys:#3b4048;              /* laukun alumiini, ei puukehystä */
   --vas:url("luukut/techno-vasen.jpg");
@@ -337,6 +344,17 @@ footer a{color:#8a7a66}
         <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
       </a>
       <p class="ohje">Napauta dekin n&auml;ytt&ouml;&auml; &mdash; sielt&auml; valitaan, ei jogista</p>
+    </div>
+
+    <div class="ovi">
+      <a class="huone suomi" href="suomi/" data-soitin>
+        <div class="sisus">
+          <b>Suomi</b>
+          <span>Valveradio ja kaupunkiasteikko<br>suomenkieliset laulut</span>
+        </div>
+        <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
+      </a>
+      <p class="ohje">Paina kosketinta &mdash; jokainen on oma laulunsa</p>
     </div>
 
   </div>

@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Suomi</title>
+<meta name="theme-color" content="#1c1109">
+<style>
+/* KJWhispers VR-57 — valveradio.
+
+   Juntsan kuva: puukaappi, kudottu kaiutinkangas, valaistu lasiasteikko
+   kaupunkien nimineen, kaksi isoa nuppia ja norsunluunvalkoinen
+   koskettimisto. Merkkia ei kirjoiteta mihinkaan; kuvan laite on
+   Riviera, tama on talon oma.
+
+   Ele on tahallaan eri kuin Country-radiossa. Siella kaannetaan
+   viisaria ja etsitaan asema. Taalla KOSKETTIMET valitsevat: jokainen
+   on oma laulunsa, kuten valveradion pikavalinnat. Viisari liukuu
+   valitun kohdalle itsestaan - se nayttaa missa ollaan, ei valitse.
+
+   Taikasilma on laitteen oma mittari. Oikeassa radiossa se kertoo
+   kuinka tarkasti asema on kohdallaan; taalla se elaa musiikin
+   mukana, ja sen tiedot tulevat .valot-tiedostosta.
+
+   Ei Web Audiota soittoketjussa: ks. MusaRooms_soitinrunko.md. */
+:root{
+  --puu:#5a3a1e; --puuTum:#2a1a0c; --puuVaal:#8a6035; --puuPinta:#6e4524;
+  --kangas:#c9bb9a; --kangasTum:#9c8f71;
+  --messinki:#c9a24e; --messinkiVaal:#f0d194;
+  --lasi:#1a1208; --asteikko:#f3e2b4; --hehku:#ffbe4a;
+  --silma:#5ef0a0; --silmaTum:#1b3a26;
+  --kosketin:#efe6d2; --kosketinVarjo:#b8ac93;
+  --kerma:#f2e6d2; --himmea:#9b8569;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{
+  background:radial-gradient(120% 70% at 50% 0%,#3a2514 0%,#140c06 70%),#140c06;
+  color:var(--kerma);
+  font:16px/1.4 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:8px 8px calc(8px + env(safe-area-inset-bottom));
+  overflow:hidden;
+}
+h1{
+  font-weight:800;font-size:11px;line-height:1;letter-spacing:.34em;
+  text-transform:uppercase;color:#c3a271;margin:0 0 9px;flex:0 0 auto;
+}
+
+/* ---- kaappi ---------------------------------------------------------- */
+#radio{
+  width:min(100%,460px);flex:0 1 auto;min-height:0;max-height:100%;
+  display:flex;flex-direction:column;gap:9px;
+  border-radius:14px 14px 9px 9px;padding:11px;
+  background:
+    repeating-linear-gradient(92deg,#ffffff0a 0 1px,#0000000d 1px 4px,transparent 4px 11px),
+    linear-gradient(180deg,#7a5330,#4a2f18 58%,#2a1a0c);
+  box-shadow:0 2px 0 #9a6b3e inset,0 -3px 0 #130b05 inset,0 16px 40px #000b;
+}
+
+/* ---- kaiutinkangas --------------------------------------------------- */
+#kangas{
+  flex:1 1 auto;min-height:60px;max-height:min(34vh,250px);border-radius:7px;position:relative;
+  background:
+    repeating-linear-gradient(45deg,#00000026 0 2px,transparent 2px 7px),
+    repeating-linear-gradient(-45deg,#00000026 0 2px,transparent 2px 7px),
+    linear-gradient(180deg,var(--kangas),var(--kangasTum));
+  box-shadow:0 0 0 3px #3a2412,0 2px 7px #0007 inset;
+}
+/* nimikilpi kankaan oikeaan alanurkkaan, kuten kuvassa */
+#merkki{
+  position:absolute;right:13px;bottom:9px;
+  font:italic 700 15px/1 Georgia,"Times New Roman",serif;
+  color:#4a3016;text-shadow:0 1px 0 #ffffff5c;letter-spacing:.02em;
+}
+
+/* ---- lasiasteikko ---------------------------------------------------- */
+#asteikko{
+  flex:0 0 auto;position:relative;height:122px;border-radius:5px;
+  overflow:hidden;cursor:default;
+  background:linear-gradient(180deg,#241808,var(--lasi) 40%,#0d0904);
+  box-shadow:0 0 0 3px #8a6632,0 0 14px #ffbe4a26 inset,0 3px 9px #0009;
+}
+#asteikko::after{          /* lasin heijastus */
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(104deg,#ffffff1f 0 18%,transparent 34%);
+}
+.kaista{
+  position:absolute;left:9px;right:9px;height:1px;background:#f3e2b43d;
+}
+.kaistaNimi{
+  position:absolute;left:11px;
+  font-weight:700;font-size:8px;line-height:1;letter-spacing:.16em;
+  color:#f3e2b480;
+}
+#kaupungit{position:absolute;left:0;right:0;top:0;bottom:0}
+.kaupunki{
+  position:absolute;transform:translateX(-50%);
+  font-size:8.5px;line-height:1;letter-spacing:.04em;
+  color:var(--asteikko);opacity:.62;white-space:nowrap;
+}
+.kaupunki i{
+  display:block;width:1px;height:6px;margin:2px auto 0;background:var(--asteikko);
+  opacity:.5;
+}
+/* viisari: liukuu valitun kohdalle, ei valitse itse */
+#viisari{
+  position:absolute;top:4px;bottom:4px;width:3px;margin-left:-1.5px;
+  background:linear-gradient(180deg,#ff7b4a,#d62f1c);
+  box-shadow:0 0 9px #ff5a2ecc,0 0 2px #fff6 inset;
+  transition:left .42s cubic-bezier(.3,.9,.3,1);
+}
+#nyt{
+  position:absolute;left:0;right:0;bottom:17px;text-align:center;
+  font:700 13px/1.25 Georgia,"Times New Roman",serif;color:var(--hehku);
+  text-shadow:0 0 12px #ffbe4a8c;
+  padding:0 12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+#alanimi{
+  position:absolute;left:0;right:0;bottom:4px;text-align:center;
+  font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+  color:#f3e2b47d;padding:0 12px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+
+/* ---- alapaneeli: nupit, taikasilma, koskettimet ---------------------- */
+#paneeli{
+  flex:0 0 auto;display:flex;align-items:center;gap:10px;
+  border-radius:7px;padding:9px 11px;
+  background:linear-gradient(180deg,#3a2412,#241508);
+  box-shadow:0 1px 0 #8a6035 inset,0 -2px 0 #120a04 inset;
+}
+.nuppi{
+  flex:0 0 auto;width:54px;height:54px;border-radius:50%;cursor:pointer;
+  position:relative;border:0;padding:0;
+  background:
+    radial-gradient(60% 60% at 36% 30%,#6e4a28,#2e1c0c 70%),
+    conic-gradient(from 0deg,#4a2f18,#7a5330,#4a2f18,#7a5330,#4a2f18);
+  box-shadow:0 2px 0 #8a6035 inset,0 -2px 5px #0009 inset,0 3px 7px #0008;
+}
+.nuppi .osoitin{
+  position:absolute;left:50%;top:7px;width:3px;height:17px;margin-left:-1.5px;
+  border-radius:2px;background:var(--messinkiVaal);
+  transform-origin:50% 20px;
+}
+.nuppi .selite{
+  position:absolute;left:50%;transform:translateX(-50%);top:58px;
+  font-weight:700;font-size:7.5px;line-height:1;letter-spacing:.16em;
+  color:var(--himmea);text-transform:uppercase;white-space:nowrap;
+}
+
+/* taikasilma: vihrea viritysilmaisin, avautuu ja sulkeutuu */
+#silmaKuori{
+  flex:1 1 auto;display:flex;align-items:center;justify-content:center;
+}
+#silma{
+  width:62px;height:62px;border-radius:50%;position:relative;overflow:hidden;
+  background:radial-gradient(circle,#0e2016 0%,#071009 72%,#040805 100%);
+  box-shadow:0 0 0 3px #2a1a0c,0 0 0 5px #6e4524,0 0 16px #5ef0a033 inset;
+}
+#silma .hehku{
+  position:absolute;inset:7px;border-radius:50%;
+  background:radial-gradient(circle,#9ffbcd 0%,var(--silma) 52%,#1d7a4e 100%);
+  box-shadow:0 0 18px #5ef0a0a8;
+}
+/* Varjokiila: oikeassa viritysilmaisimessa kiila KAPENEE kun signaali
+   vahvistuu. Siksi se on tassa paalla, ei alla. */
+#silma .kiila{
+  position:absolute;left:50%;top:50%;width:52%;height:52%;
+  transform-origin:0 0;background:#06110a;
+  box-shadow:0 0 7px #06110a;
+}
+#silma .keskus{
+  position:absolute;left:50%;top:50%;width:13px;height:13px;margin:-6.5px;
+  border-radius:50%;background:#0a1a10;box-shadow:0 0 6px #000 inset;
+}
+
+/* ---- koskettimisto: TASSA valitaan laulu ---------------------------- */
+#koskettimet{
+  flex:0 0 auto;display:flex;gap:4px;padding:7px 9px 9px;
+  border-radius:0 0 7px 7px;
+  background:linear-gradient(180deg,#241508,#160d05);
+  box-shadow:0 2px 0 #120a04 inset;
+}
+.kosketin{
+  flex:1 1 0;min-width:0;min-height:52px;cursor:pointer;
+  border:0;border-radius:3px 3px 5px 5px;padding:5px 2px 6px;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  gap:3px;
+  background:linear-gradient(180deg,var(--kosketin) 0 62%,var(--kosketinVarjo));
+  box-shadow:0 2px 0 #fffffff0 inset,0 -3px 0 #8d8168 inset,0 3px 5px #0008;
+  color:#3a2a14;
+  font-weight:700;font-size:8px;line-height:1;letter-spacing:.1em;
+  text-transform:uppercase;
+  transition:transform .08s ease,box-shadow .08s ease;
+}
+.kosketin b{
+  font-weight:700;font-size:13px;line-height:1;
+  font-family:Georgia,"Times New Roman",serif;letter-spacing:0;
+}
+/* painettu kosketin jaa alas, kuten valveradiossa */
+.kosketin[aria-pressed="true"]{
+  transform:translateY(4px);
+  background:linear-gradient(180deg,#ddd2bb 0 62%,#a4997f);
+  box-shadow:0 1px 0 #ffffffc0 inset,0 -2px 0 #7d7159 inset,0 1px 2px #0008;
+}
+.kosketin:disabled{opacity:.45;cursor:default}
+
+#rivi{
+  flex:0 0 auto;text-align:center;min-height:16px;
+  font-size:11px;color:var(--himmea);
+}
+</style>
+</head>
+<body>
+<h1>Suomi</h1>
+
+<div id="radio">
+  <div id="kangas"><span id="merkki">KJWhispers</span></div>
+
+  <div id="asteikko">
+    <div id="kaupungit"></div>
+    <div id="viisari"></div>
+    <div id="nyt">—</div>
+    <div id="alanimi"></div>
+  </div>
+
+  <div id="paneeli">
+    <button type="button" class="nuppi" id="aani"
+            role="slider" aria-label="Äänenvoimakkuus"
+            aria-valuemin="0" aria-valuemax="100">
+      <span class="osoitin"></span><span class="selite">Volume</span>
+    </button>
+    <div id="silmaKuori">
+      <div id="silma" aria-hidden="true">
+        <div class="hehku"></div>
+        <div class="kiila" id="kiilaA"></div>
+        <div class="kiila" id="kiilaB"></div>
+        <div class="keskus"></div>
+      </div>
+    </div>
+    <button type="button" class="nuppi" id="savy"
+            role="slider" aria-label="Sävy"
+            aria-valuemin="0" aria-valuemax="100">
+      <span class="osoitin"></span><span class="selite">Tone</span>
+    </button>
+  </div>
+
+  <div id="koskettimet" role="group" aria-label="Laulut"></div>
+  <div id="rivi">ei lauluja</div>
+</div>
+
+<script src="../soitin.js"></script>
+<script>
+'use strict';
+var $ = function (id){ return document.getElementById(id); };
+
+var LAULUT = [];
+var kohta = -1;
+var soi = false;
+var aaniTaso = 0.85;
+var savy = 0.5;
+var el = new Audio();
+el.preload = 'metadata';
+el.playsInline = true;
+
+/* Valokaistat tiedostosta, ei analysaattorista. Taikasilma lukee ne.
+   Syy on koko talon linjaus: Web Audio soittoketjussa hiljentaa soiton
+   kun puhelin menee taustalle, ja se tapahtuu aanettomasti. */
+var valot = null, valotOsoite = '';
+var taso = { basso: 0, keski: 0, diskantti: 0 };
+
+/* Asteikon kaupungit. Nama ovat koristetta - oikeassa valveradiossa
+   lasiin on painettu asemien nimet, ja ilman niita asteikko on tyhja
+   lasilevy. Laulut eivat sijoitu naiden kohdalle; viisari kulkee
+   koskettimien mukaan. */
+var KAUPUNGIT = ['Helsinki', 'Lahti', 'Tampere', 'Oulu', 'Rovaniemi'];
+var KAUKO = ['Stockholm', 'Oslo', 'Hilversum', 'Wien'];
+
+function mmss(s){
+  if (!isFinite(s) || s < 0) return '0:00';
+  var m = Math.floor(s / 60), x = Math.floor(s % 60);
+  return m + ':' + (x < 10 ? '0' : '') + x;
+}
+
+/* ====================  asteikko  ===================================== */
+
+function piirraAsteikko(){
+  var p = $('kaupungit');
+  p.textContent = '';
+  var rivit = [
+    { ylos: 30, nimet: KAUKO,     kaista: 'KV' },
+    { ylos: 56, nimet: KAUPUNGIT, kaista: 'ULA' }
+  ];
+  rivit.forEach(function (r){
+    var viiva = document.createElement('div');
+    viiva.className = 'kaista';
+    viiva.style.top = (r.ylos + 12) + 'px';
+    p.appendChild(viiva);
+    var nimi = document.createElement('span');
+    nimi.className = 'kaistaNimi';
+    nimi.style.top = (r.ylos + 1) + 'px';
+    nimi.textContent = r.kaista;
+    p.appendChild(nimi);
+    for (var i = 0; i < r.nimet.length; i++){
+      var k = document.createElement('span');
+      k.className = 'kaupunki';
+      k.style.left = (10 + (i + 0.5) * (80 / r.nimet.length)) + '%';
+      k.style.top = r.ylos + 'px';
+      k.textContent = r.nimet[i];
+      var t = document.createElement('i');
+      k.appendChild(t);
+      p.appendChild(k);
+    }
+  });
+}
+
+function siirraViisari(){
+  var n = Math.max(1, LAULUT.length);
+  var osuus = kohta < 0 ? 0.5 : (kohta + 0.5) / n;
+  $('viisari').style.left = (9 + osuus * 82) + '%';
+}
+
+/* ====================  taikasilma  =================================== */
+
+function piirraSilma(){
+  /* Kaksi sektoria vastakkain, kuten oikeassa viritysilmaisimessa:
+     varjokiila kapenee kun signaali vahvistuu. */
+  var v = soi ? Math.min(1, taso.basso * 0.7 + taso.keski * 0.5) : 0;
+  var kiila = 76 - v * 58;                // asteina; vahva signaali kaventaa
+  [['kiilaA', -90], ['kiilaB', 90]].forEach(function (par){
+    var e = $(par[0]);
+    if (!e) return;
+    e.style.transform = 'rotate(' + (par[1] - kiila / 2) + 'deg) skewX('
+      + (90 - kiila) + 'deg)';
+  });
+}
+
+/* ====================  valot  ======================================== */
+
+function haeValot(aani){
+  if (!aani || aani === valotOsoite) return;
+  valotOsoite = aani; valot = null;
+  var url = aani.replace(/\.(mp3|wav|m4a|ogg)(\?.*)?$/i, '.valot');
+  if (url === aani) return;
+  fetch(url, { cache: 'force-cache' })
+    .then(function (r){ return r.ok ? r.arrayBuffer() : null; })
+    .then(function (pus){
+      if (!pus || valotOsoite !== aani) return;
+      var t = new Uint8Array(pus);
+      if (t.length < 10 || t[0] !== 86 || t[1] !== 76 || t[2] !== 79) return;
+      /* VLO1:n otsake on 10 tavua, VLO2:n 12 - jalkimmaisessa on
+         tahtilaji mukana. Molemmat kelpaavat. */
+      var otsake = t[3] === 50 ? 12 : 10;
+      if (t.length < otsake) return;
+      var n = new DataView(pus);
+      valot = { fps: n.getUint16(4, true), kesto: n.getUint32(6, true),
+                bpm: otsake === 12 ? n.getUint16(10, true) / 10 : 0,
+                data: t.subarray(otsake) };
+    })
+    .catch(function (){});
+}
+
+function lueKaistat(){
+  if (!valot || !valot.data.length){
+    taso.basso = taso.keski = taso.diskantti = 0;
+    return;
+  }
+  var r = Math.floor((el.currentTime || 0) * valot.fps);
+  if (r < 0) r = 0;
+  var n = Math.floor(valot.data.length / 3);
+  if (r >= n) r = n - 1;
+  taso.basso = valot.data[r * 3] / 255;
+  taso.keski = valot.data[r * 3 + 1] / 255;
+  taso.diskantti = valot.data[r * 3 + 2] / 255;
+}
+
+var edellinen = 0;
+function kierros(aika){
+  var dt = Math.min(0.1, (aika - edellinen) / 1000 || 0);
+  edellinen = aika;
+  if (soi) lueKaistat();
+  else taso.basso = taso.keski = taso.diskantti = 0;
+  piirraSilma();
+  if (soi && el.duration){
+    $('rivi').textContent = mmss(el.currentTime) + ' / ' + mmss(el.duration);
+  }
+  requestAnimationFrame(kierros);
+}
+
+/* ====================  koskettimet  ================================== */
+
+function teeKoskettimet(){
+  var p = $('koskettimet');
+  p.textContent = '';
+  for (var i = 0; i < LAULUT.length; i++){
+    var b = LAULUT[i];
+    var nap = document.createElement('button');
+    nap.type = 'button';
+    nap.className = 'kosketin';
+    nap.setAttribute('data-kohta', String(i));
+    nap.setAttribute('aria-pressed', 'false');
+    /* Nimi menee title-attribuuttiin tekstina: laulun nimi tulee
+       tiedostonimesta, eli kayttajan syotteesta. */
+    nap.title = b.nimi || '';
+    var numero = document.createElement('b');
+    numero.textContent = String(i + 1);
+    var kirjain = document.createElement('span');
+    kirjain.textContent = lyhenne(b.nimi || '');
+    nap.appendChild(numero);
+    nap.appendChild(kirjain);
+    p.appendChild(nap);
+  }
+  paivitaKoskettimet();
+}
+
+function lyhenne(nimi){
+  /* Koskettimeen mahtuu puhelimessa kolme merkkia. Alkukirjaimet
+     kertovat enemman kuin katkaistu ensimmainen sana. */
+  var sanat = nimi.split(/\s+/).filter(function (s){ return s.length; });
+  if (!sanat.length) return '';
+  if (sanat.length === 1) return sanat[0].slice(0, 3).toUpperCase();
+  return sanat.slice(0, 3).map(function (s){
+    return s.charAt(0).toUpperCase();
+  }).join('');
+}
+
+function paivitaKoskettimet(){
+  var napit = $('koskettimet').querySelectorAll('.kosketin');
+  for (var i = 0; i < napit.length; i++){
+    napit[i].setAttribute('aria-pressed', (i === kohta && soi) ? 'true' : 'false');
+  }
+}
+
+$('koskettimet').addEventListener('click', function (e){
+  var nap = e.target.closest ? e.target.closest('.kosketin') : null;
+  if (!nap) return;
+  var i = parseInt(nap.getAttribute('data-kohta'), 10);
+  if (i === kohta && soi){ pysayta(); return; }
+  soita(i);
+});
+
+/* ====================  soitto  ======================================= */
+
+function soita(i){
+  if (!LAULUT.length) return;
+  kohta = ((i % LAULUT.length) + LAULUT.length) % LAULUT.length;
+  var b = LAULUT[kohta];
+  el.src = b.aani;
+  el.load();
+  haeValot(b.aani);
+  siirraViisari();
+  paivitaTeksti();
+  mediaTiedot(b);
+  var aloita = function (){
+    el.play().then(function (){ soi = true; paivitaKoskettimet(); paivitaTeksti(); })
+             .catch(function (){ soi = false; paivitaKoskettimet(); });
+  };
+  if (el.readyState >= 2) aloita();
+  else el.addEventListener('canplay', aloita, { once: true });
+}
+
+function pysayta(){
+  el.pause();
+  soi = false;
+  paivitaKoskettimet();
+  paivitaTeksti();
+}
+
+el.addEventListener('ended', function (){
+  /* Seuraava kosketin painuu itsestaan: radio ei jaa hiljaiseksi
+     kesken illan. Viimeisen jalkeen palataan ensimmaiseen. */
+  if (LAULUT.length > 1) soita(kohta + 1);
+  else { soi = false; paivitaKoskettimet(); paivitaTeksti(); }
+});
+el.addEventListener('pause', function (){ soi = false; paivitaKoskettimet(); });
+el.addEventListener('play',  function (){ soi = true;  paivitaKoskettimet(); });
+
+function paivitaTeksti(){
+  var b = LAULUT[kohta];
+  $('nyt').textContent = b ? b.nimi : '—';
+  $('alanimi').textContent = b ? (b.alarivi || '') : '';
+  if (!LAULUT.length) $('rivi').textContent = 'ei lauluja';
+  else if (!soi) $('rivi').textContent = kohta < 0
+    ? 'paina kosketinta' : 'tauko — paina uudelleen';
+}
+
+function mediaTiedot(b){
+  if (!('mediaSession' in navigator)) return;
+  try {
+    navigator.mediaSession.metadata = new window.MediaMetadata({
+      title: b && b.nimi ? b.nimi : 'Suomi',
+      artist: b && b.alarivi ? b.alarivi : 'KJWhispers',
+      album: 'Musa Rooms · Suomi'
+    });
+  } catch (e){}
+  var k = {
+    play: function (){ if (kohta >= 0) el.play().catch(function (){}); },
+    pause: function (){ pysayta(); },
+    previoustrack: function (){ soita(kohta - 1); },
+    nexttrack: function (){ soita(kohta + 1); }
+  };
+  for (var nimi in k){
+    try { navigator.mediaSession.setActionHandler(nimi, k[nimi]); }
+    catch (e){}
+  }
+}
+
+/* ====================  nupit  ======================================== */
+
+function paivitaAani(){
+  el.volume = Math.max(0, Math.min(1, aaniTaso));
+  asetaNuppi('aani', aaniTaso);
+}
+function paivitaSavy(){
+  asetaNuppi('savy', savy);
+  /* Savy on talla laitteella kuvitusta: ilman Web Audiota suodinta ei
+     ole, ja Web Audio veisi taustasoiton. Nuppi kaantyy, ja se riittaa
+     - oikeassakin radiossa savynuppi tekee vahemman kuin luulisi. */
+}
+function asetaNuppi(id, v){
+  var e = $(id);
+  if (!e) return;
+  var o = e.querySelector('.osoitin');
+  if (o) o.style.transform = 'rotate(' + (-135 + v * 270) + 'deg)';
+  e.setAttribute('aria-valuenow', Math.round(v * 100));
+}
+
+if (window.Saadin){
+  Saadin.lisaa({
+    nimi: 'Äänenvoimakkuus', el: $('aani'),
+    min: 0, max: 1, askel: 0.01,
+    lue: function (){ return aaniTaso; },
+    aseta: function (v){ aaniTaso = v; paivitaAani(); },
+    muotoile: function (v){ return Math.round(v * 100) + ' %'; }
+  });
+  Saadin.lisaa({
+    nimi: 'Sävy', el: $('savy'),
+    min: 0, max: 1, askel: 0.01,
+    lue: function (){ return savy; },
+    aseta: function (v){ savy = v; paivitaSavy(); },
+    muotoile: function (v){
+      return v < 0.34 ? 'Basso' : (v > 0.66 ? 'Diskantti' : 'Tasainen');
+    }
+  });
+}
+
+document.addEventListener('keydown', function (e){
+  if (e.key >= '1' && e.key <= '9'){
+    var i = parseInt(e.key, 10) - 1;
+    if (i < LAULUT.length){ soita(i); e.preventDefault(); }
+  } else if (e.key === ' '){
+    if (soi) pysayta(); else if (kohta >= 0) soita(kohta);
+    e.preventDefault();
+  }
+});
+
+/* ====================  lataus  ======================================= */
+
+(function hae(){
+  piirraAsteikko();
+  siirraViisari();
+  paivitaAani();
+  paivitaSavy();
+  paivitaTeksti();
+  requestAnimationFrame(kierros);
+  if (location.protocol === 'file:') return;
+  fetch('kokoelma.json', { cache: 'no-cache' })
+    .then(function (r){ return r.ok ? r.json() : null; })
+    .then(function (d){
+      if (!d || !Array.isArray(d.raidat) || !d.raidat.length) return;
+      LAULUT = d.raidat;
+      teeKoskettimet();
+      paivitaTeksti();
+      siirraViisari();
+    })
+    .catch(function (){});
+})();
+</script>
+</body>
+</html>

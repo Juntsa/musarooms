@@ -11,6 +11,15 @@
       "korkeus": 1024
     },
     {
+      "nimi": "Country Girl",
+      "alarivi": "",
+      "kesto": 60.0,
+      "video": "https://aani.musarooms.com/video/video-00-country-girl.mp4",
+      "kansi": "https://aani.musarooms.com/video/video-00-country-girl.jpg",
+      "leveys": 1080,
+      "korkeus": 1920
+    },
+    {
       "nimi": "Country Line at Dawn",
       "alarivi": "",
       "kesto": 20.2,
@@ -81,6 +90,15 @@
       "kansi": "https://aani.musarooms.com/video/video-09-light-follows-you.jpg",
       "leveys": 576,
       "korkeus": 1024
+    },
+    {
+      "nimi": "MY Love",
+      "alarivi": "",
+      "kesto": 45.0,
+      "video": "https://aani.musarooms.com/video/video-00-my-love.mp4",
+      "kansi": "https://aani.musarooms.com/video/video-00-my-love.jpg",
+      "leveys": 1080,
+      "korkeus": 1920
     },
     {
       "nimi": "Rumble & Light",

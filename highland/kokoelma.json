@@ -14,10 +14,24 @@
       "aani": "https://aani.musarooms.com/highland/highland-02-arctic-fire.mp3"
     },
     {
+      "nimi": "Arctic Fire",
+      "alarivi": "",
+      "kesto": 284.5,
+      "aani": "https://aani.musarooms.com/highland/highland-27-arctic-fire.mp3",
+      "bpm": 129.9
+    },
+    {
       "nimi": "Beneath The North Sky",
       "alarivi": "",
       "kesto": 286.8,
       "aani": "https://aani.musarooms.com/highland/highland-03-beneath-the-north-sky.mp3"
+    },
+    {
+      "nimi": "Beneath The Northern Sky",
+      "alarivi": "",
+      "kesto": 286.8,
+      "aani": "https://aani.musarooms.com/highland/highland-28-beneath-the-northern-sky.mp3",
+      "bpm": 127.0
     },
     {
       "nimi": "Frae Angeal's Lang Tale",
@@ -36,6 +50,13 @@
       "alarivi": "",
       "kesto": 229.0,
       "aani": "https://aani.musarooms.com/highland/highland-06-home-of-the-fire-fox.mp3"
+    },
+    {
+      "nimi": "Home Of The Firefox",
+      "alarivi": "",
+      "kesto": 229.0,
+      "aani": "https://aani.musarooms.com/highland/highland-29-home-of-the-firefox.mp3",
+      "bpm": 131.0
     },
     {
       "nimi": "Long Road Home",
@@ -60,6 +81,13 @@
       "alarivi": "",
       "kesto": 304.8,
       "aani": "https://aani.musarooms.com/highland/highland-10-the-choice-at-the-source.mp3"
+    },
+    {
+      "nimi": "The Horn Of North",
+      "alarivi": "",
+      "kesto": 279.5,
+      "aani": "https://aani.musarooms.com/highland/highland-24-the-horn-of-north.mp3",
+      "bpm": 125.8
     },
     {
       "nimi": "The Horn of the North",
@@ -92,10 +120,24 @@
       "aani": "https://aani.musarooms.com/highland/highland-15-the-light-keeper.mp3"
     },
     {
+      "nimi": "THE Light Keeper",
+      "alarivi": "",
+      "kesto": 284.9,
+      "aani": "https://aani.musarooms.com/highland/highland-25-the-light-keeper.mp3",
+      "bpm": 128.1
+    },
+    {
       "nimi": "The Mountain Awakes",
       "alarivi": "",
       "kesto": 293.6,
       "aani": "https://aani.musarooms.com/highland/highland-16-the-mountain-awakes.mp3"
+    },
+    {
+      "nimi": "The Mountain Awakes",
+      "alarivi": "",
+      "kesto": 293.6,
+      "aani": "https://aani.musarooms.com/highland/highland-26-the-mountain-awakes.mp3",
+      "bpm": 129.2
     },
     {
       "nimi": "The Night the Angeal Fell",
@@ -120,6 +162,27 @@
       "alarivi": "",
       "kesto": 280.0,
       "aani": "https://aani.musarooms.com/highland/highland-20-the-stone-watchers.mp3"
+    },
+    {
+      "nimi": "The Stone Watches",
+      "alarivi": "Vol 1",
+      "kesto": 262.0,
+      "aani": "https://aani.musarooms.com/highland/highland-23-the-stone-watches-vol-1.mp3",
+      "bpm": 127.8
+    },
+    {
+      "nimi": "The Stone Watches",
+      "alarivi": "Vol 2",
+      "kesto": 280.0,
+      "aani": "https://aani.musarooms.com/highland/highland-30-the-stone-watches-vol-2.mp3",
+      "bpm": 131.3
+    },
+    {
+      "nimi": "The Whispering Pines",
+      "alarivi": "",
+      "kesto": 274.9,
+      "aani": "https://aani.musarooms.com/highland/highland-31-the-whispering-pines.mp3",
+      "bpm": 91.9
     },
     {
       "nimi": "Whispering Pines",
