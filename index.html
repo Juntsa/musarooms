@@ -185,10 +185,12 @@ h1 span{color:var(--amber)}
 }
 .dekki .luukku::after{display:none}   /* vedin on jo kuvassa */
 .lapset{
+  --kehys:#5a3a1e;                /* tammi, Juntsan kuvasta */
   --vas:url("luukut/mansikkakyla-vasen.jpg");
   --oik:url("luukut/mansikkakyla-oikea.jpg");
   --hehku:radial-gradient(130% 95% at 50% 100%,#fff0c4 0%,#e8536a 46%,#45101e 100%);
 }
+.lapset .luukku::after{display:none}  /* vetimet ovat mansikassa */
 .highland{
   --kehys:#3f2d1c;
   --vas:url("luukut/highland-vasen.jpg");
