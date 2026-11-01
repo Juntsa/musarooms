@@ -73,3 +73,5 @@ Disallow: /
 # --- kaikki muut: tervetuloa
 User-agent: *
 Allow: /
+
+Sitemap: https://musarooms.com/sitemap.xml
