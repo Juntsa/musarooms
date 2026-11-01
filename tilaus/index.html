@@ -150,6 +150,16 @@ h2{
 }
 .nayte .kaytto{display:block;color:var(--mes);font-size:12.5px;margin-top:3px}
 .nayte .meta{display:block;color:var(--dim);font-size:12px;margin-top:2px}
+/* Ilman tätä kaatunut lataus näkyy pelkkänä hiljaisuutena: nappi
+   painuu, mitään ei kuulu, eikä mikään kerro miksi. Sama vika kuin
+   napissa joka ei tee mitään — vain vaikeampi huomata. */
+.naytevirhe{
+  margin:14px 0 0;padding:11px 13px;border-radius:8px;
+  background:rgba(255,157,143,.08);border:1px solid rgba(255,157,143,.3);
+  color:#ff9d8f;font-size:13.5px;line-height:1.5;
+}
+.naytevirhe[hidden]{display:none}
+.nayte.rikki .soita{opacity:.4}
 
 /* ---- polku ------------------------------------------------------------ */
 .polku{list-style:none;counter-reset:a;margin:0;padding:0;display:grid;gap:14px}
@@ -278,6 +288,7 @@ footer a{color:#8a7a66}
     <p class="johdanto">Lyhyt katkelma jokaisesta. N&auml;m&auml; ovat valmiita
       lauluja, ja ne kertovat millaista j&auml;lke&auml; tilauksesta syntyy.</p>
     <div class="naytteet" id="naytteet"></div>
+    <p class="naytevirhe" id="naytevirhe" hidden></p>
   </section>
 
   <section>
@@ -506,6 +517,20 @@ ett&auml; h&auml;n puhuu kasveille..."></textarea>
   });
   el.addEventListener('ended', seis);
 
+  /* Kaatunut lataus ei saa jäädä hiljaisuudeksi. Ilman tätä nappi
+     painuu, mitään ei kuulu, eikä kävijä tiedä onko vika hänen
+     verkossaan, selaimessaan vai meidän palvelimellamme. */
+  el.addEventListener('error', function (){
+    if (!soiva) return;
+    var nimi = soiva.nimi, kortti = soiva.kortti;
+    seis();
+    if (kortti) kortti.classList.add('rikki');
+    var v = document.getElementById('naytevirhe');
+    v.textContent = '”' + nimi + '” ei lähtenyt soimaan. Äänitiedostoa ei '
+                  + 'saatu ladattua — muut näytteet toimivat silti.';
+    v.hidden = false;
+  });
+
   function kortti(n){
     var d = document.createElement('article');
     d.className = 'nayte';
@@ -561,8 +586,10 @@ ett&auml; h&auml;n puhuu kasveille..."></textarea>
       seis();
       if (omaVuoro) return;
       if (el.getAttribute('src') !== n.aani){ el.setAttribute('src', n.aani); }
+      document.getElementById('naytevirhe').hidden = true;
+      d.classList.remove('rikki');
       soiva = { nappi: nappi, merkki: merkki, palkki: sis,
-                alku: alku, loppu: loppu };
+                alku: alku, loppu: loppu, nimi: n.nimi, kortti: d };
       nappi.setAttribute('aria-pressed', 'true');
       merkki.textContent = '❚❚';
 
