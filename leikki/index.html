@@ -368,7 +368,7 @@ document.querySelectorAll('#valikot button').forEach(n => {
 (function lataa(){
   piirraLista();
   if (location.protocol === 'file:') return;
-  fetch('laulut.json', { cache: 'no-cache' })
+  fetch('laulut.json?v=9385a2f3', { cache: 'no-cache' })
     .then(r => r.ok ? r.json() : null)
     .then(d => {
       if (!d || !d.ryhmat) return;

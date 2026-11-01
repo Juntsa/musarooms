@@ -418,7 +418,7 @@ document.addEventListener('keydown', function (e){
 (function hae(){
   paivita();
   if (location.protocol === 'file:') return;
-  fetch('videot.json', { cache: 'no-cache' })
+  fetch('videot.json?v=210959b7', { cache: 'no-cache' })
     .then(function (r){ return r.ok ? r.json() : null; })
     .then(function (d){
       if (!d || !Array.isArray(d.videot) || !d.videot.length) return;

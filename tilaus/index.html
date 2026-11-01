@@ -622,7 +622,7 @@ ett&auml; h&auml;n puhuu kasveille..."></textarea>
     return d;
   }
 
-  fetch('naytteet.json').then(function (r){
+  fetch('naytteet.json?v=fe7da71d').then(function (r){
     return r.ok ? r.json() : null;
   }).then(function (d){
     var lista = (d && d.naytteet) || [];

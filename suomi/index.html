@@ -336,7 +336,7 @@ h1{
   <div id="rivi">ei lauluja</div>
 </div>
 
-<script src="../soitin.js"></script>
+<script src="../soitin.js?v=2efae99c"></script>
 <script>
 'use strict';
 var $ = function (id){ return document.getElementById(id); };
@@ -729,7 +729,7 @@ document.addEventListener('keydown', function (e){
   paivitaTeksti();
   requestAnimationFrame(kierros);
   if (location.protocol === 'file:') return;
-  fetch('kokoelma.json', { cache: 'no-cache' })
+  fetch('kokoelma.json?v=6bd2828b', { cache: 'no-cache' })
     .then(function (r){ return r.ok ? r.json() : null; })
     .then(function (d){
       if (!d || !Array.isArray(d.raidat) || !d.raidat.length) return;

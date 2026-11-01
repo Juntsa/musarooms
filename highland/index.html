@@ -234,7 +234,7 @@ h1{
 
 </div>
 
-<script src="../soitin.js"></script>
+<script src="../soitin.js?v=2efae99c"></script>
 <script>
 'use strict';
 var $ = function (id){ return document.getElementById(id); };
@@ -596,7 +596,7 @@ requestAnimationFrame(askel);
 
 (function haeKokoelma(){
   if (location.protocol === 'file:') return;
-  fetch('kokoelma.json', { cache: 'no-cache' })
+  fetch('kokoelma.json?v=d09c46c8', { cache: 'no-cache' })
     .then(function (r){ return r.ok ? r.json() : null; })
     .then(function (d){
       if (!d || !Array.isArray(d.raidat)) return;

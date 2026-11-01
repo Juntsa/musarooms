@@ -201,7 +201,7 @@ canvas{border-radius:4px;box-shadow:0 30px 80px rgba(0,0,0,.75),0 0 0 1px rgba(2
 </div>
 
 <!-- jaettu iso säädin ja huoneen avaus; puuttuminen ei kaada soitinta -->
-<script src="../soitin.js"></script>
+<script src="../soitin.js?v=2efae99c"></script>
 <script>
 "use strict";
 
@@ -2378,7 +2378,7 @@ if (window.JB_UPOTETUT && Array.isArray(window.JB_UPOTETUT)){
 paivitaNapit();
 requestAnimationFrame(askel);
 
-/* Julkaistulla sivulla setti.json on soittimen vieressä ja se ladataan
+/* Julkaistulla sivulla setti.json?v=3ddca494 on soittimen vieressä ja se ladataan
    itsestään. Paikallisena tiedostona fetch ei toimi eikä sen tarvitsekaan —
    silloin biisit raahataan paneeliin käsin. */
 (function omaSetti(){
@@ -2386,7 +2386,7 @@ requestAnimationFrame(askel);
   /* file:// ei salli fetchiä lainkaan, ja yritys jättäisi konsoliin virheen.
      Paikallisena tiedostona biisit raahataan paneeliin käsin. */
   if (location.protocol === 'file:') return;
-  fetch('setti.json', { cache: 'no-cache' })
+  fetch('setti.json?v=3ddca494', { cache: 'no-cache' })
     .then(r => r.ok ? r.json() : null)
     .then(d => {
       if (!d) return;

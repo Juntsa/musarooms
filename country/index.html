@@ -118,7 +118,7 @@ h1{
   <div id="nyt">viritä asema</div>
 </div>
 
-<script src="../soitin.js"></script>
+<script src="../soitin.js?v=2efae99c"></script>
 <script>
 'use strict';
 var $ = function (id){ return document.getElementById(id); };
@@ -755,7 +755,7 @@ window.addEventListener('resize', piirra);
 
 (function haeAsemat(){
   if (location.protocol === 'file:') return;
-  fetch('asemat.json', { cache: 'no-cache' })
+  fetch('asemat.json?v=6a32d552', { cache: 'no-cache' })
     .then(function (r){ return r.ok ? r.json() : null; })
     .then(function (d){
       if (!d) return;
