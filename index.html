@@ -225,6 +225,7 @@ h1 span{color:var(--amber)}
   --kehys:#3b4048;              /* laukun alumiini, ei puukehystä */
   --vas:url("luukut/techno-vasen.jpg");
   --oik:url("luukut/techno-oikea.jpg");
+  --sisakuva:url("luukut/techno-sisus.jpg");
   --hehku:radial-gradient(130% 95% at 50% 100%,#ff2fd0 0%,#5a1a86 42%,#070512 100%);
 }
 /* lentolaukun luukuissa on omat valonsa, ne eivät kaipaa suodinta */
@@ -234,7 +235,8 @@ h1 span{color:var(--amber)}
 .huone.kiinni .sisus{filter:saturate(.3) brightness(.42)}
 /* Kun sisusta on oikea kuva, se saa näkyä himmeänäkin — muuten koko
    kalusteen piirtäminen meni hukkaan */
-.huone.video.kiinni .sisus,.huone.highland.kiinni .sisus{
+.huone.video.kiinni .sisus,.huone.highland.kiinni .sisus,
+.huone.techno.kiinni .sisus{
   filter:saturate(.62) brightness(.66)}
 .kyltti{
   /* ylös: keskellä tai alhaalla kyltti peittäisi juuri sen aiheen, jonka
