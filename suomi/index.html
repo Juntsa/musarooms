@@ -176,14 +176,26 @@ h1{
 }
 
 /* ---- koskettimisto: TASSA valitaan laulu ---------------------------- */
+/* Koskettimet olivat rivi joustoja, jotka jakoivat leveyden tasan. Se
+   toimi seitsemaan lauluun asti: silloin kosketin on tasan 44 px eli
+   juuri sormen mitta. Kahdeksas kutisti sen 38:aan, kymmenes 30:een ja
+   kuudestoista 17 pikseliin - rivi pysyi siistina ja laulut muuttuivat
+   osumattomiksi. Vika ei nakynyt mitenkaan, se vain tuli vahitellen.
+
+   Ruudukko kaantaa saannon toisin pain: kosketin EI saa alittaa 44:aa,
+   ja kun ne eivat mahdu, rivi vaihtuu. Sarakkeiden maaraa ei lyoda
+   lukkoon, joten leveammalla naytolla niita on enemman - puhelimessa
+   seitseman kuten ennenkin. */
 #koskettimet{
-  flex:0 0 auto;display:flex;gap:4px;padding:7px 9px 9px;
+  flex:0 0 auto;display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(44px,1fr));
+  gap:4px;padding:7px 9px 9px;
   border-radius:0 0 7px 7px;
   background:linear-gradient(180deg,#241508,#160d05);
   box-shadow:0 2px 0 #120a04 inset;
 }
 .kosketin{
-  flex:1 1 0;min-width:0;min-height:52px;cursor:pointer;
+  min-width:0;min-height:52px;cursor:pointer;
   border:0;border-radius:3px 3px 5px 5px;padding:5px 2px 6px;
   display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
   gap:3px;
