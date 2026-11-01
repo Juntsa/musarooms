@@ -294,6 +294,28 @@
     return hJuuri;
   }
 
+  /* Luukut aukeavat .6 s. Soitin lahti kasvamaan jo 260 ms kohdalla,
+     eli se peitti luukut kun ne olivat vasta 43 % auki.
+
+     Tyopoydalla sita ei huomaa: ovi on 240 px 1180:sta, joten soitin
+     kasvaa pienesta ja luukut nakyvat sen takana. PUHELIMESSA ovi on
+     358 px 390:sta - soitin kasvaa koosta 0.92 kokoon 1.0, matkaa ei
+     ole, ja se peittaa koko ruudun heti. Ovien avautumista ei nay
+     lainkaan, vain valahdys.
+
+     Nyt odotetaan etta luukut ovat auki. Se maksaa 0.2 s, ja se 0.2 s
+     on koko aulan idea.
+
+     Odotus koskee VAIN kosketusnayttoa. Hiirella luukut ovat jo auki
+     ennen napsautusta, koska ne aukeavat osoittimen alla - silloin
+     odotus olisi pelkkaa tyhjaa tuijotusta. */
+  function luukkuAika() {
+    try {
+      if (W.matchMedia && W.matchMedia('(hover: hover)').matches) return 260;
+    } catch (e) {}
+    return 480;
+  }
+
   function huoneAvaa(ovi, url) {
     if (hAuki) return;
     huoneJuuri();
@@ -334,7 +356,7 @@
         'transform .46s cubic-bezier(.28,.88,.3,1),opacity .24s linear';
       hJuuri.style.transform = 'translate(0px,0px) scale(1,1)';
       hJuuri.style.opacity = '1';
-    }, 260);
+    }, luukkuAika());
 
     try {
       history.pushState({ musaHuone: true }, '', url);
