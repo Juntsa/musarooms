@@ -1041,5 +1041,36 @@ window.addEventListener('resize', paivitaHaivy);
     .catch(function (){});
 })();
 </script>
+
+<a class="musa-paluu" href="../" aria-label="Takaisin aulaan">
+<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+ stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"
+ aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a>
+<style>
+.musa-paluu{position:fixed;left:10px;top:10px;z-index:9000;
+ width:44px;height:44px;border-radius:50%;
+ border:1px solid rgba(255,235,200,.3);background:rgba(10,9,8,.62);
+ color:#f0e4d2;display:flex;align-items:center;justify-content:center;
+ -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.musa-paluu:active{background:rgba(10,9,8,.85)}
+.musa-paluu[hidden]{display:none}
+</style>
+<script>
+/* Aulan oma peite piirtää paluunapin kehyksen päälle, joten kehyksen
+   SISÄLLÄ tämä olisi toinen samannäköinen nappi vierekkäin. Piilotetaan
+   se silloin — mutta vain silloin. Suoraan huoneen osoitteeseen tullut
+   kävijä (linkki, kirjanmerkki, hakutulos, sivun päivitys) ei ole
+   kehyksessä eikä pääsisi muuten mihinkään. */
+(function (){
+  try {
+    if (window.self !== window.top){
+      var n = document.querySelector('.musa-paluu');
+      if (n) n.hidden = true;
+    }
+  } catch (e){ /* eri alkuperä: ollaan kehyksessä, mutta varmuuden
+                  vuoksi nappi jää näkyviin — turha nappi on parempi
+                  kuin umpikuja */ }
+})();
+</script>
 </body>
 </html>
