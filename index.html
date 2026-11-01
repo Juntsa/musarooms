@@ -177,6 +177,7 @@ h1 span{color:var(--amber)}
   --kehys:#6a4420;
   --vas:url("luukut/house-vasen.jpg");
   --oik:url("luukut/house-oikea.jpg");
+  --sisakuva:url("luukut/house-sisus.jpg");
   --hehku:radial-gradient(130% 95% at 50% 100%,#ffb340 0%,#b4381e 44%,#2a0a16 100%);
 }
 .dekki{
@@ -236,7 +237,7 @@ h1 span{color:var(--amber)}
 /* Kun sisusta on oikea kuva, se saa näkyä himmeänäkin — muuten koko
    kalusteen piirtäminen meni hukkaan */
 .huone.video.kiinni .sisus,.huone.highland.kiinni .sisus,
-.huone.techno.kiinni .sisus{
+.huone.techno.kiinni .sisus,.huone.house.kiinni .sisus{
   filter:saturate(.62) brightness(.66)}
 .kyltti{
   /* ylös: keskellä tai alhaalla kyltti peittäisi juuri sen aiheen, jonka
