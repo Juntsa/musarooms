@@ -54,6 +54,26 @@
       "alku": 35,
       "katkelma": 25,
       "kansi": "https://aani.musarooms.com/naytteet/naytteet-01-happy-birthday-my-friend.jpg"
+    },
+    {
+      "nimi": "Cafe Elias",
+      "tarkoitus": "Yritystunnus · 30 s",
+      "genre": "Jazz-sävyinen akustinen",
+      "kieli": "Suomi",
+      "kesto": 32.4,
+      "aani": "https://aani.musarooms.com/naytteet/naytteet-07-cafe-elias-suomi.mp3",
+      "alku": 0,
+      "katkelma": 34
+    },
+    {
+      "nimi": "Cafe Elias",
+      "tarkoitus": "Yritystunnus · 30 s",
+      "genre": "Jazz-sävyinen akustinen",
+      "kieli": "Englanti",
+      "kesto": 30.0,
+      "aani": "https://aani.musarooms.com/naytteet/naytteet-06-cafe-elias-englanti.mp3",
+      "alku": 0,
+      "katkelma": 32
     }
   ]
 }

@@ -112,6 +112,15 @@ h2{
   cursor:pointer;color:var(--mes);
 }
 .soita img{width:100%;height:100%;object-fit:cover;display:block}
+/* Kannetonta näytettä ei jätetä tyhjäksi laataksi viiden kuvan seaan:
+   nimi kaiverretaan ruutuun, jolloin puuttuva kansi näyttää
+   tarkoitukselliselta eikä latausvirheeltä. */
+.nimetty{
+  position:absolute;inset:0;display:flex;align-items:center;
+  justify-content:center;padding:14px;text-align:center;
+  font:600 15px/1.3 Georgia,"Times New Roman",serif;
+  color:#e3cfa6;text-shadow:0 1px 2px #000a;
+}
 .soita:hover{border-color:var(--mes)}
 .soita:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 /* Merkki on kannen ALAPUOLELLA, ei sen päällä. Jokaisessa kannessa on
@@ -514,6 +523,11 @@ ett&auml; h&auml;n puhuu kasveille..."></textarea>
       kuva.loading = 'lazy';
       kuva.decoding = 'async';
       nappi.appendChild(kuva);
+    } else {
+      var teksti = document.createElement('span');
+      teksti.className = 'nimetty';
+      teksti.textContent = n.nimi;               /* teksti, ei merkintä */
+      nappi.appendChild(teksti);
     }
     var palkki = document.createElement('span');
     palkki.className = 'palkki';
