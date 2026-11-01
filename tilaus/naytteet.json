@@ -6,9 +6,9 @@
       "genre": "Lastenlaulu",
       "kieli": "Suomi",
       "kesto": 220.0,
-      "aani": "https://aani.musarooms.com/naytteet/naytteet-02-koulutie.mp3",
       "alku": 35,
       "katkelma": 25,
+      "aani": "https://aani.musarooms.com/naytteet/naytteet-02-koulutie.mp3",
       "kansi": "https://aani.musarooms.com/naytteet/naytteet-02-koulutie.jpg"
     },
     {
@@ -17,9 +17,9 @@
       "genre": "Lastenlaulu",
       "kieli": "Suomi",
       "kesto": 213.4,
-      "aani": "https://aani.musarooms.com/naytteet/naytteet-04-superpoika.mp3",
       "alku": 35,
       "katkelma": 25,
+      "aani": "https://aani.musarooms.com/naytteet/naytteet-04-superpoika.mp3",
       "kansi": "https://aani.musarooms.com/naytteet/naytteet-04-superpoika.jpg"
     },
     {
@@ -28,9 +28,9 @@
       "genre": "Highland ballad",
       "kieli": "Englanti",
       "kesto": 265.0,
-      "aani": "https://aani.musarooms.com/naytteet/naytteet-05-ye-are-my-hame.mp3",
       "alku": 35,
       "katkelma": 25,
+      "aani": "https://aani.musarooms.com/naytteet/naytteet-05-ye-are-my-hame.mp3",
       "kansi": "https://aani.musarooms.com/naytteet/naytteet-05-ye-are-my-hame.jpg"
     },
     {
@@ -39,9 +39,9 @@
       "genre": "Country rock",
       "kieli": "Englanti",
       "kesto": 258.0,
-      "aani": "https://aani.musarooms.com/naytteet/naytteet-03-super-woman-trucker.mp3",
       "alku": 35,
       "katkelma": 25,
+      "aani": "https://aani.musarooms.com/naytteet/naytteet-03-super-woman-trucker.mp3",
       "kansi": "https://aani.musarooms.com/naytteet/naytteet-03-super-woman-trucker.jpg"
     },
     {
@@ -50,9 +50,9 @@
       "genre": "Country",
       "kieli": "Englanti",
       "kesto": 227.6,
-      "aani": "https://aani.musarooms.com/naytteet/naytteet-01-happy-birthday-my-friend.mp3",
       "alku": 35,
       "katkelma": 25,
+      "aani": "https://aani.musarooms.com/naytteet/naytteet-01-happy-birthday-my-friend.mp3",
       "kansi": "https://aani.musarooms.com/naytteet/naytteet-01-happy-birthday-my-friend.jpg"
     },
     {
@@ -60,20 +60,24 @@
       "tarkoitus": "Yritystunnus · 30 s",
       "genre": "Jazz-sävyinen akustinen",
       "kieli": "Suomi",
-      "kesto": 32.4,
-      "aani": "https://aani.musarooms.com/naytteet/naytteet-07-cafe-elias-suomi.mp3",
+      "kesto": 31.9,
       "alku": 0,
-      "katkelma": 34
+      "katkelma": 33,
+      "video": "https://aani.musarooms.com/naytteet/naytteet-07-cafe-elias-suomi.mp4",
+      "kansi": "https://aani.musarooms.com/naytteet/naytteet-07-cafe-elias-suomi.jpg",
+      "suhde": 0.5769
     },
     {
       "nimi": "Cafe Elias",
       "tarkoitus": "Yritystunnus · 30 s",
       "genre": "Jazz-sävyinen akustinen",
       "kieli": "Englanti",
-      "kesto": 30.0,
-      "aani": "https://aani.musarooms.com/naytteet/naytteet-06-cafe-elias-englanti.mp3",
+      "kesto": 29.9,
       "alku": 0,
-      "katkelma": 32
+      "katkelma": 31,
+      "video": "https://aani.musarooms.com/naytteet/naytteet-06-cafe-elias-englanti.mp4",
+      "kansi": "https://aani.musarooms.com/naytteet/naytteet-06-cafe-elias-englanti.jpg",
+      "suhde": 0.5769
     }
   ]
 }
