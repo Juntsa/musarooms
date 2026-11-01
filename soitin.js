@@ -314,14 +314,26 @@
       'translate(' + r.left + 'px,' + r.top + 'px) scale(' + sx + ',' + sy + ')';
     hJuuri.style.opacity = '0';
 
-    /* Luukut ehtivät auki ennen kuin soitin kasvaa niiden takaa esiin. */
+    /* Luukut ehtivät auki ennen kuin soitin kasvaa niiden takaa esiin.
+
+       TÄSSÄ OLI ennen requestAnimationFrame, jotta selain ehtisi piirtää
+       alkutilan ennen siirtymää. Se oli vakava virhe: selain PYSÄYTTÄÄ
+       rAF:n kokonaan kun ikkuna ei ole näkyvissä. Jos ovi avattiin
+       piilossa olevassa ikkunassa, kehys jäi ikuisesti tilaan
+       opacity:0 — luukut auki, soitinta ei näy, eikä sivu palautunut,
+       koska peite oli päällä ja vieritys lukittu.
+
+       Pakotettu taitto tekee saman työn ilman ruudun odottamista:
+       offsetWidth:n lukeminen pakottaa selaimen laskemaan asettelun
+       heti, jolloin siirtymä lähtee alkutilasta eikä hyppää. Ja vaikka
+       siirtymä jäisi ajamatta, LOPPUTILA on silti asetettu — pahin
+       mahdollinen lopputulos on että soitin ilmestyy ilman animaatiota. */
     setTimeout(function () {
-      requestAnimationFrame(function () {
-        hJuuri.style.transition =
-          'transform .46s cubic-bezier(.28,.88,.3,1),opacity .24s linear';
-        hJuuri.style.transform = 'translate(0px,0px) scale(1,1)';
-        hJuuri.style.opacity = '1';
-      });
+      void hJuuri.offsetWidth;
+      hJuuri.style.transition =
+        'transform .46s cubic-bezier(.28,.88,.3,1),opacity .24s linear';
+      hJuuri.style.transform = 'translate(0px,0px) scale(1,1)';
+      hJuuri.style.opacity = '1';
     }, 260);
 
     try {
