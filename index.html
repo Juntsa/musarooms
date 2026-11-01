@@ -167,10 +167,12 @@ h1 span{color:var(--amber)}
   --hehku:radial-gradient(130% 95% at 50% 100%,#ffb23a 0%,#c4371f 44%,#2a0e09 100%);
 }
 .country{
+  --kehys:#5e6a66;                /* sinertävä säänkäynyt puu, Juntsan kuvasta */
   --vas:url("luukut/country-vasen.jpg");
   --oik:url("luukut/country-oikea.jpg");
   --hehku:radial-gradient(130% 95% at 50% 100%,#ffcb6a 0%,#a85a1e 44%,#2a1408 100%);
 }
+.country .luukku::after{display:none}  /* ikkunaluukuissa ei ole vetimiä */
 .house{
   --kehys:#6a4420;
   --vas:url("luukut/house-vasen.jpg");
