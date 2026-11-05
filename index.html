@@ -307,7 +307,7 @@ footer a{color:#8a7a66}
         </div>
         <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
       </a>
-      <p class="ohje">Auki 15.11.&ndash;15.1.</p>
+      <p class="ohje">Auki 15.11.&ndash;6.1.</p>
     </div>
 
     <div class="ovi">
@@ -450,7 +450,7 @@ footer a{color:#8a7a66}
    kaantyy ympari.                                                      */
 (function (){
   var KAUDET = [
-    { id: 'jouluovi', alku: [11, 15], loppu: [1, 15] }   // joulu
+    { id: 'jouluovi', alku: [11, 15], loppu: [1, 6] }    // joulu -> loppiainen
     // ruska, keskiyon aurinko ja paasiainen lisataan tahan kun niilla on
     // lauluja. 2.11. mitattuna: syksy 0, kevat 2, kesa 31 mutta kaikki
     // Fifties-huoneen omaa ohjelmistoa.
@@ -458,6 +458,16 @@ footer a{color:#8a7a66}
 
   var d = new Date();
   var nyt = d.getMonth() * 100 + d.getDate() + 100;   // kk*100 + pv
+
+  /* Esikatselu: ?kausi=jouluovi avaa oven paivamaarasta riippumatta.
+     Ilman tata oven voi nahda ensimmaisen kerran vasta kun se on jo
+     julki - ja silloin on myohaista huomata etta kuva on vaarin pain.
+     Sama tapa kuin Mansikkakylan kalenterissa (?preview=<paiva>).
+     Vierailijalle tama ei nay eika vaikuta mihinkaan. */
+  var pakotettu = null;
+  try {
+    pakotettu = new URLSearchParams(location.search).get('kausi');
+  } catch (e) {}
 
   function kaudella(k){
     var a = k.alku[0] * 100 + k.alku[1];
@@ -470,8 +480,9 @@ footer a{color:#8a7a66}
      paallekkain, kaksi ovea nakyy - se on nakyva virhe. Ensimmaisen
      valitseminen piilottaisi paallekkaisyyden kokonaan. */
   for (var i = 0; i < KAUDET.length; i++){
-    if (!kaudella(KAUDET[i])) continue;
-    var ovi = document.getElementById(KAUDET[i].id);
+    var k = KAUDET[i];
+    if (pakotettu !== k.id && !kaudella(k)) continue;
+    var ovi = document.getElementById(k.id);
     if (ovi) ovi.hidden = false;
   }
 })();
