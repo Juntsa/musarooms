@@ -427,16 +427,52 @@ footer a{color:#8a7a66}
   </script>
 
 <script>
-/* Kausiovi avautuu kavijan omasta kellosta, ei kaannoshetkesta: muuten
-   ovi riippuisi siita milloin sivusto sattui viimeksi rakennettua, ja
+/* ====================  kausiovet  =====================================
+
+   Linjaus 2.11.: aulassa on YKSI vuodenaikaovi, ei nelja. Ovi on olemassa
+   vain kun silla on sisaltoa - poissaolo tekee paluusta tapahtuman, kun
+   taas aina paikalla oleva vuodenaikaovi muuttuu tapetiksi.
+
+   Ovi avautuu kavijan omasta kellosta, ei kaannoshetkesta. Muuten se
+   riippuisi siita milloin sivusto sattui viimeksi rakennettua, ja
    tammikuun sulkeminen jaisi muistin varaan.
-   Kausi 15.11.-15.1. ylittaa vuodenvaihteen, siksi kolme ehtoa. */
+
+   Oletus on PIILOSSA: jos tama skripti ei aja, aulasta puuttuu ovi. Se on
+   pienempi vahinko kuin jouluovi heinakuussa.
+
+   Kaudet ovat taulukossa eivatka erillisina if-lauseina. Toinen kausi olisi
+   muuten kopio talle logiikalle toisilla luvuilla, ja silloin kaksi asiaa
+   muuttuisi nakymattomaksi: menevatko kaudet paallekkain, ja jaako johonkin
+   kohtaan vuotta yhtaan ovea. Taulukosta molemmat nakee yhdella silmayksella.
+
+   [kuukausi, paiva] molemmat mukaan luettuina. Kausi saa ylittaa
+   vuodenvaihteen - silloin loppu on pienempi kuin alku, ja vertailu
+   kaantyy ympari.                                                      */
 (function (){
-  var ovi = document.getElementById('jouluovi');
-  if (!ovi) return;
-  var d = new Date(), kk = d.getMonth() + 1, pv = d.getDate();
-  if ((kk === 11 && pv >= 15) || kk === 12 || (kk === 1 && pv <= 15)){
-    ovi.hidden = false;
+  var KAUDET = [
+    { id: 'jouluovi', alku: [11, 15], loppu: [1, 15] }   // joulu
+    // ruska, keskiyon aurinko ja paasiainen lisataan tahan kun niilla on
+    // lauluja. 2.11. mitattuna: syksy 0, kevat 2, kesa 31 mutta kaikki
+    // Fifties-huoneen omaa ohjelmistoa.
+  ];
+
+  var d = new Date();
+  var nyt = d.getMonth() * 100 + d.getDate() + 100;   // kk*100 + pv
+
+  function kaudella(k){
+    var a = k.alku[0] * 100 + k.alku[1];
+    var l = k.loppu[0] * 100 + k.loppu[1];
+    return (a <= l) ? (nyt >= a && nyt <= l)          // saman vuoden sisalla
+                    : (nyt >= a || nyt <= l);         // vuodenvaihteen yli
+  }
+
+  /* Avataan kaikki osuvat, ei vain ensimmaista. Jos kaudet joskus menevat
+     paallekkain, kaksi ovea nakyy - se on nakyva virhe. Ensimmaisen
+     valitseminen piilottaisi paallekkaisyyden kokonaan. */
+  for (var i = 0; i < KAUDET.length; i++){
+    if (!kaudella(KAUDET[i])) continue;
+    var ovi = document.getElementById(KAUDET[i].id);
+    if (ovi) ovi.hidden = false;
   }
 })();
 </script>
