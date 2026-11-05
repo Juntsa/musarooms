@@ -665,7 +665,7 @@ requestAnimationFrame(askel);
 (function haeKokoelma(){
   piirraLista();
   if (location.protocol === 'file:') return;
-  fetch('kokoelma.json?v=242808ca', { cache: 'no-cache' })
+  fetch('kokoelma.json?v=2a9a4868', { cache: 'no-cache' })
     .then(function (r){ return r.ok ? r.json() : null; })
     .then(function (d){
       if (!d || !Array.isArray(d.raidat)) return;

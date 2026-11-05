@@ -485,7 +485,7 @@ async function dbInfo(note){
   tila('dbInfo', note ? (base?base+'<br>':'')+note : base);
 }
 /* ---- huoneen oma setti --------------------------------------------
-   Julkaistulla sivulla `setti.json?v=3734ac90` on laitteen vieressä ja kertoo mitkä
+   Julkaistulla sivulla `setti.json?v=67ec4d62` on laitteen vieressä ja kertoo mitkä
    raidat kuuluvat mihinkin kuljettimeen. Osoitteet osoittavat suoraan
    objektivarastoon, eikä raitoja haeta muistiin: EL[k].src ottaa
    verkko-osoitteen sellaisenaan, ja laite striimaa. Kolmen setin
@@ -499,7 +499,7 @@ async function lataaSetti(){
   if (location.protocol==='file:') return 0;
   let d=null;
   try{
-    const r=await fetch('setti.json?v=3734ac90',{cache:'no-cache'});
+    const r=await fetch('setti.json?v=67ec4d62',{cache:'no-cache'});
     if (!r.ok) return 0;
     d=await r.json();
   }catch(e){ return 0; }

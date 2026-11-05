@@ -11,6 +11,15 @@
       "korkeus": 1024
     },
     {
+      "nimi": "Cafe Elias en",
+      "alarivi": "",
+      "kesto": 30.2,
+      "video": "https://aani.musarooms.com/video/video-00-cafe-elias-en.mp4",
+      "kansi": "https://aani.musarooms.com/video/video-00-cafe-elias-en.jpg",
+      "leveys": 1080,
+      "korkeus": 1920
+    },
+    {
       "nimi": "Country Girl",
       "alarivi": "",
       "kesto": 60.0,
