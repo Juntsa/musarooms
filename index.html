@@ -41,6 +41,7 @@ h1 span{color:var(--amber)}
    jogista. Rivi on oven ALLA eika sen takana, koska ovien takana sita ei
    lue kukaan - puhelimessa ovet eivat aukea ennen kuin niita painaa. */
 .ovi{display:flex;flex-direction:column;gap:9px}
+.ovi[hidden]{display:none}   /* kausiovi: flex kumoaisi hidden-attribuutin */
 .ovi .huone{flex:0 0 auto}
 .ohje{
   margin:0;text-align:center;
@@ -222,6 +223,14 @@ h1 span{color:var(--amber)}
   --hehku:radial-gradient(130% 95% at 50% 100%,#ffd9a0 0%,#8d4a1c 42%,#190d06 100%);
 }
 .tilaus .luukku::after{display:none}  /* messinkivetimet ovat kuvassa */
+.joulu{
+  --kehys:#4a2a16;              /* tumma pähkinä, Juntsan kuvasta */
+  --vas:url("luukut/joulu-vasen.jpg");
+  --oik:url("luukut/joulu-oikea.jpg");
+  --sisakuva:url("luukut/joulu-sisus.jpg");
+  --hehku:radial-gradient(130% 95% at 50% 100%,#ffe2ab 0%,#b4471f 40%,#130a06 100%);
+}
+.joulu .luukku::after{display:none}   /* messinkivetimet ovat kuvassa */
 .techno{
   --kehys:#3b4048;              /* laukun alumiini, ei puukehystä */
   --vas:url("luukut/techno-vasen.jpg");
@@ -237,7 +246,8 @@ h1 span{color:var(--amber)}
 /* Kun sisusta on oikea kuva, se saa näkyä himmeänäkin — muuten koko
    kalusteen piirtäminen meni hukkaan */
 .huone.video.kiinni .sisus,.huone.highland.kiinni .sisus,
-.huone.techno.kiinni .sisus,.huone.house.kiinni .sisus{
+.huone.techno.kiinni .sisus,.huone.house.kiinni .sisus,
+.huone.joulu.kiinni .sisus{
   filter:saturate(.62) brightness(.66)}
 .kyltti{
   /* ylös: keskellä tai alhaalla kyltti peittäisi juuri sen aiheen, jonka
@@ -286,6 +296,19 @@ footer a{color:#8a7a66}
   <p class="ala">Valitse huone</p>
 
   <div class="kaytava">
+
+    <!-- Kausiovi. Piilossa oletuksena: jos skripti ei aja, aulasta
+         puuttuu ovi - se on pienempi vahinko kuin jouluovi heinakuussa. -->
+    <div class="ovi" id="jouluovi" hidden>
+      <a class="huone joulu" href="joulu/" data-soitin>
+        <div class="sisus">
+          <b>Joulu</b>
+          <span>Rees-1000<br>kelat pyörivät</span>
+        </div>
+        <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
+      </a>
+      <p class="ohje">Auki 15.11.&ndash;15.1.</p>
+    </div>
 
     <div class="ovi">
       <a class="huone fifties" href="jukebox/" data-soitin>
@@ -403,5 +426,19 @@ footer a{color:#8a7a66}
     if (window.Huone) Huone.kytke();
   </script>
 
+<script>
+/* Kausiovi avautuu kavijan omasta kellosta, ei kaannoshetkesta: muuten
+   ovi riippuisi siita milloin sivusto sattui viimeksi rakennettua, ja
+   tammikuun sulkeminen jaisi muistin varaan.
+   Kausi 15.11.-15.1. ylittaa vuodenvaihteen, siksi kolme ehtoa. */
+(function (){
+  var ovi = document.getElementById('jouluovi');
+  if (!ovi) return;
+  var d = new Date(), kk = d.getMonth() + 1, pv = d.getDate();
+  if ((kk === 11 && pv >= 15) || kk === 12 || (kk === 1 && pv <= 15)){
+    ovi.hidden = false;
+  }
+})();
+</script>
 </body>
 </html>

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#140c06">
+<title>Joulu &mdash; Rees-1000</title>
+<style>
+:root{
+  --tausta:#140c06;
+  --messinki:#d2a358;
+  --teksti:#eedcc0;
+  --himmea:#a08a68;
+  --viiva:#3a2715;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{
+  background:
+    radial-gradient(1200px 700px at 50% -10%,#2c1a0c 0%,transparent 64%),
+    var(--tausta);
+  color:var(--teksti);
+  font:16px/1.6 Georgia,"Times New Roman",serif;
+  -webkit-font-smoothing:antialiased;
+  -webkit-text-size-adjust:100%;
+  padding:18px 16px calc(34px + env(safe-area-inset-bottom));
+}
+.sivu{max-width:540px;margin:0 auto}
+
+h1{
+  font:400 15px/1.2 Georgia,serif;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--messinki);text-align:center;margin:12px 0 4px;
+}
+.alaotsikko{
+  text-align:center;color:var(--himmea);font-size:12.5px;letter-spacing:.2em;
+  text-transform:uppercase;margin:0 0 20px;
+}
+
+/* ---- kaappi ja kelat --------------------------------------------------
+   Kela on leikattu kuvasta ympyrana. Pyoriessaan se peittaa tasmalleen
+   samat pikselit kuin paikallaan, joten alta ei paljastu mitaan eika
+   taustaa tarvitse paikata.
+   Paikat ovat prosentteja SOVITETUSTA kaappikuvasta (1052 x 1402).
+   left ja width suhteessa leveyteen, top suhteessa korkeuteen.      */
+.kaappi{
+  position:relative;line-height:0;border-radius:9px;overflow:hidden;
+  box-shadow:0 16px 46px rgba(0,0,0,.62);
+}
+.kaappi>img.pohja{width:100%;height:auto;display:block}
+.kela{position:absolute;display:block;will-change:transform}
+#kelaV{left:17.586%;top:62.767%;width:16.540%}
+#kelaO{left:66.445%;top:62.981%;width:16.350%}
+
+/* VU-neulat. Kaappikuvasta on pyyhitty maalatut neulat, ja nama
+   piirretaan tilalle. SVG:n viewBox on tasmalleen kaappikuvan
+   pikselimitta, joten koordinaatit ovat suoraan kuvan koordinaatteja
+   eika mitaan tarvitse laskea prosenteiksi. */
+.mittarit{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.mittarit line{stroke:#2b1a0b;stroke-width:3.4;stroke-linecap:round}
+.mittarit line.varjo{stroke:rgba(90,52,16,.38);stroke-width:5.6}
+
+/* Lampo syttyy kun kone soi. Peite on kaapin paalla eika sen alla,
+   joten se ei vaikuta kelojen paikkoihin. */
+.hehku{
+  position:absolute;inset:0;pointer-events:none;opacity:0;
+  transition:opacity .9s ease;
+  background:radial-gradient(70% 42% at 50% 72%,
+    rgba(255,196,110,.26) 0%,rgba(255,150,60,.09) 45%,transparent 72%);
+}
+.soi .hehku{opacity:1}
+
+/* ---- ohjaimet ---------------------------------------------------------
+   Kaapin omat nupit ovat maalattuja eivatka painu. Oikeat painikkeet
+   ovat siksi kaapin alla, missa ne nakyvat ja missa peukalo yltaa. */
+.ohjain{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  margin:20px 0 6px;
+}
+.nappi{
+  font:inherit;color:#2a1a08;cursor:pointer;
+  background:linear-gradient(#e9c67e,#b4842f);
+  border:1px solid #8a6220;border-radius:999px;
+  box-shadow:0 3px 0 #6b4815,0 7px 16px rgba(0,0,0,.5);
+  display:flex;align-items:center;justify-content:center;
+  width:50px;height:50px;padding:0;
+}
+.nappi.iso{width:66px;height:66px}
+.nappi:active{transform:translateY(2px);box-shadow:0 1px 0 #6b4815,0 4px 10px rgba(0,0,0,.5)}
+.nappi:disabled{opacity:.34;cursor:default;box-shadow:none;transform:none}
+.nappi svg{width:20px;height:20px;fill:currentColor}
+.nappi.iso svg{width:26px;height:26px}
+.nappi:focus-visible{outline:2px solid #ffd99a;outline-offset:3px}
+
+.nyt{
+  text-align:center;min-height:42px;margin:4px 0 2px;
+}
+.nyt b{display:block;font-weight:400;font-size:17px;color:#ffe9c6}
+.nyt span{font-size:12.5px;color:var(--himmea);letter-spacing:.08em}
+
+/* kulkupalkki */
+.palkki{
+  height:3px;border-radius:3px;background:#2e2013;margin:12px 0 2px;
+  overflow:hidden;
+}
+.palkki i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8a5e22,#e8bf72)}
+.ajat{display:flex;justify-content:space-between;font-size:11.5px;color:#7d6a51;letter-spacing:.08em}
+
+/* ---- laululista ------------------------------------------------------- */
+h2{
+  font:400 12px/1 Georgia,serif;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--himmea);margin:34px 0 10px;
+}
+ol.lista{list-style:none;margin:0;padding:0;border-top:1px solid var(--viiva)}
+ol.lista li{border-bottom:1px solid var(--viiva)}
+ol.lista button{
+  width:100%;display:flex;align-items:baseline;gap:12px;text-align:left;
+  background:none;border:0;color:var(--teksti);font:inherit;
+  padding:13px 4px;cursor:pointer;
+}
+ol.lista button:hover{background:rgba(255,220,170,.05)}
+ol.lista .nro{color:#6f5c44;font-size:12.5px;min-width:1.6em;flex:none}
+ol.lista .nimi{flex:1}
+ol.lista .nimi em{display:block;font-style:normal;font-size:12.5px;color:var(--himmea)}
+ol.lista .kesto{color:#6f5c44;font-size:12.5px;flex:none}
+ol.lista li.soiva .nimi{color:#ffd79a}
+ol.lista li.soiva .nro{color:#d2a358}
+ol.lista li.rikki{opacity:.4}
+
+.tyhja,.virhe{
+  text-align:center;color:var(--himmea);font-size:14px;padding:26px 6px;
+}
+.virhe{color:#e7a07a}
+footer{margin-top:40px;text-align:center;color:#6f5c44;font-size:11.5px;letter-spacing:.1em}
+
+@media (prefers-reduced-motion: reduce){
+  .hehku{transition:none}
+}
+</style>
+<meta name="description" content="Kausihuone, auki 15.11.–15.1. Messinkikaappi, pyörivät kelat ja KJWhispersin omat joululaulut.">
+<link rel="canonical" href="https://musarooms.com/joulu/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Musa Rooms">
+<meta property="og:locale" content="fi_FI">
+<meta property="og:title" content="Joulu — Rees-1000">
+<meta property="og:description" content="Kausihuone, auki 15.11.–15.1. Messinkikaappi, pyörivät kelat ja KJWhispersin omat joululaulut.">
+<meta property="og:url" content="https://musarooms.com/joulu/">
+<meta property="og:image" content="https://musarooms.com/jakokuva.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Joulu — Rees-1000">
+<meta name="twitter:description" content="Kausihuone, auki 15.11.–15.1. Messinkikaappi, pyörivät kelat ja KJWhispersin omat joululaulut.">
+<meta name="twitter:image" content="https://musarooms.com/jakokuva.jpg">
+</head>
+<body>
+<div class="sivu">
+
+  <h1>Rees&#8209;1000</h1>
+  <p class="alaotsikko">Joulu &middot; 15.11.&ndash;15.1.</p>
+
+  <div class="kaappi" id="kaappi">
+    <img class="pohja" src="../luukut/joulu-kaappi.jpg" width="900" height="1199"
+         alt="Messinkikoristeltu joulukaappi, kaksi kelaa ja soittorasian rumpu">
+    <img class="kela" id="kelaV" src="../luukut/kela-vasen.png" alt="">
+    <img class="kela" id="kelaO" src="../luukut/kela-oikea.png" alt="">
+    <svg class="mittarit" viewBox="0 0 1052 1402" aria-hidden="true">
+      <g id="neulaV" transform="rotate(-54 438 846)"><line class="varjo" x1="438" y1="846" x2="438" y2="799"></line>
+                     <line x1="438" y1="846" x2="438" y2="799"></line></g>
+      <g id="neulaO" transform="rotate(-54 621 846)"><line class="varjo" x1="621" y1="846" x2="621" y2="799"></line>
+                     <line x1="621" y1="846" x2="621" y2="799"></line></g>
+    </svg>
+    <div class="hehku"></div>
+  </div>
+
+  <div class="ohjain">
+    <button class="nappi" id="edellinen" type="button" aria-label="Edellinen" disabled>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h2.6v14H7zM19 5l-9 7 9 7z"/></svg>
+    </button>
+    <button class="nappi iso" id="soita" type="button" aria-label="Soita" disabled>
+      <svg viewBox="0 0 24 24" aria-hidden="true" id="kuvake"><path d="M7 4l13 8-13 8z"/></svg>
+    </button>
+    <button class="nappi" id="seuraava" type="button" aria-label="Seuraava" disabled>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.4 5H17v14h-2.6zM5 5l9 7-9 7z"/></svg>
+    </button>
+  </div>
+
+  <div class="nyt" id="nyt"><b></b><span></span></div>
+  <div class="palkki"><i id="kulku"></i></div>
+  <div class="ajat"><span id="aika">0:00</span><span id="pituus">0:00</span></div>
+
+  <p class="virhe" id="virhe" hidden></p>
+
+  <h2>Laulut</h2>
+  <ol class="lista" id="lista"></ol>
+  <p class="tyhja" id="tyhja">Ladataan&hellip;</p>
+
+  <footer>KJWhispers &middot; omaa musiikkia</footer>
+</div>
+
+<script src="../soitin.js?v=716633fd"></script>
+<script>
+'use strict';
+(function (){
+var $ = function (id){ return document.getElementById(id); };
+
+var BIISIT = [];
+var kohta = -1;
+var soi = false;
+
+/* Elementtisoitin, ei Web Audiota: soitto jatkuu kun naytto sammuu. */
+var el = new Audio();
+el.preload = 'none';
+el.playsInline = true;
+
+/* ====================  kelat  ========================================= */
+
+var kelat = [
+  { el: $('kelaV'), kulma: 0, nopeus: 0, huippu:  96 },
+  { el: $('kelaO'), kulma: 0, nopeus: 0, huippu: 112 }
+];
+var edellinenAika = 0, kehysPyynto = 0;
+
+/* ====================  VU-mittarit  =================================== */
+
+/* Taso luetaan esilasketusta .valot-tiedostosta, ei Web Audiosta:
+   MediaElementSource katkaisisi soiton kun naytto sammuu, ja se oli
+   koko talon alkuperainen vaatimus. Sama tiedosto ajaa Highlandin
+   palkkeja. */
+var valot = null, valotOsoite = '';
+
+var NIVELET = [
+  { el: $('neulaV'), x: 438, y: 846 },
+  { el: $('neulaO'), x: 621, y: 846 }
+];
+var LEPO = -54, HUIPPU = 42;        // asteikon paat, astetta pystysuorasta
+var tasot = [0, 0], kulmat = [LEPO, LEPO];   // markkaus aloittaa levossa
+
+function haeValot(aani){
+  var osoite = String(aani || '');
+  if (!osoite || osoite === valotOsoite) return;
+  valotOsoite = osoite; valot = null;
+  var url = osoite.replace(/\.(mp3|wav|m4a|ogg)(\?.*)?$/i, '.valot');
+  if (url === osoite) return;
+  fetch(url, { cache: 'force-cache' })
+    .then(function (r){ return r.ok ? r.arrayBuffer() : null; })
+    .then(function (pus){
+      if (!pus || valotOsoite !== osoite) return;
+      var t = new Uint8Array(pus);
+      if (t.length < 10 || t[0] !== 86 || t[1] !== 76 || t[2] !== 79) return;
+      /* VLO1:n otsake on 10 tavua, VLO2:n 12. Molemmat kelpaavat. */
+      var otsake = t[3] === 50 ? 12 : 10;
+      if (t.length < otsake) return;
+      var n = new DataView(pus);
+      valot = { fps: n.getUint16(4, true), data: t.subarray(otsake) };
+    })
+    .catch(function (){});
+}
+
+function kaistat(){
+  if (!(soi && valot && valot.fps)) return null;
+  var kpl = (valot.data.length / 3) | 0;
+  var i = Math.max(0, Math.min(kpl - 1, Math.floor(el.currentTime * valot.fps))) * 3;
+  return { b: valot.data[i] / 255, k: valot.data[i + 1] / 255,
+           d: valot.data[i + 2] / 255 };
+}
+
+function neulat(dt){
+  var v = kaistat();
+  /* Vasen painottaa bassoa, oikea diskanttia: kaksi identtisesti
+     heiluvaa neulaa nayttaisi koristeelta eika mittaukselta. */
+  var kohde = v ? [v.b * 0.66 + v.k * 0.34, v.k * 0.46 + v.d * 0.54] : [0, 0];
+  for (var i = 0; i < NIVELET.length; i++){
+    /* VU-mittarin ballistiikka on tahallaan hidas: nousu noin 300 ms,
+       lasku hitaampi. Nopea neula vapisisi eika kertoisi mitaan. */
+    var t = Math.min(1, kohde[i] * 1.25);
+    var kerroin = Math.min(1, dt * (t > tasot[i] ? 7.0 : 3.2));
+    tasot[i] += (t - tasot[i]) * kerroin;
+    var aste = LEPO + tasot[i] * (HUIPPU - LEPO);
+    if (Math.abs(aste - kulmat[i]) < 0.15) continue;   // turha kirjoitus pois
+    kulmat[i] = aste;
+    NIVELET[i].el.setAttribute('transform',
+      'rotate(' + aste.toFixed(2) + ' ' + NIVELET[i].x + ' ' + NIVELET[i].y + ')');
+  }
+  return tasot[0] > 0.004 || tasot[1] > 0.004;
+}
+
+function askel(t){
+  kehysPyynto = 0;
+  /* dt rajataan: kun valilehti on ollut piilossa, selain antaa
+     paluukehykselle valtavan aikaeron ja kelat hyppaisivat. */
+  var dt = edellinenAika ? Math.min((t - edellinenAika) / 1000, 0.1) : 0;
+  edellinenAika = t;
+  var liikkuu = neulat(dt);
+  for (var i = 0; i < kelat.length; i++){
+    var k = kelat[i];
+    var tavoite = soi ? k.huippu : 0;
+    /* Kiihdytys ja jarrutus. Jarru on nopeampi kuin lahto, kuten
+       oikeassa dekissa: moottori kiihdyttaa massaa, jarru pysayttaa sen.
+       Pelkalla lahtonopeudella kelat kreivasivat viela kolme sekuntia
+       tauon jalkeen, ja se nayttaa rikkinaiselta eika raskaalta. */
+    k.nopeus += (tavoite - k.nopeus) * Math.min(dt * (soi ? 1.9 : 4.6), 1);
+    if (!soi && Math.abs(k.nopeus) < 0.25) k.nopeus = 0;
+    if (k.nopeus){
+      k.kulma = (k.kulma + k.nopeus * dt) % 360;
+      k.el.style.transform = 'rotate(' + k.kulma.toFixed(2) + 'deg)';
+      liikkuu = true;
+    }
+  }
+  if (liikkuu || soi) kehysPyynto = requestAnimationFrame(askel);
+  else edellinenAika = 0;
+}
+
+function pyorita(){
+  if (kehysPyynto) return;
+  edellinenAika = 0;
+  kehysPyynto = requestAnimationFrame(askel);
+}
+
+/* requestAnimationFrame on pysaytetty kokonaan kun ikkuna on piilossa.
+   Kun se palaa, silmukka pitaa kaynnistaa itse -- muuten kelat jaavat
+   seisomaan vaikka musiikki soi. */
+document.addEventListener('visibilitychange', function (){
+  if (!document.hidden && soi) pyorita();
+});
+
+/* ====================  soitin  ======================================== */
+
+function mmss(s){
+  s = Math.max(0, Math.round(s || 0));
+  return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2);
+}
+
+function virhe(teksti){
+  var v = $('virhe');
+  if (!teksti){ v.hidden = true; return; }
+  v.textContent = teksti;
+  v.hidden = false;
+}
+
+function merkitse(){
+  var rivit = $('lista').children;
+  for (var i = 0; i < rivit.length; i++){
+    rivit[i].classList.toggle('soiva', i === kohta);
+  }
+  document.body.classList.toggle('soi', soi);
+  $('kuvake').innerHTML = soi
+    ? '<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>'
+    : '<path d="M7 4l13 8-13 8z"/>';
+  $('soita').setAttribute('aria-label', soi ? 'Tauko' : 'Soita');
+  var b = BIISIT[kohta];
+  /* Tyhja alarivi on sitkea paikka tehda virhe: teksti() pakenee &-merkin,
+     joten "&nbsp;" paatyisi sivulle kirjaimina. Valilyonti riittaa, kun
+     .nyt pitaa korkeutensa min-heightilla. */
+  $('nyt').innerHTML = b
+    ? '<b>' + teksti(b.nimi) + '</b><span>' + (b.alarivi ? teksti(b.alarivi) : '') + '</span>'
+    : '<b></b><span></span>';
+}
+
+function teksti(s){
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function valitse(i, soitaHeti){
+  if (!BIISIT.length) return;
+  kohta = ((i % BIISIT.length) + BIISIT.length) % BIISIT.length;
+  var b = BIISIT[kohta];
+  virhe('');
+  if (el.getAttribute('src') !== b.aani){
+    el.setAttribute('src', b.aani);
+    el.load();
+  }
+  haeValot(b.aani);
+  $('pituus').textContent = mmss(b.kesto);
+  $('kulku').style.width = '0%';
+  $('aika').textContent = '0:00';
+  if (soitaHeti) kaynnista();
+  else merkitse();
+}
+
+function kaynnista(){
+  if (kohta < 0) { valitse(0, true); return; }
+  /* play() ensin: preload="none" pitaa readyState nollassa kunnes
+     lataus alkaa, joten metatietoa ei kannata jaada odottamaan. */
+  var lupaus = el.play();
+  if (lupaus && lupaus.catch){
+    lupaus.catch(function (){
+      soi = false; merkitse();
+    });
+  }
+}
+
+el.addEventListener('play',  function (){ soi = true;  merkitse(); pyorita(); });
+el.addEventListener('pause', function (){ soi = false; merkitse(); pyorita(); });
+el.addEventListener('ended', function (){ valitse(kohta + 1, true); });
+
+el.addEventListener('timeupdate', function (){
+  var p = BIISIT[kohta];
+  var kesto = el.duration || (p && p.kesto) || 0;
+  if (kesto > 0){
+    $('kulku').style.width = (100 * el.currentTime / kesto).toFixed(2) + '%';
+  }
+  $('aika').textContent = mmss(el.currentTime);
+});
+
+el.addEventListener('loadedmetadata', function (){
+  if (el.duration && isFinite(el.duration)) $('pituus').textContent = mmss(el.duration);
+});
+
+/* Hiljainen epaonnistuminen on pahin: nappi painuu eika mitaan tapahdu.
+   Sanotaan se aaneen ja himmennetaan rivi. */
+el.addEventListener('error', function (){
+  soi = false; merkitse();
+  var rivi = $('lista').children[kohta];
+  if (rivi) rivi.classList.add('rikki');
+  var b = BIISIT[kohta];
+  virhe('”' + (b ? b.nimi : 'Laulu') + '” ei lähtenyt soimaan. '
+      + 'Äänitiedostoa ei saatu ladattua — muut laulut toimivat silti.');
+});
+
+$('soita').addEventListener('click', function (){
+  if (soi) el.pause(); else kaynnista();
+});
+$('edellinen').addEventListener('click', function (){
+  /* Alle kaksi sekuntia: takaisin alkuun, kuten oikeassa soittimessa. */
+  if (el.currentTime > 2){ try { el.currentTime = 0; } catch (e){} return; }
+  valitse(kohta - 1, soi);
+});
+$('seuraava').addEventListener('click', function (){ valitse(kohta + 1, soi); });
+
+/* ====================  lista  ========================================= */
+
+function piirra(){
+  var ol = $('lista');
+  ol.innerHTML = '';
+  BIISIT.forEach(function (b, i){
+    var li = document.createElement('li');
+    var nap = document.createElement('button');
+    nap.type = 'button';
+    nap.innerHTML =
+      '<span class="nro">' + (i + 1) + '</span>' +
+      '<span class="nimi">' + teksti(b.nimi) +
+        (b.alarivi ? '<em>' + teksti(b.alarivi) + '</em>' : '') + '</span>' +
+      '<span class="kesto">' + mmss(b.kesto) + '</span>';
+    nap.addEventListener('click', function (){
+      if (i === kohta && soi){ el.pause(); return; }
+      valitse(i, true);
+    });
+    li.appendChild(nap);
+    ol.appendChild(li);
+  });
+  var on = BIISIT.length > 0;
+  $('soita').disabled = $('edellinen').disabled = $('seuraava').disabled = !on;
+  $('tyhja').hidden = on;
+  if (!on) $('tyhja').textContent = 'Lauluja ei ole vielä tässä huoneessa.';
+  if (on) valitse(0, false);
+}
+
+(function hae(){
+  if (location.protocol === 'file:'){ piirra(); return; }
+  fetch('kokoelma.json?v=1efac442', { cache: 'no-cache' })
+    .then(function (r){ return r.ok ? r.json() : null; })
+    .then(function (d){
+      BIISIT = (d && Array.isArray(d.raidat)) ? d.raidat : [];
+      piirra();
+    })
+    .catch(function (){
+      BIISIT = [];
+      piirra();
+      $('tyhja').textContent = 'Laululistaa ei saatu ladattua.';
+    });
+})();
+
+})();
+</script>
+
+<a class="musa-paluu" href="../" aria-label="Takaisin aulaan">
+<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+ stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"
+ aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a>
+<style>
+.musa-paluu{position:fixed;left:10px;top:10px;z-index:9000;
+ width:44px;height:44px;border-radius:50%;
+ border:1px solid rgba(255,235,200,.3);background:rgba(10,9,8,.62);
+ color:#f0e4d2;display:flex;align-items:center;justify-content:center;
+ -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.musa-paluu:active{background:rgba(10,9,8,.85)}
+.musa-paluu[hidden]{display:none}
+</style>
+<script>
+/* Aulan oma peite piirtää paluunapin kehyksen päälle, joten kehyksen
+   SISÄLLÄ tämä olisi toinen samannäköinen nappi vierekkäin. Piilotetaan
+   se silloin — mutta vain silloin. Suoraan huoneen osoitteeseen tullut
+   kävijä (linkki, kirjanmerkki, hakutulos, sivun päivitys) ei ole
+   kehyksessä eikä pääsisi muuten mihinkään. */
+(function (){
+  try {
+    if (window.self !== window.top){
+      var n = document.querySelector('.musa-paluu');
+      if (n) n.hidden = true;
+    }
+  } catch (e){ /* eri alkuperä: ollaan kehyksessä, mutta varmuuden
+                  vuoksi nappi jää näkyviin — turha nappi on parempi
+                  kuin umpikuja */ }
+})();
+</script>
+</body>
+</html>
