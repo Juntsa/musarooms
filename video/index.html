@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Musa videot</title>
+<title>Music Videos</title>
 <meta name="theme-color" content="#2a1a0f">
 <style>
 /* Musa videot.
@@ -198,17 +198,17 @@ video{
 
   <div id="napit">
     <button type="button" id="edel">&#9664;&#9664;</button>
-    <button type="button" id="soita">TOISTA</button>
+    <button type="button" id="soita">PLAY</button>
     <button type="button" id="seur">&#9654;&#9654;</button>
   </div>
 
-  <div id="nyt">ei videoita</div>
+  <div id="nyt">no videos</div>
 </div>
 
 <div id="lista" aria-hidden="true">
   <div id="listaOtsikko">
     <b>Browse</b>
-    <button type="button" id="listaKiinni">Sulje</button>
+    <button type="button" id="listaKiinni">Close</button>
   </div>
   <ol id="listaRivit"></ol>
 </div>
@@ -313,11 +313,11 @@ function paivita(){
   var b = VIDEOT[kohta];
   $('nimi').textContent = b ? b.nimi : '—';
   $('alanimi').textContent = b ? (b.alarivi || '') : '';
-  $('soita').textContent = soi ? 'TAUKO' : 'TOISTA';
+  $('soita').textContent = soi ? 'PAUSE' : 'PLAY';
   $('soita').disabled = !VIDEOT.length;
   $('edel').disabled = VIDEOT.length < 2;
   $('seur').disabled = VIDEOT.length < 2;
-  if (!VIDEOT.length) $('nyt').textContent = 'ei videoita';
+  if (!VIDEOT.length) $('nyt').textContent = 'no videos';
   else if (!soi && !v.currentTime)
     $('nyt').textContent = (kohta + 1) + ' / ' + VIDEOT.length;
 }
@@ -445,7 +445,7 @@ document.addEventListener('keydown', function (e){
 })();
 </script>
 
-<a class="musa-paluu" href="../" aria-label="Takaisin aulaan">
+<a class="musa-paluu" href="../" aria-label="Back to the lobby">
 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
  stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"
  aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a>

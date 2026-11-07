@@ -232,7 +232,7 @@ h1{
       <div class="tunnus">DECK A<span class="bpm" id="bpmA">—</span></div>
       <div class="ruutu" id="ruutuA" role="button" tabindex="0"
            aria-label="Valitse kappale dekkiin A">
-        <div class="nimi tyhja" id="nimiA">napauta ja valitse</div>
+        <div class="nimi tyhja" id="nimiA">tap to load</div>
         <canvas class="aalto" id="aaltoA"></canvas>
         <div class="ajat"><span id="kulA">0:00</span><span id="jalA">—</span></div>
       </div>
@@ -247,7 +247,7 @@ h1{
       <div class="tunnus">DECK B<span class="bpm" id="bpmB">—</span></div>
       <div class="ruutu" id="ruutuB" role="button" tabindex="0"
            aria-label="Valitse kappale dekkiin B">
-        <div class="nimi tyhja" id="nimiB">napauta ja valitse</div>
+        <div class="nimi tyhja" id="nimiB">tap to load</div>
         <canvas class="aalto" id="aaltoB"></canvas>
         <div class="ajat"><span id="kulB">0:00</span><span id="jalB">—</span></div>
       </div>
@@ -262,7 +262,7 @@ h1{
   <div id="mikseri">
     <div id="haivyRivi">
       <span class="pää a">A</span>
-      <div id="haivy" role="slider" tabindex="0" aria-label="Ristihäivytin"
+      <div id="haivy" role="slider" tabindex="0" aria-label="Crossfader"
            aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
         <div class="ura"></div><div class="nappula" id="haivyNappula"></div>
       </div>
@@ -295,20 +295,20 @@ h1{
     </div>
   </div>
 
-  <div id="nyt">valitse kappale dekin näytöltä</div>
+  <div id="nyt">tap a deck display to load a track</div>
 </div>
 
-<div id="kirjasto" role="dialog" aria-modal="true" aria-label="Kappaleet">
+<div id="kirjasto" role="dialog" aria-modal="true" aria-label="Tracks">
   <div id="kirjastoSisus">
     <div id="kirjastoYla">
-      <b>Kappaleet</b><span id="kohdeKilpi">&rarr; A</span>
-      <button type="button" id="kirjastoKiinni">Sulje</button>
+      <b>Tracks</b><span id="kohdeKilpi">&rarr; A</span>
+      <button type="button" id="kirjastoKiinni">Close</button>
     </div>
-    <div id="lista" role="listbox" aria-label="Kappaleet"></div>
+    <div id="lista" role="listbox" aria-label="Tracks"></div>
   </div>
 </div>
 
-<script src="../soitin.js?v=716633fd"></script>
+<script src="../soitin.js?v=8e92747f"></script>
 <script>
 'use strict';
 var $ = function (id){ return document.getElementById(id); };
@@ -745,7 +745,7 @@ function paivitaTeksti(){
     }
   });
   $('nyt').textContent = osat.length ? osat.join('   ·   ')
-                                     : 'valitse kappale dekin näytöltä';
+                                     : 'tap a deck display to load a track';
 }
 
 function mediaTiedot(){
@@ -777,7 +777,7 @@ function piirraLista(){
   var p = $('lista');
   if (!BIISIT.length){
     p.innerHTML = '<div style="padding:20px;color:#6b7489;font-size:13px">'
-                + 'Täällä ei ole vielä kappaleita.</div>';
+                + 'No tracks here yet.</div>';
     return;
   }
   var osat = [];
@@ -916,7 +916,7 @@ kytkeJog('a'); kytkeJog('b');
     piirra: paivitaSuodin,
     muotoile: function (v){
       if (Math.abs(v) < 0.03) return 'auki';
-      return (v < 0 ? 'alipäästö ' : 'ylipäästö ')
+      return (v < 0 ? 'low-pass ' : 'high-pass ')
              + Math.round(Math.abs(v) * 100) + ' %';
     }
   });
@@ -1042,7 +1042,7 @@ window.addEventListener('resize', paivitaHaivy);
 })();
 </script>
 
-<a class="musa-paluu" href="../" aria-label="Takaisin aulaan">
+<a class="musa-paluu" href="../" aria-label="Back to the lobby">
 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
  stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"
  aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a>

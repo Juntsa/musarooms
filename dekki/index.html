@@ -219,28 +219,28 @@ a.dl:hover{border-color:var(--green)}
     <div class="stage"><canvas id="rack" width="1080" height="1920"></canvas></div>
     <div class="panel">
       <div class="sheetbar" id="sheetbar"><i></i>
-        <button class="sclose" id="sheetClose" aria-label="Sulje">&times;</button>
+        <button class="sclose" id="sheetClose" aria-label="Close">&times;</button>
       </div>
 
       <section id="secSrc">
-        <h2>1 &middot; Lähde</h2>
-        <div class="row"><label>Soittaa</label>
+        <h2>1 &middot; Source</h2>
+        <div class="row"><label>Playing</label>
           <div class="seg">
-            <button data-src="reel">Kela</button>
-            <button data-src="A" class="on">Kasetti A</button>
-            <button data-src="B">Kasetti B</button>
+            <button data-src="reel">Reel</button>
+            <button data-src="A" class="on">Cassette A</button>
+            <button data-src="B">Cassette B</button>
           </div>
         </div>
         <div class="lst" id="lstReel"></div>
         <div class="lst" id="lstA"></div>
         <div class="lst" id="lstB"></div>
         <div class="row">
-          <label class="chk" style="margin:0;white-space:nowrap"><input type="checkbox" id="loopOn" checked> Toista lista</label></div>
+          <label class="chk" style="margin:0;white-space:nowrap"><input type="checkbox" id="loopOn" checked> Repeat list</label></div>
       </section>
 
 
       <section id="secPlay">
-        <h2>3 &middot; Soitto</h2>
+        <h2>3 &middot; Playback</h2>
         <div class="transport">
           <button id="btnPlay" class="primary">&#9654; PLAY</button>
           <button id="btnPause">&#10073;&#10073;</button>
@@ -248,66 +248,66 @@ a.dl:hover{border-color:var(--green)}
           <button id="btnPrev">&#9664;&#9664;</button>
           <button id="btnNext">&#9654;&#9654;</button>
         </div>
-        <div class="hint">Laitteen omat napit canvaksella toimivat myös: kelan ja kasettien transport, EQ-liu'ut, volume, balanssi ja viritinasteikko.</div>
+        <div class="hint">The controls drawn on the units work too: reel and cassette transport, EQ sliders, volume, balance and the tuning scale.</div>
       </section>
 
       <section id="secAudio">
-        <h2>4 &middot; Ääni</h2>
-        <div class="row"><label>EQ-esiasetus</label>
+        <h2>4 &middot; Audio</h2>
+        <div class="row"><label>EQ preset</label>
           <select id="eqPreset">
-            <option value="flat">Suora</option><option value="rock">Rock</option>
+            <option value="flat">Flat</option><option value="rock">Rock</option>
             <option value="disco">Disco</option><option value="bass">Bass boost</option>
-            <option value="loud">Loudness</option><option value="vocal">Vokaali</option>
+            <option value="loud">Loudness</option><option value="vocal">Vocal</option>
           </select>
         </div>
         <div class="eqpad" id="eqPad"></div>
-        <label class="chk"><input type="checkbox" id="tapeOn"> Nauhasaundi (wow &amp; flutter + kohina)</label>
-        <div class="row"><label>Kuluneisuus</label>
+        <label class="chk"><input type="checkbox" id="tapeOn"> Tape sound (wow &amp; flutter + hiss)</label>
+        <div class="row"><label>Wear</label>
           <input type="range" id="tapeAmt" min="0" max="100" value="45" style="flex:1;accent-color:var(--amber)">
           <span id="tapeTxt" style="width:58px;text-align:right;color:var(--amber2);font-size:11px">0,09 %</span>
         </div>
-        <label class="chk"><input type="checkbox" id="stopFx" checked> STOP hyydyttää kelat</label>
-        <label class="chk"><input type="checkbox" id="awake" checked> Pidä näyttö päällä soiton aikana</label>
-        <div class="hint" id="awakeInfo">Estää näytön sammumisen, joka katkaisisi äänen.</div>
-        <label class="chk"><input type="checkbox" id="bgPlay" checked> Jatka soittoa ruudun sammuttua</label>
-        <div class="hint">Taskussa ääni siirtyy soittimelle joka ohittaa EQ:n ja mittarit. Ne palaavat heti kun avaat sovelluksen.</div>
+        <label class="chk"><input type="checkbox" id="stopFx" checked> STOP freezes the reels</label>
+        <label class="chk"><input type="checkbox" id="awake" checked> Keep the screen on while playing</label>
+        <div class="hint" id="awakeInfo">Prevents the screen from sleeping, which would cut the audio.</div>
+        <label class="chk"><input type="checkbox" id="bgPlay" checked> Keep playing after the screen goes dark</label>
+        <div class="hint">In your pocket the audio moves to a player that bypasses the EQ and the meters. They come back the moment you open the app.</div>
       </section>
 
       <section id="secView">
-        <h2>5 &middot; Kuva</h2>
-        <div class="row"><label>Muoto</label>
+        <h2>5 &middot; Picture</h2>
+        <div class="row"><label>Format</label>
           <div class="seg"><button id="fmt916" class="on">9:16</button><button id="fmt169">16:9</button></div>
         </div>
-        <div class="row"><label>Laitteet</label>
+        <div class="row"><label>Units</label>
           <div class="seg" id="unitPick">
-            <button data-unit="reel" class="on">Kela</button>
-            <button data-unit="cass" class="on">Kasetti</button>
-            <button data-unit="an" class="on">Analys.</button>
-            <button data-unit="scope" class="on">Skooppi</button>
+            <button data-unit="reel" class="on">Reel</button>
+            <button data-unit="cass" class="on">Cassette</button>
+            <button data-unit="an" class="on">Analyser</button>
+            <button data-unit="scope" class="on">Scope</button>
           </div>
         </div>
-        <div class="hint">Vahvistin ja taajuuskorjain ovat aina mukana. Mitä harvempi laite, sitä isompana ne näkyvät.</div>
-        <div class="row"><label>Tausta</label>
+        <div class="hint">The amplifier and the equaliser are always included. The fewer units there are, the larger they appear.</div>
+        <div class="row"><label>Background</label>
           <select id="bgMode">
-            <option value="quill">Sulkakynä-loop</option>
-            <option value="rose">KJ-ruusu</option>
-            <option value="custom">Oma kuva / video&hellip;</option>
-            <option value="none">Ei mitään</option>
+            <option value="quill">Quill loop</option>
+            <option value="rose">KJ rose</option>
+            <option value="custom">Your own image / video&hellip;</option>
+            <option value="none">None</option>
           </select>
         </div>
         <input type="file" id="fileBg" accept="image/*,video/*" class="hidden">
-        <div class="row"><label>Rajaa alhaalta</label>
+        <div class="row"><label>Crop from the bottom</label>
           <input type="range" id="bgCrop" min="0" max="40" step="1" value="0" style="flex:1">
           <span class="hint" style="margin:0;min-width:3em;text-align:right" id="bgCropArvo">0 %</span>
         </div>
-        <div class="hint">Leikkaa taustakuvan alareunan pois. Tarpeen jos kuvaan on
-          poltettu tunnus tai tekstiä, jota ei haluta videolle.</div>
+        <div class="hint">Cuts off the bottom of the background image. Needed when a logo
+          or text is burned in and should not end up in the video.</div>
         <div class="row">
-          <label class="chk" style="margin:0"><input type="checkbox" id="relOn"> Julkaisutieto</label>
-          <input type="text" id="relText" value="Kuunneltavissa Spotifyssa" style="flex:1">
-          <input type="text" id="relDate" placeholder="pp.kk.vvvv" style="max-width:110px">
+          <label class="chk" style="margin:0"><input type="checkbox" id="relOn"> Credit line</label>
+          <input type="text" id="relText" value="Listen on Spotify" style="flex:1">
+          <input type="text" id="relDate" placeholder="dd.mm.yyyy" style="max-width:110px">
         </div>
-        <div class="hint">N&auml;kyy kuvapaneelin alareunassa. Tyhj&auml; kentt&auml; j&auml;&auml; pois.</div>
+        <div class="hint">Shown at the bottom of the picture panel. An empty field is left out.</div>
       </section>
 
 
@@ -316,13 +316,13 @@ a.dl:hover{border-color:var(--green)}
 
   <nav class="bar mob" id="bar">
     <div class="chips">
-      <button data-sheet="secSrc">Lähde</button>
-      <button data-sheet="secAudio secView">Ääni</button>
+      <button data-sheet="secSrc">Source</button>
+      <button data-sheet="secAudio secView">Audio</button>
     </div>
     <div class="tr">
-      <button id="mPrev" aria-label="Edellinen">&#9664;&#9664;</button>
-      <button id="mPlay" class="play" aria-label="Toista">&#9654;</button>
-      <button id="mNext" aria-label="Seuraava">&#9654;&#9654;</button>
+      <button id="mPrev" aria-label="Previous">&#9664;&#9664;</button>
+      <button id="mPlay" class="play" aria-label="Play">&#9654;</button>
+      <button id="mNext" aria-label="Next">&#9654;&#9654;</button>
     </div>
   </nav>
 </div>
@@ -330,19 +330,19 @@ a.dl:hover{border-color:var(--green)}
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <div class="knobpad hidden" id="knobPad" aria-hidden="true">
-  <div class="kp" role="dialog" aria-label="Säädin">
-    <div class="kp-name" id="kpName">SÄÄDIN</div>
+  <div class="kp" role="dialog" aria-label="Slider">
+    <div class="kp-name" id="kpName">SLIDER</div>
     <div class="kp-val" id="kpVal">—</div>
     <div class="kp-track" id="kpTrack">
       <div class="kp-fill" id="kpFill"></div>
       <div class="kp-grip" id="kpGrip"></div>
     </div>
     <div class="kp-row">
-      <button id="kpDown" aria-label="Pienennä">&minus;</button>
-      <button id="kpUp" aria-label="Suurenna">+</button>
+      <button id="kpDown" aria-label="Shrink">&minus;</button>
+      <button id="kpUp" aria-label="Enlarge">+</button>
     </div>
-    <p class="kp-hint">Vedä palkkia ylös tai alas. Nuppia voi kiertää myös suoraan tornissa.</p>
-    <button id="kpDone" class="primary">VALMIS</button>
+    <p class="kp-hint">Drag the bar up or down. The knob can also be turned on the unit itself.</p>
+    <button id="kpDone" class="primary">DONE</button>
   </div>
 </div>
 
@@ -452,7 +452,7 @@ const DB={
     if (this.warned) return; this.warned=true;
     const q = e && /quota|storage/i.test(String(e.name||e.message||''));
     tila('dbInfo','<span class="err">'+(q
-      ? 'Selaimen tallennustila täyttyi. Biisit toimivat tässä istunnossa, mutta eivät säily.'
+      ? 'The browser storage is full. The tracks work in this session but will not be kept.'
       : 'Tämä selain ei salli pysyvää säilytystä tiedostosta avattuna. Biisit toimivat tässä istunnossa, mutta eivät säily.')+'</span>');
   },
   put(rec){ return this.tx('readwrite',st=>st.put(rec)); },
@@ -472,16 +472,16 @@ async function dbInfo(note){
     if (navigator.storage && navigator.storage.estimate){
       const e=await navigator.storage.estimate();
       if (e && e.usage){ const mb=e.usage/1048576;
-        extra=' · '+(mb<10?mb.toFixed(1):mb.toFixed(0))+' MB käytössä'; }
+        extra=' · '+(mb<10?mb.toFixed(1):mb.toFixed(0))+' MB in use'; }
       if (e && e.quota){
         const vapaa=Math.max(0,(e.quota-(e.usage||0))/1048576);
         const kpl=n?Math.min(20,Math.max(2,(e.usage/1048576)/n)):5;
         extra+=' · tilaa '+(vapaa>1024?(vapaa/1024).toFixed(1)+' GB':Math.round(vapaa)+' MB')+
-               ' eli n. '+Math.round(vapaa/kpl)+' biisiä lisää';
+               ' eli n. '+Math.round(vapaa/kpl)+' more tracks';
       }
     }
   }catch(e){}
-  const base = n ? esc(n+' biisiä tallessa'+extra) : '';
+  const base = n ? esc(n+' tracks stored'+extra) : '';
   tila('dbInfo', note ? (base?base+'<br>':'')+note : base);
 }
 /* ---- huoneen oma setti --------------------------------------------
@@ -808,7 +808,7 @@ function toast(m){
   clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('on'),4000);
 }
 function sanoTyhja(k,lisa){
-  const m=DECK_NAME[k]+' on tyhjä'+(lisa||'.');
+  const m=DECK_NAME[k]+' is empty'+(lisa||'.');
   toast(m); setStatus(m,true);
 }
 function deckEmpty(k){ return k!=='tuner' && !(LIST[k]&&LIST[k].length); }
@@ -844,7 +844,7 @@ async function play(){
   el.playbackRate=1;
   const off=startOffset();
   if (off>0 && S.src!=='tuner' && el.currentTime<0.25){ try{ el.currentTime=off; }catch(e){} }
-  try{ await el.play(); }catch(e){ setStatus('Toisto ei käynnistynyt: '+e.message,true); return; }
+  try{ await el.play(); }catch(e){ setStatus('Playback did not start: '+e.message,true); return; }
   bgv.play().catch(()=>{});
   S.playing=true; applyTape(); keepAwake(true); startShadow();
   if (BUILD.rec && $('autoRec').checked && !S.recording) startRec();
@@ -1398,7 +1398,7 @@ function drawCassetteBay(x,y,w,h,k){
   } else {
     ctx.fillStyle='rgba(180,170,155,.25)'; ctx.textAlign='center';
     ctx.font='600 '+Math.max(6,ih*.14)+'px "Segoe UI",sans-serif';
-    ctx.fillText('TYHJÄ',ix+iw/2,iy+ih*.55); ctx.textAlign='left';
+    ctx.fillText('EMPTY',ix+iw/2,iy+ih*.55); ctx.textAlign='left';
   }
   ctx.save(); rr(ctx,ix,iy,iw,ih,3); ctx.clip();
   const sg=ctx.createLinearGradient(ix,iy,ix+iw*.55,iy+ih);
@@ -2328,7 +2328,7 @@ function fromBackground(){
     silence(BG,false);
     try{ el.pause(); }catch(e){}
     if (BG.paused) BG.play().catch(()=>{});
-    setStatus('Ääniketju ei herännyt ('+why+'). Musiikki jatkuu taustasoittimella — '+
+    setStatus('The audio chain did not wake up ('+why+'). Musiikki jatkuu taustasoittimella — '+
       'kosketa ruutua niin EQ ja mittarit palaavat.',true);
   };
   const verify=()=>{
@@ -2344,7 +2344,7 @@ function fromBackground(){
         startShadow();
         return;
       }
-      backToShadow(running?'toisto ei edisty':'ketju pysäytetty');
+      backToShadow(running?'toisto ei edisty':'chain stopped');
     },420);
   };
   // Raita on voinut vaihtua taskussa, jolloin elementti ei ole vielä valmis.
@@ -2418,7 +2418,7 @@ function mediaSession(){
 /* ==========================  INIT  ========================== */
 if (!BUILD.rec){
   const s=$('secRec'); if(s) s.remove();
-  $('codecInfo').textContent='soitinversio';
+  $('codecInfo').textContent='player build';
 }
 /* Äänigraafi rakennetaan heti, ennen kuin mikään ehtii soida. Selain antaa
    sen olla aluksi pysäytetyssä tilassa; ensimmäinen kosketus herättää sen. */
@@ -2451,7 +2451,7 @@ requestAnimationFrame(frame);
 window.addEventListener('load',fitStage);
 </script>
 
-<a class="musa-paluu" href="../" aria-label="Takaisin aulaan">
+<a class="musa-paluu" href="../" aria-label="Back to the lobby">
 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
  stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"
  aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a>

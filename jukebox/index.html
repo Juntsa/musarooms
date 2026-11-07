@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>KJWhispers JB-2400 — etunäkymä</title>
+<title>KJWhispers JB-2400</title>
 <style>
 :root{--bg:#0a0908;--line:#2e2419;--txt:#e8ded0;--dim:#9a8b78;--amber:#ff9a1f}
 *{box-sizing:border-box}
@@ -151,11 +151,11 @@ canvas{border-radius:4px;box-shadow:0 30px 80px rgba(0,0,0,.75),0 0 0 1px rgba(2
     <option value="1600">korkeus 1600 — tarkistus</option>
     <option value="1920">1080 × 1920 — pystyvideo</option>
   </select>
-  <button id="ristikko">Mittaristikko</button>
-  <button id="valot">Valot musiikkiin</button>
-  <button id="paikatAuki">Biisit</button>
-  <button id="seis">Seis</button>
-  <button id="png">Tallenna PNG</button>
+  <button id="ristikko">Grille</button>
+  <button id="valot">Lights to music</button>
+  <button id="paikatAuki">Slots</button>
+  <button id="seis">Stop</button>
+  <button id="png">Save PNG</button>
   <b id="nyt">ei valintaa</b>
   <span id="tiedot">—</span>
 </div>
@@ -163,44 +163,44 @@ canvas{border-radius:4px;box-shadow:0 30px 80px rgba(0,0,0,.75),0 0 0 1px rgba(2
 
 <div id="ohjaus">
   <div id="aani" class="nuppi" role="slider" tabindex="0"
-       aria-label="Äänenvoimakkuus" aria-valuemin="0" aria-valuemax="100">
+       aria-label="Volume" aria-valuemin="0" aria-valuemax="100">
     <span class="osoitin"></span>
   </div>
-  <div class="selite"><b>Ääni</b><span id="aaniArvo">80 %</span></div>
+  <div class="selite"><b>Volume</b><span id="aaniArvo">80 %</span></div>
 
   <!-- Kuljetusnapit. Jukeboksin omat painikkeet taulussa valitsevat
        biisin, mutta niillä ei pysäytetä eikä hypätä - oikeassa
        laitteessa ei ollutkaan mihin. Ruudulla se on puute: kun biisi
        on väärä, ainoa keino oli avata lista uudelleen. -->
-  <div id="kuljetus" role="group" aria-label="Soitto">
-    <button id="edel" type="button" aria-label="Edellinen biisi">&#9198;</button>
-    <button id="soitaNappi" type="button" aria-label="Soita">&#9654;</button>
-    <button id="seur" type="button" aria-label="Seuraava biisi">&#9197;</button>
+  <div id="kuljetus" role="group" aria-label="Transport">
+    <button id="edel" type="button" aria-label="Previous track">&#9198;</button>
+    <button id="soitaNappi" type="button" aria-label="Play">&#9654;</button>
+    <button id="seur" type="button" aria-label="Next track">&#9197;</button>
   </div>
 
-  <button id="listaAuki" type="button">Biisilista</button>
+  <button id="listaAuki" type="button">Track list</button>
 </div>
 
 <div id="paikat" class="piilossa">
   <div class="paikatYla">
-    <b>24 PAIKKAA</b>
-    <span>raahaa mp3 tai wav soluun — tai napauta solua ja valitse tiedosto</span>
-    <button id="paikatKiinni">Sulje</button>
+    <b>24 SLOTS</b>
+    <span>drag an mp3 or wav onto a slot &mdash; or tap a slot and pick a file</span>
+    <button id="paikatKiinni">Close</button>
   </div>
   <div class="paikatTyokalut">
-    <label class="lataa">Lisää biisejä
+    <label class="lataa">Add tracks
       <input type="file" id="tiedostot" accept="audio/*,.mp3,.wav,.m4a,.ogg,.flac" multiple>
     </label>
-    <label class="lataa" title="Valitse json JA biisitiedostot samalla kertaa">
-      Lataa paketti
+    <label class="lataa" title="Pick the json AND the audio files at the same time">
+      Load a package
       <input type="file" id="pakettiLataa" accept=".json,application/json,audio/*,.mp3,.wav,.m4a,.ogg,.flac" multiple>
     </label>
-    <button id="paketti">Tallenna paketti</button>
-    <button id="jaa">Vie jaettava tiedosto</button>
-    <button id="poista">Poista korteista</button>
-    <button id="tyhjenna">Tyhjennä kaikki</button>
-    <span class="vihje">Paketti on JSON, jossa on 24 paikkaa. Lataa se yhdessä
-      biisitiedostojen kanssa — tai käytä <i>aani</i>-kenttää verkko-osoitteille.</span>
+    <button id="paketti">Save package</button>
+    <button id="jaa">Export shareable file</button>
+    <button id="poista">Remove from cards</button>
+    <button id="tyhjenna">Clear all</button>
+    <span class="vihje">The package is a JSON file with 24 slots. Load it together
+      with the audio files &mdash; or use the <i>aani</i> field for web addresses.</span>
   </div>
   <div id="ruudukko"></div>
 </div>
@@ -208,15 +208,15 @@ canvas{border-radius:4px;box-shadow:0 30px 80px rgba(0,0,0,.75),0 0 0 1px rgba(2
 
 <div id="lista" class="piilossa">
   <div class="listaYla">
-    <b>VALITSE</b>
-    <span>napauta nimeä</span>
-    <button id="listaKiinni">Sulje</button>
+    <b>SELECT</b>
+    <span>tap a title</span>
+    <button id="listaKiinni">Close</button>
   </div>
   <div id="listaRivit"></div>
 </div>
 
 <!-- jaettu iso säädin ja huoneen avaus; puuttuminen ei kaada soitinta -->
-<script src="../soitin.js?v=716633fd"></script>
+<script src="../soitin.js?v=8e92747f"></script>
 <script>
 "use strict";
 
@@ -698,8 +698,8 @@ function nauhaTeksti(){
     return (S.valittu + 1) + '   ' + b.nimi + (b.esittaja ? '   ·   ' + b.esittaja : '');
   if (settiNimi) return settiNimi;
   if (mallilista) return 'KJWhispers   ·   JB-2400   ·   24 SELECTIONS';
-  return ladattu > 0 ? ladattu + ' / ' + PAIKKOJA + ' PAIKKAA TÄYNNÄ'
-                     : 'EI BIISEJÄ  ·  RAAHAA MP3 TAI WAV PAIKKOIHIN';
+  return ladattu > 0 ? ladattu + ' / ' + PAIKKOJA + ' SLOTS FILLED'
+                     : 'NO TRACKS  \u00b7  DRAG AN MP3 OR WAV ONTO A SLOT';
 }
 
 function nauha(c){
@@ -1381,7 +1381,7 @@ function ristikko(c){
   lk('mekanismi', 60, M.mekAla);
   lk('ohjelma', M.ohj[1], M.ohj[3]);
   lk('kilpi', M.kilpiY[0], M.kilpiY[1]);
-  lk('säleikkö', M.sale[1], M.sale[3]);
+  lk('grille', M.sale[1], M.sale[3]);
   c.restore();
 }
 
@@ -1455,7 +1455,7 @@ function piirra(){
 
   const m = ohjelmaMitat();
   $('tiedot').textContent =
-    kw + ' × ' + kh + ' px · kortti ' + (m.kLev * TM.s).toFixed(0) + ' px leveä' +
+    kw + ' × ' + kh + ' px \u00b7 card ' + (m.kLev * TM.s).toFixed(0) + ' px wide' +
     (S.valittu >= 0 ? ' · valittu ' + (S.valittu + 1) : '');
 }
 
@@ -1661,7 +1661,7 @@ function valitse(n){
   if (!mallilista && (!BIISIT[n] || !BIISIT[n].nimi)){
     aanetKayntiin().then(() => naps(0.35));
     S.painettu = n; S.painoT = 0.10;
-    $('nyt').textContent = 'paikka ' + (n + 1) + ' on tyhjä';
+    $('nyt').textContent = 'slot ' + (n + 1) + ' is empty';
     return;
   }
   aanetKayntiin().then(() => {
@@ -1699,7 +1699,7 @@ function vaihtoValmis(){
        sanoo suoraan miksi mitään ei kuulu. */
     S.soi = true;
     paivitaNapit();
-    if (b) $('nyt').textContent = (S.valittu + 1) + '  ' + b.nimi + ' · ei äänitiedostoa';
+    if (b) $('nyt').textContent = (S.valittu + 1) + '  ' + b.nimi + ' \u00b7 no audio file';
     return;
   }
   paivitaNapit();
@@ -1709,8 +1709,8 @@ function paivitaNapit(){
   const b = BIISIT[S.valittu];
   if (S.valittu < 0){
     $('nyt').textContent = mallilista
-      ? 'mallilista — lataa omat biisit'
-      : ladattu + ' / ' + PAIKKOJA + ' paikkaa täynnä';
+      ? 'sample list \u2014 load your own tracks'
+      : ladattu + ' / ' + PAIKKOJA + ' slots filled';
     return;
   }
   $('nyt').textContent = (S.valittu + 1) + '  ' + (b ? b.nimi : '—') +
@@ -1794,7 +1794,7 @@ function paivitaLista(){
     const t = document.createElement('span');
     t.className = 't';
     const nimi = document.createElement('b');
-    nimi.textContent = on ? b.nimi : 'tyhjä';
+    nimi.textContent = on ? b.nimi : 'empty';
     const alle = document.createElement('span');
     alle.textContent = on ? (b.esittaja || '') : '';
     t.appendChild(nimi); t.appendChild(alle);
@@ -1901,9 +1901,9 @@ function paketinPohja(){
   return {
     laite: 'KJWhispers JB-2400',
     paikkoja: PAIKKOJA,
-    ohje: 'Täytä tiedosto-kenttä äänitiedoston nimellä ja valitse latauksessa ' +
-          'sekä tämä json että biisitiedostot. Jos soitin on verkossa, voit ' +
-          'käyttää aani-kenttää suorana osoitteena. Tyhjä paikka jää tyhjäksi.',
+    ohje: 'Put the audio file name in the tiedosto field, then pick both this ' +
+          'json and the audio files when loading. If the player is online you ' +
+          'can use the aani field as a direct address. An empty slot stays empty.',
     paikat: Array.from({ length: PAIKKOJA }, (_, i) => {
       const b = BIISIT[i];
       return {
@@ -1924,7 +1924,7 @@ $('paketti').addEventListener('click', () => {
   a.download = 'JB-2400_latauspaketti.json';
   a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-  $('nyt').textContent = 'latauspaketti tallennettu — täytä ja lataa takaisin';
+  $('nyt').textContent = 'package saved \u2014 fill it in and load it back';
 });
 
 /* Paketin lukeminen. Äänitiedostot tulevat samasta valinnasta ja
@@ -1962,8 +1962,8 @@ function lataaPaketti(pkt, aanet){
   S.valittu = -1; S.soi = false;
   if (el){ try { el.pause(); } catch(err){} }
 
-  const osat = ['paketti ladattu · ' + taytetty + ' / ' + PAIKKOJA];
-  if (puuttuu.length) osat.push(puuttuu.length + ' äänitiedostoa puuttui');
+  const osat = ['package loaded \u00b7 ' + taytetty + ' / ' + PAIKKOJA];
+  if (puuttuu.length) osat.push(puuttuu.length + ' audio files missing');
   $('nyt').textContent = osat.join(' · ');
   paivitaRuudukko();
 }
@@ -1981,7 +1981,7 @@ async function kasitteleTiedostot(e){
       const data = JSON.parse(await pkt.text());
       lataaPaketti(data, kaikki.filter(f => f !== pkt));
     } catch (err){
-      $('nyt').textContent = 'pakettia ei voitu lukea: ' + err.message;
+      $('nyt').textContent = 'the package could not be read: ' + err.message;
     }
     e.target.value = '';
     return;
@@ -2016,9 +2016,9 @@ async function kasitteleTiedostot(e){
   }
   ladattu = BIISIT.filter(b => b && b.nimi).length;
 
-  const osat = ['lisätty ' + lisatty];
+  const osat = ['added ' + lisatty];
   if (kaksoset)   osat.push(kaksoset + ' oli jo koneessa');
-  if (eiMahtunut) osat.push(eiMahtunut + ' ei mahtunut — kone on täynnä');
+  if (eiMahtunut) osat.push(eiMahtunut + ' did not fit \u2014 the machine is full');
   osat.push(ladattu + ' / ' + PAIKKOJA);
   $('nyt').textContent = osat.join(' · ');
   paivitaRuudukko();
@@ -2034,7 +2034,7 @@ $('tyhjenna').addEventListener('click', () => {
   mallilista = false; ladattu = 0;
   S.valittu = -1; S.soi = false;
   if (el){ try { el.pause(); } catch(err){} }
-  $('nyt').textContent = 'kaikki paikat tyhjennetty';
+  $('nyt').textContent = 'all slots cleared';
   paivitaRuudukko();
 });
 
@@ -2043,13 +2043,13 @@ $('poista').addEventListener('click', e => {
   poistoTila = !poistoTila;
   e.currentTarget.classList.toggle('on', poistoTila);
   $('nyt').textContent = poistoTila
-    ? 'poistotila päällä — napauta korttia niin paikka vapautuu'
-    : (ladattu + ' / ' + PAIKKOJA + ' paikkaa täynnä');
+    ? 'remove mode on \u2014 tap a card to free its slot'
+    : (ladattu + ' / ' + PAIKKOJA + ' slots filled');
 });
 
 function poistaPaikka(n){
   if (!BIISIT[n] || !BIISIT[n].nimi){
-    $('nyt').textContent = 'paikka ' + (n + 1) + ' on jo tyhjä';
+    $('nyt').textContent = 'slot ' + (n + 1) + ' is already empty';
     return;
   }
   const nimi = BIISIT[n].nimi;
@@ -2095,12 +2095,12 @@ async function vieJaettava(){
     if (b && b.nimi) mukaan.push({ i: i, b: b });
   }
   if (!mukaan.length){
-    $('nyt').textContent = 'koneessa ei ole biisejä jaettavaksi';
+    $('nyt').textContent = 'there are no tracks to share';
     return;
   }
 
   $('jaa').disabled = true;
-  $('nyt').textContent = 'kootaan jaettavaa tiedostoa…';
+  $('nyt').textContent = 'building the shareable file\u2026';
   const data = [];
   let koko = 0;
   try {
@@ -2113,15 +2113,15 @@ async function vieJaettava(){
       }
       koko += aani.length;
       if (koko > JAKO_RAJA){
-        $('nyt').textContent = 'liikaa ääntä yhteen tiedostoon (' +
-          (koko / 1048576).toFixed(0) + ' MB) — vie vähemmän biisejä tai siirrä ne palvelimelle';
+        $('nyt').textContent = 'too much audio for one file (' +
+          (koko / 1048576).toFixed(0) + ' MB) \u2014 export fewer tracks or move them to a server';
         $('jaa').disabled = false;
         return;
       }
       data.push({ paikka: i + 1, nimi: b.nimi, esittaja: b.esittaja || '', aani: aani });
     }
   } catch (err){
-    $('nyt').textContent = 'äänen upottaminen ei onnistunut: ' + err.message;
+    $('nyt').textContent = 'embedding the audio failed: ' + err.message;
     $('jaa').disabled = false;
     return;
   }
@@ -2149,7 +2149,7 @@ async function vieJaettava(){
   setTimeout(() => URL.revokeObjectURL(a.href), 4000);
 
   $('jaa').disabled = false;
-  $('nyt').textContent = 'jaettava tiedosto valmis · ' + data.length + ' biisiä · ' +
+  $('nyt').textContent = 'shareable file ready \u00b7 ' + data.length + ' tracks \u00b7 ' +
     (blob.size / 1048576).toFixed(1) + ' MB';
 }
 
@@ -2211,7 +2211,7 @@ function tyhjennaPaikka(n){
 function paikatMuuttui(viesti){
   ladattu = BIISIT.filter(b => b && b.nimi).length;
   paivitaRuudukko();
-  $('nyt').textContent = viesti || (ladattu + ' / ' + PAIKKOJA + ' paikkaa täynnä');
+  $('nyt').textContent = viesti || (ladattu + ' / ' + PAIKKOJA + ' slots filled');
 }
 
 /* Pudotus soluun n. Useampi tiedosto täyttää siitä eteenpäin. */
@@ -2219,7 +2219,7 @@ function pudota(n, tiedostot){
   const fs = Array.from(tiedostot).filter(onAani)
     .sort((a, b) => a.name.localeCompare(b.name, 'fi', { numeric: true }));
   if (!fs.length){
-    $('nyt').textContent = 'vain äänitiedostot kelpaavat (mp3, wav, m4a, ogg, flac)';
+    $('nyt').textContent = 'audio files only (mp3, wav, m4a, ogg, flac)';
     return;
   }
   let i = n, asetettu = 0, yli = 0;
@@ -2230,8 +2230,8 @@ function pudota(n, tiedostot){
   }
   aanetKayntiin();
   ladattu = BIISIT.filter(b => b && b.nimi).length;
-  paikatMuuttui('paikkaan ' + (n + 1) + ' asetettu ' + asetettu +
-    (yli ? ' · ' + yli + ' ei mahtunut' : '') + ' · ' + ladattu + ' / ' + PAIKKOJA);
+  paikatMuuttui('slot ' + (n + 1) + ' loaded with ' + asetettu +
+    (yli ? ' \u00b7 ' + yli + ' did not fit' : '') + ' \u00b7 ' + ladattu + ' / ' + PAIKKOJA);
 }
 
 function paivitaRuudukko(){
@@ -2245,10 +2245,10 @@ function paivitaRuudukko(){
     solu.classList.toggle('taysi', soiva);
     solu.classList.toggle('vajaa', nimetty && !soiva);
     solu.classList.toggle('tyhja', !nimetty);
-    solu.querySelector('.nimi').textContent = nimetty ? b.nimi : 'tyhjä';
+    solu.querySelector('.nimi').textContent = nimetty ? b.nimi : 'empty';
     solu.title = soiva ? (b.tiedosto || b.nimi)
-      : nimetty ? 'nimi on, äänitiedosto puuttuu — raahaa se tähän'
-                : 'raahaa tiedosto tähän';
+      : nimetty ? 'name is set, audio file missing \u2014 drag it here'
+                : 'drag a file here';
   }
 }
 
@@ -2260,7 +2260,7 @@ function paivitaRuudukko(){
     d.dataset.n = n;
     d.innerHTML = '<span class="nro">' + (n + 1) + '</span>' +
                   '<span class="nimi">tyhjä</span>' +
-                  '<button class="x" title="tyhjennä paikka">×</button>';
+                  '<button class="x" title="clear this slot">\u00d7</button>';
 
     d.addEventListener('dragover', e => { e.preventDefault(); d.classList.add('yli'); });
     d.addEventListener('dragenter', e => { e.preventDefault(); d.classList.add('yli'); });
@@ -2273,7 +2273,7 @@ function paivitaRuudukko(){
     d.addEventListener('click', e => {
       if (e.target.classList.contains('x')){
         tyhjennaPaikka(n);
-        paikatMuuttui('paikka ' + (n + 1) + ' tyhjennetty · ' +
+        paikatMuuttui('slot ' + (n + 1) + ' cleared \u00b7 ' +
           BIISIT.filter(b => b && b.nimi).length + ' / ' + PAIKKOJA);
         return;
       }
@@ -2338,13 +2338,13 @@ function paivitaAani(){
     const n = $('aani');
     if (n) n.style.display = 'none';
     const s = document.querySelector('#ohjaus .selite');
-    if (s) s.innerHTML = '<b>Ääni</b><span>puhelimen napeista</span>';
+    if (s) s.innerHTML = '<b>Volume</b><span>use the phone buttons</span>';
     return;
   }
   paivitaAani();
   if (!window.Saadin || !$('aani')) return;
   Saadin.lisaa({
-    id: 'aani', nimi: 'Äänenvoimakkuus', el: $('aani'),
+    id: 'aani', nimi: 'Volume', el: $('aani'),
     min: 0, max: 1, askel: 0.01,
     lue: () => aaniTaso,
     aseta: v => { aaniTaso = v; paivitaAani(); },
@@ -2420,7 +2420,7 @@ requestAnimationFrame(askel);
 })();
 </script>
 
-<a class="musa-paluu" href="../" aria-label="Takaisin aulaan">
+<a class="musa-paluu" href="../" aria-label="Back to the lobby">
 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
  stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"
  aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a>

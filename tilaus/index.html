@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tilaushuone</title>
-<meta name="description" content="KJWhispers Tilauslaulut — oma laulu omasta tarinasta. Kerro toiveesi, saat maksuttoman tarjouksen.">
+<title>Custom Songs</title>
+<meta name="description" content="KJWhispers Custom Songs — your own song from your own story. Tell me what you want and get a free quote.">
 <style>
 /* ======================================================================
    TILAUSHUONE — KJWhispers Tilauslaulut
@@ -308,26 +308,26 @@ footer a{color:#8a7a66}
 <div class="kuori">
 
   <header>
-    <a class="takaisin" href="../">&larr; Takaisin aulaan</a>
+    <a class="takaisin" href="../">&larr; Back to the lobby</a>
     <p class="merkki">KJWhispers</p>
-    <h1>Tilauslaulut</h1>
-    <p class="iskulause">Sinun tarinasi. Sinun laulusi.</p>
+    <h1>Custom Songs</h1>
+    <p class="iskulause">Your story. Your song.</p>
   </header>
 
   <hr class="viiva">
 
   <div class="lupaus">
-    <p>Kerro, mik&auml; hetki on t&auml;rke&auml;. Saat tarjouksen omaan lauluun
-       &mdash; ilman sitoutumista.</p>
-    <p class="hinta">Henkil&ouml;kohtaiset laulut <b>25&ndash;89 &euro;</b></p>
-    <small>Tiedustelu ja tarjous ovat maksuttomia. N&auml;et lopullisen hinnan
-      ja ty&ouml;n sis&auml;ll&ouml;n ennen kuin maksat mit&auml;&auml;n.</small>
+    <p>Tell me which moment matters. You get a quote for a song of your own
+       &mdash; with no commitment.</p>
+    <p class="hinta">Personal songs <b>&euro;25&ndash;89</b></p>
+    <small>Asking and quoting are free. You see the final price and what the
+      work includes before you pay anything.</small>
   </div>
 
   <section id="esimerkit" hidden>
-    <h2>Kuuntele esimerkkej&auml;</h2>
-    <p class="johdanto">Lyhyt katkelma jokaisesta. N&auml;m&auml; ovat valmiita
-      lauluja, ja ne kertovat millaista j&auml;lke&auml; tilauksesta syntyy.</p>
+    <h2>Listen to examples</h2>
+    <p class="johdanto">A short excerpt of each. These are finished songs, and
+      they show the kind of work a commission produces.</p>
     <div class="naytteet" id="naytteet"></div>
     <p class="naytevirhe" id="naytevirhe" hidden></p>
   </section>
@@ -335,104 +335,104 @@ footer a{color:#8a7a66}
   <!-- Videonäyte avautuu omaan kehykseensä. Kortti on neliö, video
        pystykuva: neliöön pakotettuna siitä näkyisi kolmannes. -->
   <div id="videokehys" hidden>
-    <button type="button" id="suljeVideo" aria-label="Sulje video">&times;</button>
+    <button type="button" id="suljeVideo" aria-label="Close video">&times;</button>
     <video id="naytevideo" playsinline controls preload="none"></video>
     <p id="videonimi"></p>
   </div>
 
   <section>
-    <h2>N&auml;in se etenee</h2>
+    <h2>How it works</h2>
     <ol class="polku">
-      <li><b>Kerrot toiveesi.</b> Lyhyt lomake: tilaisuus, tarina, tyyli ja
-          aikataulu. Muutama minuutti riitt&auml;&auml;.</li>
-      <li><b>Saat kiinte&auml;n tarjouksen.</b> Siin&auml; lukee hinta,
-          toimitusp&auml;iv&auml;, mit&auml; tiedostoja saat ja kuinka monta
-          korjauskierrosta sis&auml;ltyy.</li>
-      <li><b>Hyv&auml;ksyt ja maksat.</b> Vasta t&auml;ss&auml; vaiheessa.
-          Jos tarjous ei miellyt&auml;, asia j&auml;&auml; siihen.</li>
-      <li><b>Saat laulun.</b> Latauslinkki ja QR-koodi, joka avaa oman
-          kuuntelusivun. QR kuuluu perustoimitukseen, siit&auml; ei
-          veloiteta erikseen.</li>
+      <li><b>You tell me what you want.</b> A short form: the occasion, the
+          story, the style and the schedule. A few minutes is enough.</li>
+      <li><b>You get a fixed quote.</b> It states the price, the delivery
+          date, which files you get and how many rounds of revisions are
+          included.</li>
+      <li><b>You accept and pay.</b> Not before this point. If the quote does
+          not suit you, that is where it ends.</li>
+      <li><b>You get the song.</b> A download link and a QR code that opens
+          its own listening page. The QR code is part of the basic delivery
+          and is not charged separately.</li>
     </ol>
   </section>
 
   <section>
-    <h2>Kerro toiveesi</h2>
-    <p class="johdanto">V&auml;h&auml;n kysymyksi&auml; ensin. Tarkennetaan
-      yhdess&auml; sen j&auml;lkeen.</p>
+    <h2>Tell me what you want</h2>
+    <p class="johdanto">A few questions first. We work out the details
+      together afterwards.</p>
 
     <form id="lomake" novalidate>
 
       <fieldset>
-        <legend><span class="nro">1.</span>Mihin tilaisuuteen?</legend>
+        <legend><span class="nro">1.</span>What is the occasion?</legend>
         <div class="sirut" id="tilaisuus"></div>
       </fieldset>
 
       <fieldset>
-        <legend><span class="nro">2.</span>Mit&auml; laulussa halutaan kertoa?</legend>
-        <p class="vihje">Kenelle laulu tulee, mit&auml; muistoja tai sanoja
-          siihen pit&auml;isi saada, hauskat yksityiskohdat. T&auml;m&auml; on
-          laulun t&auml;rkein osa &mdash; mit&auml; enemm&auml;n kerrot, sit&auml;
-          henkil&ouml;kohtaisemmaksi se tulee.</p>
+        <legend><span class="nro">2.</span>What should the song say?</legend>
+        <p class="vihje">Who the song is for, which memories or words should
+          go into it, the funny details. This is the most important part of
+          the song &mdash; the more you tell me, the more personal it
+          becomes.</p>
         <label class="kentta">
-          <textarea id="tarina" maxlength="1200" aria-label="Laulun tarina"
+          <textarea id="tarina" maxlength="1200" aria-label="The story of the song"
             aria-describedby="laskuri"
-            placeholder="Esimerkiksi: Aino t&auml;ytt&auml;&auml; 50 ja on hoitanut
-puutarhaansa koko ik&auml;ns&auml;. H&auml;net tunnetaan siit&auml;,
-ett&auml; h&auml;n puhuu kasveille..."></textarea>
+            placeholder="For example: Aino is turning 50 and has tended her
+garden her whole life. She is known for talking
+to her plants..."></textarea>
         </label>
         <p class="laskuri" id="laskuri">0 / 1200</p>
         <p class="virhe" id="virhe-tarina"></p>
       </fieldset>
 
       <fieldset>
-        <legend><span class="nro">3.</span>Millainen musiikkityyli?</legend>
-        <p class="vihje">Valitse yksi tai useampi. Jos et tied&auml;, valitse
-          &rdquo;ehdottakaa te&rdquo;.</p>
+        <legend><span class="nro">3.</span>What kind of musical style?</legend>
+        <p class="vihje">Pick one or several. If you are not sure, pick
+          &rdquo;you choose&rdquo;.</p>
         <div class="sirut" id="tyyli"></div>
       </fieldset>
 
       <fieldset>
-        <legend><span class="nro">4.</span>Mill&auml; kielell&auml; ja kuka laulaa?</legend>
-        <p class="vihje">Kaksikielinen laulu onnistuu my&ouml;s &mdash; sovitaan
-          silloin, mitk&auml; osat ovat kummallakin kielell&auml;.</p>
+        <legend><span class="nro">4.</span>Which language, and who sings?</legend>
+        <p class="vihje">A bilingual song works too &mdash; we then agree
+          which parts are in which language.</p>
         <div class="sirut" id="kieli"></div>
         <label class="kentta" style="margin-top:16px">
-          <span>Laulu&auml;&auml;ni</span>
+          <span>Singing voice</span>
           <select id="aani">
-            <option value="">Ehdottakaa te</option>
-            <option>Naissolisti</option>
-            <option>Miessolisti</option>
-            <option>Duetto</option>
-            <option>Tytt&ouml;ryhm&auml;</option>
-            <option>Poikaryhm&auml;</option>
-            <option>Sekaryhm&auml;</option>
+            <option value="">You choose</option>
+            <option>Female solo</option>
+            <option>Male solo</option>
+            <option>Duet</option>
+            <option>Girls&rsquo; group</option>
+            <option>Boys&rsquo; group</option>
+            <option>Mixed group</option>
           </select>
         </label>
       </fieldset>
 
       <fieldset>
-        <legend><span class="nro">5.</span>Milloin tarvitset sen?</legend>
+        <legend><span class="nro">5.</span>When do you need it?</legend>
         <label class="kentta">
-          <span>Toivottu toimitusp&auml;iv&auml;</span>
+          <span>Preferred delivery date</span>
           <input type="date" id="paiva">
         </label>
         <label class="ruutu">
           <input type="checkbox" id="kiire">
-          <span>Kiireellinen &mdash; kerro tarjouksessa onnistuuko ja
-            mit&auml; se maksaa</span>
+          <span>Urgent &mdash; say in the quote whether it is possible and
+            what it costs</span>
         </label>
       </fieldset>
 
       <fieldset>
-        <legend>Yhteystietosi</legend>
+        <legend>Your contact details</legend>
         <div class="kentat2">
           <label class="kentta">
-            <span>Nimi</span>
+            <span>Name</span>
             <input type="text" id="nimi" autocomplete="name">
           </label>
           <label class="kentta">
-            <span>S&auml;hk&ouml;posti</span>
+            <span>Email</span>
             <input type="email" id="sposti" autocomplete="email"
                    inputmode="email">
           </label>
@@ -440,37 +440,36 @@ ett&auml; h&auml;n puhuu kasveille..."></textarea>
         <p class="virhe" id="virhe-yhteys"></p>
         <label class="ruutu">
           <input type="checkbox" id="lupa">
-          <span>Toiveeni saa k&auml;sitell&auml; tarjouksen tekemist&auml;
-            varten. Tietoja ei k&auml;ytet&auml; muuhun eik&auml; luovuteta
-            eteenp&auml;in.</span>
+          <span>My request may be processed in order to prepare a quote.
+            The information is not used for anything else and is not passed
+            on to anyone.</span>
         </label>
         <p class="virhe" id="virhe-lupa"></p>
       </fieldset>
 
       <div class="napit">
-        <button type="submit" class="paa">Pyyd&auml; maksuton tarjous</button>
-        <button type="button" class="sivu" id="kopioi">Kopioi teksti</button>
+        <button type="submit" class="paa">Request a free quote</button>
+        <button type="button" class="sivu" id="kopioi">Copy the text</button>
       </div>
 
       <p class="kuittaus" id="kuittaus" hidden></p>
 
       <p class="eiviela">
-        Toiveen l&auml;hett&auml;minen <b>ei ole viel&auml; tilaus</b> eik&auml;
-        sido sinua mihinkään. Painike avaa oman s&auml;hk&ouml;postisi, jossa
-        viesti on valmiina &mdash; n&auml;et sen ennen l&auml;hett&auml;mist&auml;
-        ja voit vielä muokata sitä. Mit&auml;&auml;n ei tallenneta t&auml;lle
-        sivustolle.
+        Sending your request <b>is not an order yet</b> and does not commit
+        you to anything. The button opens your own email program with the
+        message ready &mdash; you see it before sending and can still edit
+        it. Nothing is stored on this site.
       </p>
 
     </form>
   </section>
 
   <p class="rehellisyys">
-    Laulut tehd&auml;&auml;n omina teoksina: oma sanoitus, oma sovitus ja
-    nykyaikaiset musiikkity&ouml;kalut, teko&auml;ly mukaan lukien. Emme kopioi
-    tunnetun artistin &auml;&auml;nt&auml; emmek&auml; kappaletta, vaan teemme
-    toivotun tyylilajin omana ty&ouml;n&auml;. Yrityskäytöstä, mainoksista ja
-    laajemmasta jakelusta sovitaan aina erikseen.
+    The songs are made as original works: original lyrics, original
+    arrangement and modern music tools, AI among them. We do not copy a known
+    artist&rsquo;s voice or a known track; we make the requested style as our
+    own work. Commercial use, advertising and wider distribution are always
+    agreed separately.
   </p>
 
   <footer>
@@ -491,14 +490,14 @@ ett&auml; h&auml;n puhuu kasveille..."></textarea>
   /* ---- valinnat ------------------------------------------------------
      Listat ovat täällä yhtenä paikkana, jotta uuden tilaisuuden tai
      kielen lisääminen on yksi rivi eikä HTML-kaivuuta. */
-  var TILAISUUDET = ['Syntym&auml;p&auml;iv&auml;','H&auml;&auml;t',
-    'Vuosip&auml;iv&auml;','Yst&auml;v&auml;lle','Kiitos','Muistolaulu',
-    'Lemmikki','Lapselle','Yritys tai tapahtuma','Muu'];
-  var TYYLIT = ['Pop','Balladi','Country','Rock','Jazz / soul','House',
-    'Techno','Latin','Highland / pohjoinen','K-pop','C-pop','J-pop',
-    'Lastenlaulu','Ehdottakaa te'];
-  var KIELET = ['Suomi','Englanti','Ruotsi','Espanja','Mandariinikiina',
-    'Kantoninkiina','Japani','Korea','Muu kieli'];
+  var TILAISUUDET = ['Birthday','Wedding',
+    'Anniversary','For a friend','Thank you','In memory',
+    'A pet','For a child','Business or event','Something else'];
+  var TYYLIT = ['Pop','Ballad','Country','Rock','Jazz / soul','House',
+    'Techno','Latin','Highland / northern','K-pop','C-pop','J-pop',
+    'Children\u2019s song','You choose'];
+  var KIELET = ['Finnish','English','Swedish','Spanish','Mandarin Chinese',
+    'Cantonese','Japanese','Korean','Another language'];
 
   function teksti(s){           /* &auml; -> ä, ilman innerHTML:ää */
     var d = document.createElement('textarea');
@@ -575,8 +574,8 @@ ett&auml; h&auml;n puhuu kasveille..."></textarea>
     seis();
     if (kortti) kortti.classList.add('rikki');
     var v = document.getElementById('naytevirhe');
-    v.textContent = '”' + nimi + '” ei lähtenyt soimaan. Äänitiedostoa ei '
-                  + 'saatu ladattua — muut näytteet toimivat silti.';
+    v.textContent = '\u201d' + nimi + '\u201d would not play. The audio file '
+                  + 'could not be loaded \u2014 the other samples still work.';
     v.hidden = false;
   });
 
@@ -720,7 +719,7 @@ ett&auml; h&auml;n puhuu kasveille..."></textarea>
   video.addEventListener('error', function (){
     suljeVideo();
     var v = document.getElementById('naytevirhe');
-    v.textContent = 'Videota ei saatu ladattua. Muut näytteet toimivat silti.';
+    v.textContent = 'The video could not be loaded. The other samples still work.';
     v.hidden = false;
   });
 
@@ -747,16 +746,16 @@ ett&auml; h&auml;n puhuu kasveille..."></textarea>
 
   function viesti(a){
     var r = [];
-    r.push('Tarjouspyyntö — KJWhispers Tilauslaulut');
+    r.push('Quote request \u2014 KJWhispers Custom Songs');
     r.push('');
-    r.push('Tilaisuus: ' + (a.tilaisuus || '(ei valittu)'));
-    r.push('Tyyli: ' + (a.tyyli.length ? a.tyyli.join(', ') : '(ehdottakaa te)'));
-    r.push('Kieli: ' + (a.kieli.length ? a.kieli.join(', ') : '(ehdottakaa te)'));
-    r.push('Lauluääni: ' + (a.aani || '(ehdottakaa te)'));
-    r.push('Toivottu toimituspäivä: ' + (a.paiva || '(ei kiirettä)') +
-           (a.kiire ? '  — KIIREELLINEN' : ''));
+    r.push('Occasion: ' + (a.tilaisuus || '(not selected)'));
+    r.push('Style: ' + (a.tyyli.length ? a.tyyli.join(', ') : '(you choose)'));
+    r.push('Language: ' + (a.kieli.length ? a.kieli.join(', ') : '(you choose)'));
+    r.push('Singing voice: ' + (a.aani || '(you choose)'));
+    r.push('Preferred delivery date: ' + (a.paiva || '(no hurry)') +
+           (a.kiire ? '  \u2014 URGENT' : ''));
     r.push('');
-    r.push('Tarina:');
+    r.push('Story:');
     r.push(a.tarina);
     r.push('');
     r.push('---');
@@ -771,17 +770,17 @@ ett&auml; h&auml;n puhuu kasveille..."></textarea>
     nayta('virhe-tarina'); nayta('virhe-yhteys'); nayta('virhe-lupa');
     var eka = null;
     if (a.tarina.length < 15){
-      nayta('virhe-tarina', 'Kerro vielä muutamalla lauseella, mistä laulun ' +
-            'pitäisi kertoa — ilman sitä tarjousta ei voi tehdä.');
+      nayta('virhe-tarina', 'Tell me in a few more sentences what the song ' +
+            'should be about \u2014 without that I cannot make a quote.');
       eka = eka || tarina;
     }
     if (!a.nimi || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(a.sposti)){
-      nayta('virhe-yhteys', 'Tarvitsen nimesi ja toimivan sähköpostiosoitteen, ' +
-            'jotta voin vastata.');
+      nayta('virhe-yhteys', 'I need your name and a working email address ' +
+            'so that I can reply.');
       eka = eka || document.getElementById(a.nimi ? 'sposti' : 'nimi');
     }
     if (!document.getElementById('lupa').checked){
-      nayta('virhe-lupa', 'Rastita lupa, niin voin käsitellä toiveesi.');
+      nayta('virhe-lupa', 'Tick the permission box so I can process your request.');
       eka = eka || document.getElementById('lupa');
     }
     if (eka){ eka.focus(); eka.scrollIntoView({ block: 'center' }); }
@@ -798,7 +797,7 @@ ett&auml; h&auml;n puhuu kasveille..."></textarea>
     e.preventDefault();
     var a = arvot();
     if (!kelpaa(a)) return;
-    var otsikko = 'Tarjouspyyntö: ' + (a.tilaisuus || 'oma laulu') +
+    var otsikko = 'Quote request: ' + (a.tilaisuus || 'a song of my own') +
                   (a.nimi ? ' — ' + a.nimi : '');
     var url = 'mailto:' + POSTI +
               '?subject=' + encodeURIComponent(otsikko) +
@@ -807,20 +806,20 @@ ett&auml; h&auml;n puhuu kasveille..."></textarea>
        sähköpostiohjelmissa. Silloin kopiointi on ainoa rehellinen tie. */
     if (url.length > 1900){
       kopioiTeksti(viesti(a),
-        'Tarinasi on niin pitkä, ettei se mahdu suoraan sähköpostilinkkiin. ' +
-        'Kopioin sen leikepöydälle — liitä se viestiin osoitteeseen ' + POSTI + '.');
+        'Your story is too long to fit straight into an email link. ' +
+        'I copied it to the clipboard \u2014 paste it into a message to ' + POSTI + '.');
       return;
     }
-    kuittaa('Avaan sähköpostisi. Viesti on valmiina — lue se läpi ja paina ' +
-            'lähetä. Vastaan yleensä parissa päivässä.');
+    kuittaa('Opening your email program. The message is ready \u2014 read it and press ' +
+            'send. I usually reply within a couple of days.');
     window.location.href = url;
   });
 
   function kopioiTeksti(t, sanoma){
     var valmis = function (){ kuittaa(sanoma); };
     var eiOnnistu = function (){
-      kuittaa('Kopiointi ei onnistunut tässä selaimessa. Maalaa teksti ' +
-              'käsin tai lähetä viesti osoitteeseen ' + POSTI + '.');
+      kuittaa('Copying did not work in this browser. Select the text ' +
+              'by hand or send a message to ' + POSTI + '.');
     };
     if (navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(t).then(valmis, eiOnnistu);
@@ -841,15 +840,15 @@ ett&auml; h&auml;n puhuu kasveille..."></textarea>
   document.getElementById('kopioi').addEventListener('click', function (){
     var a = arvot();
     kopioiTeksti(viesti(a),
-      'Teksti on leikepöydällä. Liitä se sähköpostiin, viestiin tai ' +
-      'mihin haluat — osoite on ' + POSTI + '.');
+      'The text is on the clipboard. Paste it into an email, a message or ' +
+      'wherever you like \u2014 the address is ' + POSTI + '.');
   });
 
 })();
 </script>
 
 
-<a class="musa-paluu" href="../" aria-label="Takaisin aulaan">
+<a class="musa-paluu" href="../" aria-label="Back to the lobby">
 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
  stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"
  aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a>

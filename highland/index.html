@@ -147,9 +147,28 @@ h1{
 #solmu{display:block;margin:0 auto 2px;width:18px;height:18px;opacity:.85}
 
 #nyt{
-  flex:0 0 auto;text-align:center;font-size:12px;color:#8ba3b0;
-  padding-top:8px;min-height:17px;
+  flex:1 1 auto;min-width:0;text-align:center;font-size:12px;color:#8ba3b0;
+  min-height:17px;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+
+/* Alarivi: nuppi kertoo yhden raidan kerrallaan, lista kertoo mita
+   muuta on. Nappi on nupin rinnalla eika sen tilalla. */
+#alarivi{display:flex;align-items:center;gap:8px;padding-top:8px}
+#listaNappi{
+  flex:0 0 auto;appearance:none;cursor:pointer;
+  background:linear-gradient(#3c4650,#2a323a);
+  border:1px solid #55646f;border-radius:7px;color:#cfe0ea;
+  font:600 10px/1 "Segoe UI",system-ui,sans-serif;
+  letter-spacing:.14em;text-transform:uppercase;padding:7px 10px;
+}
+#listaNappi:hover{background:linear-gradient(#45505b,#303943)}
+#listaNappi:focus-visible{outline:2px solid #8ba3b0;outline-offset:2px}
+
+/* Jaettu lista huoneen vareihin. */
+:root{
+  --listaTausta:#1a2026; --listaReuna:#55646f;
+  --listaTeksti:#dce7ee; --listaKorostus:#8ed0ea;
 }
 @media (max-width:400px){
   #paneeli{gap:6px;padding:9px 6px 7px}
@@ -196,7 +215,7 @@ h1{
     <div id="naytto">
       <div id="merkki"><b>KJWhispers</b><span>Northern Roots</span></div>
       <canvas id="palkit" aria-hidden="true"></canvas>
-      <div id="nimi">valitse kappale</div>
+      <div id="nimi">select a track</div>
       <div id="alanimi"></div>
     </div>
 
@@ -215,7 +234,7 @@ h1{
     <div id="paneeli">
       <div class="pylvas">
         <div id="aani" class="nuppi" role="slider" tabindex="0"
-             aria-label="Äänenvoimakkuus" aria-valuemin="0" aria-valuemax="100">
+             aria-label="Volume" aria-valuemin="0" aria-valuemax="100">
           <span class="osoitin"></span>
         </div>
         <div class="selite">Volume</div>
@@ -238,18 +257,21 @@ h1{
 
       <div class="pylvas">
         <div id="valitsin" class="nuppi" role="slider" tabindex="0"
-             aria-label="Kappaleen valinta" aria-valuemin="1" aria-valuemax="1">
+             aria-label="Track selection" aria-valuemin="1" aria-valuemax="1">
           <span class="osoitin"></span>
         </div>
         <div class="selite">Select</div>
       </div>
     </div>
-    <div id="nyt">valitse kappale</div>
+    <div id="alarivi">
+      <button type="button" id="listaNappi" aria-haspopup="dialog">Tracks</button>
+      <div id="nyt">select a track</div>
+    </div>
   </div>
 
 </div>
 
-<script src="../soitin.js?v=716633fd"></script>
+<script src="../soitin.js?v=8e92747f"></script>
 <script>
 'use strict';
 var $ = function (id){ return document.getElementById(id); };
@@ -410,20 +432,20 @@ function paivitaTeksti(){
   var n = $('nimi');
   n.classList.toggle('selaa', selaa);
   if (!BIISIT.length){
-    n.textContent = 'ei kappaleita';
+    n.textContent = 'no tracks';
     $('alanimi').textContent = '';
-    $('nyt').textContent = 'kokoelma on tyhjä';
+    $('nyt').textContent = 'the collection is empty';
   } else if (!nayta){
-    n.textContent = 'valitse kappale';
-    $('alanimi').textContent = 'käännä SELECT-nupista';
-    $('nyt').textContent = 'valitse kappale';
+    n.textContent = 'select a track';
+    $('alanimi').textContent = 'turn the SELECT knob';
+    $('nyt').textContent = 'select a track';
   } else {
     n.textContent = nayta.nimi;
     $('alanimi').textContent =
       (selaa ? (osoitin + 1) + ' / ' + BIISIT.length
              : (nayta.alarivi || mmss(nayta.kesto)));
     $('nyt').textContent = selaa
-      ? 'valitse: ' + nayta.nimi
+      ? 'select: ' + nayta.nimi
       : (soi ? '▶ ' : '‖ ') + nayta.nimi;
   }
   var v = $('valitsin');
@@ -533,7 +555,7 @@ function paivitaAani(){
   paivitaAani();
   if (!window.Saadin || !$('aani')) return;
   window.Saadin.lisaa({
-    id: 'aani', nimi: 'Äänenvoimakkuus', el: $('aani'),
+    id: 'aani', nimi: 'Volume', el: $('aani'),
     min: 0, max: 1, askel: 0.01,
     lue: function (){ return aaniTaso; },
     aseta: function (v){ aaniTaso = v; paivitaAani(); },
@@ -564,7 +586,7 @@ function merkitseSelaus(){
   paivitaTeksti();
   if (!window.Saadin || !$('valitsin')) return;
   window.Saadin.lisaa({
-    id: 'valitsin', nimi: 'Kappale', el: $('valitsin'),
+    id: 'valitsin', nimi: 'Track', el: $('valitsin'),
     min: 0, max: 1, askel: 0.0001,
     lue: function (){
       return BIISIT.length > 1 ? osoitin / (BIISIT.length - 1) : 0;
@@ -584,9 +606,25 @@ function merkitseSelaus(){
   });
 })();
 
+/* Lista nupin rinnalle. Nuppi nayttaa yhden raidan kerrallaan, eika
+   kolmeakymmenta raitaa loyda kaantamalla. */
+(function kytkeLista(){
+  var nappi = $('listaNappi');
+  if (!window.Lista || !nappi){ if (nappi) nappi.hidden = true; return; }
+  window.Lista.kytke({
+    nappi: nappi,
+    otsikko: 'Highland Sessions',
+    tyhja: 'No tracks in this room yet.',
+    hae: function (){ return BIISIT; },
+    nyt: function (){ return kohta; },
+    valitse: function (i){ soita(i); }
+  });
+})();
+
 /* Nuolinäppäimet siirtävät raidasta toiseen suoraan. */
 document.addEventListener('keydown', function (e){
   if (window.Saadin && window.Saadin.auki) return;
+  if (window.Lista && window.Lista.auki) return;
   if (e.key === 'ArrowRight'){ soita(kohta + 1); e.preventDefault(); }
   else if (e.key === 'ArrowLeft'){ soita(kohta - 1); e.preventDefault(); }
 });
@@ -623,7 +661,7 @@ requestAnimationFrame(askel);
 })();
 </script>
 
-<a class="musa-paluu" href="../" aria-label="Takaisin aulaan">
+<a class="musa-paluu" href="../" aria-label="Back to the lobby">
 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
  stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"
  aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a>

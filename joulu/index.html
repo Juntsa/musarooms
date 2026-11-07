@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#140c06">
-<title>Joulu &mdash; Rees-1000</title>
+<title>Christmas &mdash; Rees-1000</title>
 <style>
 :root{
   --tausta:#140c06;
@@ -156,7 +156,7 @@ footer{margin-top:40px;text-align:center;color:#6f5c44;font-size:11.5px;letter-s
 <div class="sivu">
 
   <h1>Rees&#8209;1000</h1>
-  <p class="alaotsikko">Joulu &middot; 15.11.&ndash;6.1.</p>
+  <p class="alaotsikko">Christmas &middot; Nov 15 &ndash; Jan 6</p>
 
   <div class="kaappi" id="kaappi">
     <img class="pohja" src="../luukut/joulu-kaappi.jpg" width="900" height="1199"
@@ -173,13 +173,13 @@ footer{margin-top:40px;text-align:center;color:#6f5c44;font-size:11.5px;letter-s
   </div>
 
   <div class="ohjain">
-    <button class="nappi" id="edellinen" type="button" aria-label="Edellinen" disabled>
+    <button class="nappi" id="edellinen" type="button" aria-label="Previous" disabled>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h2.6v14H7zM19 5l-9 7 9 7z"/></svg>
     </button>
-    <button class="nappi iso" id="soita" type="button" aria-label="Soita" disabled>
+    <button class="nappi iso" id="soita" type="button" aria-label="Play" disabled>
       <svg viewBox="0 0 24 24" aria-hidden="true" id="kuvake"><path d="M7 4l13 8-13 8z"/></svg>
     </button>
-    <button class="nappi" id="seuraava" type="button" aria-label="Seuraava" disabled>
+    <button class="nappi" id="seuraava" type="button" aria-label="Next" disabled>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.4 5H17v14h-2.6zM5 5l9 7-9 7z"/></svg>
     </button>
   </div>
@@ -190,14 +190,14 @@ footer{margin-top:40px;text-align:center;color:#6f5c44;font-size:11.5px;letter-s
 
   <p class="virhe" id="virhe" hidden></p>
 
-  <h2>Laulut</h2>
+  <h2>Songs</h2>
   <ol class="lista" id="lista"></ol>
-  <p class="tyhja" id="tyhja">Ladataan&hellip;</p>
+  <p class="tyhja" id="tyhja">Loading&hellip;</p>
 
   <footer>KJWhispers &middot; omaa musiikkia</footer>
 </div>
 
-<script src="../soitin.js?v=716633fd"></script>
+<script src="../soitin.js?v=8e92747f"></script>
 <script>
 'use strict';
 (function (){
@@ -346,7 +346,7 @@ function merkitse(){
   $('kuvake').innerHTML = soi
     ? '<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>'
     : '<path d="M7 4l13 8-13 8z"/>';
-  $('soita').setAttribute('aria-label', soi ? 'Tauko' : 'Soita');
+  $('soita').setAttribute('aria-label', soi ? 'Pause' : 'Play');
   var b = BIISIT[kohta];
   /* Tyhja alarivi on sitkea paikka tehda virhe: teksti() pakenee &-merkin,
      joten "&nbsp;" paatyisi sivulle kirjaimina. Valilyonti riittaa, kun
@@ -414,8 +414,8 @@ el.addEventListener('error', function (){
   var rivi = $('lista').children[kohta];
   if (rivi) rivi.classList.add('rikki');
   var b = BIISIT[kohta];
-  virhe('”' + (b ? b.nimi : 'Laulu') + '” ei lähtenyt soimaan. '
-      + 'Äänitiedostoa ei saatu ladattua — muut laulut toimivat silti.');
+  virhe('\u201d' + (b ? b.nimi : 'This song') + '\u201d would not play. '
+      + 'The audio file could not be loaded \u2014 the other songs still work.');
 });
 
 $('soita').addEventListener('click', function (){
@@ -452,7 +452,7 @@ function piirra(){
   var on = BIISIT.length > 0;
   $('soita').disabled = $('edellinen').disabled = $('seuraava').disabled = !on;
   $('tyhja').hidden = on;
-  if (!on) $('tyhja').textContent = 'Lauluja ei ole vielä tässä huoneessa.';
+  if (!on) $('tyhja').textContent = 'No songs in this room yet.';
   if (on) valitse(0, false);
 }
 
@@ -467,14 +467,14 @@ function piirra(){
     .catch(function (){
       BIISIT = [];
       piirra();
-      $('tyhja').textContent = 'Laululistaa ei saatu ladattua.';
+      $('tyhja').textContent = 'The song list could not be loaded.';
     });
 })();
 
 })();
 </script>
 
-<a class="musa-paluu" href="../" aria-label="Takaisin aulaan">
+<a class="musa-paluu" href="../" aria-label="Back to the lobby">
 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
  stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"
  aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a>

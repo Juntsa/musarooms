@@ -388,7 +388,7 @@
 
   W.addEventListener('popstate', function () { if (hAuki) huoneSulje(); });
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && hAuki && !Saadin.auki) {
+    if (e.key === 'Escape' && hAuki && !Saadin.auki && !lAuki) {
       if (history.state && history.state.musaHuone) history.back();
       else huoneSulje();
     }
@@ -413,6 +413,200 @@
     }
   };
 
+  /* ==================================================================
+   * Lista — biisiluettelo nupin rinnalle
+   *
+   * Nuppi on hyva ele mutta huono hakemisto: Highlandissa on 30 raitaa
+   * ja Countryssa 25, eika kaantamalla nae mita muuta tarjolla on.
+   * Lista ei korvaa nuppia, se kertoo mita nupin takana on.
+   *
+   * Jaettu siksi etta molemmat huoneet saavat saman eleen ja saman
+   * nappaimistokaytoksen. Huone antaa vain datan ja valinnan.
+   * ================================================================== */
+
+  var lJuuri = null, lSisus = null, lOtsikko = null;
+  var lAuki = false, lMaarittely = null, lPalaa = null;
+
+  function lTyyli(){
+    if (document.getElementById('musaListaTyyli')) return;
+    var s = document.createElement('style');
+    s.id = 'musaListaTyyli';
+    /* Varit tulevat huoneen omista muuttujista jos ne ovat olemassa,
+       muuten neutraali tumma. Nain sama lista sopii seka Countryn
+       ruskeaan ettei Highlandin liuskekiveen ilman omaa kopiota. */
+    s.textContent = [
+      '#musaLista{position:fixed;inset:0;z-index:9100;display:none}',
+      '#musaLista.auki{display:flex;align-items:flex-end;justify-content:center}',
+      '@media (min-width:600px){#musaLista.auki{align-items:center}}',
+      '#musaLista .ml-tausta{position:absolute;inset:0;background:rgba(6,5,4,.82)}',
+      '#musaLista .ml-paneeli{position:relative;display:flex;flex-direction:column;',
+        'width:min(460px,100%);max-height:min(76vh,620px);',
+        'background:var(--listaTausta,#1b1612);',
+        'border:1px solid var(--listaReuna,#6a543a);',
+        'border-radius:14px 14px 0 0;overflow:hidden;',
+        'box-shadow:0 -10px 40px rgba(0,0,0,.6)}',
+      '@media (min-width:600px){#musaLista .ml-paneeli{border-radius:14px}}',
+      '#musaLista .ml-yla{display:flex;align-items:center;gap:10px;',
+        'padding:12px 14px;border-bottom:1px solid var(--listaReuna,#6a543a)}',
+      '#musaLista .ml-otsikko{flex:1;margin:0;',
+        'color:var(--listaTeksti,#e8ded0);',
+        'font:600 13px/1.2 "Segoe UI",system-ui,sans-serif;',
+        'letter-spacing:.14em;text-transform:uppercase}',
+      '#musaLista .ml-kiinni{appearance:none;background:none;cursor:pointer;',
+        'border:1px solid var(--listaReuna,#6a543a);border-radius:8px;',
+        'color:var(--listaTeksti,#e8ded0);font:600 16px/1 system-ui,sans-serif;',
+        'width:34px;height:34px;flex:none}',
+      '#musaLista .ml-rivit{margin:0;padding:6px 0;list-style:none;',
+        'overflow:auto;-webkit-overflow-scrolling:touch}',
+      '#musaLista .ml-ryhma{padding:12px 14px 4px;',
+        'color:var(--listaTeksti,#e8ded0);opacity:.55;',
+        'font:600 11px/1 "Segoe UI",system-ui,sans-serif;',
+        'letter-spacing:.16em;text-transform:uppercase}',
+      '#musaLista .ml-rivi{display:flex;align-items:baseline;gap:10px;width:100%;',
+        'padding:10px 14px;background:none;border:0;cursor:pointer;text-align:left;',
+        'color:var(--listaTeksti,#e8ded0);',
+        'font:400 15px/1.3 "Segoe UI",system-ui,sans-serif}',
+      '#musaLista .ml-rivi:hover,#musaLista .ml-rivi:focus-visible{',
+        'background:rgba(255,255,255,.07);outline:none}',
+      '#musaLista .ml-rivi[aria-current="true"]{',
+        'color:var(--listaKorostus,#ffb63f);font-weight:600}',
+      '#musaLista .ml-nro{flex:none;min-width:2.2em;opacity:.55;',
+        'font-variant-numeric:tabular-nums;font-size:13px}',
+      '#musaLista .ml-nimi{flex:1}',
+      '#musaLista .ml-ala{display:block;opacity:.6;font-size:12px}',
+      '#musaLista .ml-kesto{flex:none;opacity:.55;font-size:13px;',
+        'font-variant-numeric:tabular-nums}',
+      '#musaLista .ml-tyhja{padding:26px 14px;text-align:center;opacity:.6;',
+        'color:var(--listaTeksti,#e8ded0);',
+        'font:400 14px/1.4 "Segoe UI",system-ui,sans-serif}'
+    ].join('');
+    document.head.appendChild(s);
+  }
+
+  function lRakenna(){
+    if (lJuuri) return;
+    lTyyli();
+    lJuuri = document.createElement('div');
+    lJuuri.id = 'musaLista';
+    lJuuri.innerHTML =
+      '<div class="ml-tausta"></div>' +
+      '<div class="ml-paneeli" role="dialog" aria-modal="true" ' +
+           'aria-labelledby="musaListaOtsikko">' +
+        '<div class="ml-yla">' +
+          '<h2 class="ml-otsikko" id="musaListaOtsikko"></h2>' +
+          '<button type="button" class="ml-kiinni">&times;</button>' +
+        '</div>' +
+        '<ul class="ml-rivit"></ul>' +
+      '</div>';
+    document.body.appendChild(lJuuri);
+    lSisus = lJuuri.querySelector('.ml-rivit');
+    lOtsikko = lJuuri.querySelector('.ml-otsikko');
+    lJuuri.querySelector('.ml-tausta').addEventListener('click', listaSulje);
+    lJuuri.querySelector('.ml-kiinni').addEventListener('click', listaSulje);
+  }
+
+  function lKesto(s){
+    if (typeof s !== 'number' || !isFinite(s) || s < 0) return '';
+    var m = Math.floor(s / 60), x = Math.floor(s % 60);
+    return m + ':' + (x < 10 ? '0' : '') + x;
+  }
+
+  function lTayta(){
+    var d = lMaarittely;
+    var rivit = (d.hae && d.hae()) || [];
+    var nyt = d.nyt ? d.nyt() : -1;
+    lSisus.innerHTML = '';
+    if (!rivit.length){
+      var tyhja = document.createElement('li');
+      tyhja.className = 'ml-tyhja';
+      tyhja.textContent = d.tyhja || 'Nothing here yet.';
+      lSisus.appendChild(tyhja);
+      return;
+    }
+    var edellinenRyhma = null;
+    rivit.forEach(function (r, i){
+      if (r.ryhma && r.ryhma !== edellinenRyhma){
+        edellinenRyhma = r.ryhma;
+        var otsikko = document.createElement('li');
+        otsikko.className = 'ml-ryhma';
+        otsikko.textContent = r.ryhma;
+        lSisus.appendChild(otsikko);
+      }
+      var li = document.createElement('li');
+      var nappi = document.createElement('button');
+      nappi.type = 'button';
+      nappi.className = 'ml-rivi';
+      if (i === nyt) nappi.setAttribute('aria-current', 'true');
+      var nro = document.createElement('span');
+      nro.className = 'ml-nro';
+      nro.textContent = String(i + 1);
+      var nimi = document.createElement('span');
+      nimi.className = 'ml-nimi';
+      nimi.textContent = r.nimi || '';
+      if (r.alarivi){
+        var ala = document.createElement('span');
+        ala.className = 'ml-ala';
+        ala.textContent = r.alarivi;
+        nimi.appendChild(ala);
+      }
+      var kesto = document.createElement('span');
+      kesto.className = 'ml-kesto';
+      kesto.textContent = lKesto(r.kesto);
+      nappi.appendChild(nro); nappi.appendChild(nimi); nappi.appendChild(kesto);
+      nappi.addEventListener('click', function (){
+        listaSulje();
+        if (d.valitse) d.valitse(i, r);
+      });
+      li.appendChild(nappi);
+      lSisus.appendChild(li);
+    });
+    /* Soiva rivi naytolle heti, jotta pitkan listan keskelta ei tarvitse
+       etsia missa ollaan. */
+    var nykyinen = lSisus.querySelector('[aria-current="true"]');
+    if (nykyinen) nykyinen.scrollIntoView({ block: 'center' });
+  }
+
+  function listaAvaa(){
+    if (!lMaarittely) return;
+    lRakenna();
+    lOtsikko.textContent = lMaarittely.otsikko || 'Tracks';
+    lTayta();
+    lPalaa = document.activeElement;
+    lJuuri.classList.add('auki');
+    lAuki = true;
+    document.documentElement.style.overflow = 'hidden';
+    var eka = lSisus.querySelector('[aria-current="true"]') ||
+              lSisus.querySelector('.ml-rivi');
+    if (eka) eka.focus();
+  }
+
+  function listaSulje(){
+    if (!lAuki) return;
+    lAuki = false;
+    lJuuri.classList.remove('auki');
+    document.documentElement.style.overflow = '';
+    if (lPalaa && lPalaa.focus) lPalaa.focus();
+    lPalaa = null;
+  }
+
+  document.addEventListener('keydown', function (e){
+    if (e.key === 'Escape' && lAuki) listaSulje();
+  });
+
+  var Lista = {
+    kytke: function (def){
+      lMaarittely = def;
+      var n = typeof def.nappi === 'string'
+            ? document.getElementById(def.nappi) : def.nappi;
+      if (n) n.addEventListener('click', listaAvaa);
+      return !!n;
+    },
+    avaa: listaAvaa,
+    sulje: listaSulje,
+    get auki(){ return lAuki; }
+  };
+
   W.Saadin = Saadin;
   W.Huone = Huone;
+  W.Lista = Lista;
 })(window);

@@ -210,7 +210,7 @@ h1{
         <span id="muoto">—</span>
       </div>
       <div id="ruutuSisus">
-        <div id="lista" role="listbox" aria-label="Kokoelma"></div>
+        <div id="lista" role="listbox" aria-label="Collection"></div>
         <div id="levy">
           <svg id="levySvg" viewBox="0 0 100 100" aria-hidden="true">
             <defs>
@@ -246,7 +246,7 @@ h1{
       <canvas id="vu1" aria-hidden="true"></canvas>
       <div id="kilpi"><b>KJWhispers</b><span>House Edition</span></div>
       <canvas id="vu2" aria-hidden="true"></canvas>
-      <div id="aani" role="slider" tabindex="0" aria-label="Äänenvoimakkuus"
+      <div id="aani" role="slider" tabindex="0" aria-label="Volume"
            aria-valuemin="0" aria-valuemax="100"><span class="osoitin"></span></div>
     </div>
     <div id="lahteet">
@@ -261,11 +261,11 @@ h1{
       <button type="button" data-lahde="tape" disabled aria-pressed="false">
         <span class="led"></span>TAPE</button>
     </div>
-    <div id="nyt">valitse kappale</div>
+    <div id="nyt">select a track</div>
   </div>
 </div>
 
-<script src="../soitin.js?v=716633fd"></script>
+<script src="../soitin.js?v=8e92747f"></script>
 <script>
 'use strict';
 var $ = function (id){ return document.getElementById(id); };
@@ -465,7 +465,7 @@ function piirraLista(){
   var p = $('lista');
   if (!BIISIT.length){
     p.innerHTML = '<div style="padding:18px;color:#6f6a7d;font-size:13px">'
-                + 'Kokoelma on vielä tyhjä.</div>';
+                + 'The collection is empty.</div>';
     return;
   }
   var osat = [];
@@ -498,7 +498,7 @@ function paivitaTeksti(){
   $('nyt').textContent = b
     ? (soi ? '▶ ' : '‖ ') + b.nimi
       + (b.alarivi ? '  ·  ' + b.alarivi : '')
-    : (BIISIT.length ? 'valitse kappale' : 'kokoelma on tyhjä');
+    : (BIISIT.length ? 'select a track' : 'the collection is empty');
   $('muoto').textContent = b ? 'MP3 192' : '—';
   $('levyNimi').textContent = b ? b.nimi : '—';
   $('levyAla').textContent = b ? (b.alarivi || '') : '';
@@ -621,7 +621,7 @@ function paivitaAani(){
   paivitaAani();
   if (!window.Saadin || !$('aani')) return;
   window.Saadin.lisaa({
-    id: 'aani', nimi: 'Äänenvoimakkuus', el: $('aani'),
+    id: 'aani', nimi: 'Volume', el: $('aani'),
     min: 0, max: 1, askel: 0.01,
     lue: function (){ return aaniTaso; },
     aseta: function (v){ aaniTaso = v; paivitaAani(); },
@@ -678,7 +678,7 @@ requestAnimationFrame(askel);
 })();
 </script>
 
-<a class="musa-paluu" href="../" aria-label="Takaisin aulaan">
+<a class="musa-paluu" href="../" aria-label="Back to the lobby">
 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
  stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"
  aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a>
