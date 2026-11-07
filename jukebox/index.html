@@ -93,6 +93,14 @@ canvas{touch-action:manipulation}
 #ohjaus{flex:0 0 auto;display:flex;align-items:center;gap:12px;
   padding:10px 14px calc(10px + env(safe-area-inset-bottom));
   background:#15100c;border-top:1px solid #33271b}
+/* Kapealla puhelimella nuppi, selite, kuljetus ja listanappi eivat mahdu
+   samalle riville taysilla valeilla: rivi karkasi 3 px yli ja koko sivu
+   sai vaakavierityksen. Kavennetaan valit, ei sisaltoa. */
+@media (max-width:430px){
+  #ohjaus{gap:8px;padding-left:10px;padding-right:10px}
+  #ohjaus .selite{min-width:0}
+  #listaAuki{padding-left:10px;padding-right:10px}
+}
 #ohjaus .nuppi{position:relative;width:46px;height:46px;border-radius:50%;
   background:radial-gradient(circle at 34% 28%,#6a5c4a,#241c13 70%);
   box-shadow:0 2px 6px rgba(0,0,0,.7),inset 0 0 0 1px #4a3a28;
@@ -178,7 +186,7 @@ canvas{border-radius:4px;box-shadow:0 30px 80px rgba(0,0,0,.75),0 0 0 1px rgba(2
     <button id="seur" type="button" aria-label="Next track">&#9197;</button>
   </div>
 
-  <button id="listaAuki" type="button">Track list</button>
+  <button id="listaAuki" type="button">Tracks</button>
 </div>
 
 <div id="paikat" class="piilossa">
@@ -216,7 +224,7 @@ canvas{border-radius:4px;box-shadow:0 30px 80px rgba(0,0,0,.75),0 0 0 1px rgba(2
 </div>
 
 <!-- jaettu iso säädin ja huoneen avaus; puuttuminen ei kaada soitinta -->
-<script src="../soitin.js?v=8e92747f"></script>
+<script src="../soitin.js?v=c7c2f574"></script>
 <script>
 "use strict";
 

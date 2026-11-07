@@ -606,7 +606,123 @@
     get auki(){ return lAuki; }
   };
 
+  /* ==================================================================
+   * Kuljetus — edellinen / soita-tauko / seuraava
+   *
+   * Neljassa huoneessa soitto oli kokonaan laitteen oman eleen varassa:
+   * nupin kaanto, koskettimen painallus, neulan pudotus. Ele on huoneen
+   * luonne eika siita luovuta, mutta siita puuttui kaksi asiaa joita
+   * kavija osaa odottaa jokaiselta soittimelta: tauko ja hyppy.
+   *
+   * Huone antaa vain teot. Tama piirtaa napit ja pitaa soita/tauko
+   * -kuvakkeen ajan tasalla kyselemalla soiko() nelja kertaa sekunnissa
+   * - se on halvempi kuin vaatia jokaista huonetta ilmoittamaan
+   * tilanmuutoksista erikseen, eika unohdu kun huoneen koodi muuttuu.
+   * ================================================================== */
+
+  var kTyyliTehty = false;
+
+  function kTyyli(){
+    if (kTyyliTehty) return;
+    kTyyliTehty = true;
+    var s = document.createElement('style');
+    s.textContent = [
+      '.musa-kuljetus{display:flex;align-items:center;gap:8px;flex:0 0 auto}',
+      '.musa-kuljetus button{appearance:none;cursor:pointer;flex:0 0 auto;',
+        'display:flex;align-items:center;justify-content:center;',
+        'width:38px;height:38px;border-radius:50%;',
+        'background:var(--kuljetusTausta,#2a323a);',
+        'border:1px solid var(--kuljetusReuna,#55646f);',
+        'color:var(--kuljetusTeksti,#dce7ee);font:400 15px/1 system-ui,sans-serif}',
+      '.musa-kuljetus button.iso{width:46px;height:46px;font-size:18px;',
+        'color:var(--kuljetusKorostus,#ffb63f)}',
+      '.musa-kuljetus button:hover{background:var(--kuljetusYli,#39434d)}',
+      '.musa-kuljetus button:focus-visible{outline:2px solid ',
+        'var(--kuljetusKorostus,#ffb63f);outline-offset:2px}',
+      '.musa-kuljetus button[disabled]{opacity:.35;cursor:default}',
+      '.musa-kuljetus svg{width:17px;height:17px;fill:currentColor;',
+        'pointer-events:none}',
+      '.musa-kuljetus .iso svg{width:19px;height:19px}'
+    ].join('');
+    document.head.appendChild(s);
+  }
+
+  /* Kuvakkeet piirretaan SVG:na eika merkkeina: puhelimen fonteissa
+     U+23EE ja U+23EF nakyvat vaihtelevasti, osassa tyhjana ruutuna. */
+  var K_IKONIT = {
+    edel:  'M7 6h2.2v12H7zM17 6v12l-8.4-6z',
+    seur:  'M14.8 6H17v12h-2.2zM7 6l8.4 6L7 18z',
+    soita: 'M8 5l11 7-11 7z',
+    tauko: 'M7 5h3.4v14H7zm6.6 0H17v14h-3.4z',
+    seis:  'M6 6h12v12H6z'
+  };
+
+  function kNappi(nimi, ikoni, iso){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('aria-label', nimi);
+    if (iso) b.className = 'iso';
+    b.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="' +
+                  K_IKONIT[ikoni] + '"/></svg>';
+    return b;
+  }
+
+  function kuljetusKytke(def){
+    var kohde = typeof def.kohde === 'string'
+              ? document.getElementById(def.kohde) : def.kohde;
+    if (!kohde) return null;
+    kTyyli();
+
+    var nimet = def.nimet || {};
+    var juuri = document.createElement('div');
+    juuri.className = 'musa-kuljetus';
+    juuri.setAttribute('role', 'group');
+    juuri.setAttribute('aria-label', nimet.ryhma || 'Transport');
+
+    var edel = kNappi(nimet.edel || 'Previous', 'edel');
+    var paa  = kNappi(nimet.soita || 'Play', 'soita', true);
+    var seur = kNappi(nimet.seur || 'Next', 'seur');
+    juuri.appendChild(edel); juuri.appendChild(paa); juuri.appendChild(seur);
+
+    var seis = null;
+    if (def.seis){
+      seis = kNappi(nimet.seis || 'Stop', 'seis');
+      juuri.appendChild(seis);
+    }
+    kohde.appendChild(juuri);
+
+    edel.addEventListener('click', function (){ def.edellinen(); paivita(); });
+    seur.addEventListener('click', function (){ def.seuraava(); paivita(); });
+    paa.addEventListener('click', function (){
+      if (def.soiko()) def.tauko(); else def.soita();
+      paivita();
+    });
+    if (seis) seis.addEventListener('click', function (){ def.seis(); paivita(); });
+
+    var edellinenTila = null;
+    function paivita(){
+      var soi = !!def.soiko();
+      if (soi !== edellinenTila){
+        edellinenTila = soi;
+        paa.querySelector('path').setAttribute(
+          'd', K_IKONIT[soi ? 'tauko' : 'soita']);
+        paa.setAttribute('aria-label',
+          soi ? (nimet.tauko || 'Pause') : (nimet.soita || 'Play'));
+      }
+      /* Tyhja huone: napit nakyvat mutta eivat valehtele. */
+      var kay = def.kaytossa ? !!def.kaytossa() : true;
+      [edel, paa, seur].forEach(function (b){ b.disabled = !kay; });
+      if (seis) seis.disabled = !kay;
+    }
+    paivita();
+    setInterval(paivita, 250);
+    return { juuri: juuri, paivita: paivita };
+  }
+
+  var Kuljetus = { kytke: kuljetusKytke };
+
   W.Saadin = Saadin;
   W.Huone = Huone;
   W.Lista = Lista;
+  W.Kuljetus = Kuljetus;
 })(window);

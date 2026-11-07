@@ -101,6 +101,21 @@ h1 span{color:var(--amber)}
   color:rgba(255,246,233,.82);text-shadow:0 1px 9px rgba(0,0,0,.95);
 }
 
+/* Kaksi kielta: englanti ensin, suomi sen alla pienempana. Suomi ei ole
+   alaviite vaan rinnakkainen teksti - siksi se on himmeampi mutta ei
+   niin himmea etteiko sita lukisi. */
+.sisus .fi{
+  margin-top:7px;padding-top:6px;font-size:11.5px;
+  color:rgba(255,246,233,.58);
+  border-top:1px solid rgba(255,246,233,.16);
+}
+.ohje .fi{
+  display:block;margin-top:3px;font-size:11px;opacity:.68;
+}
+.ala .fi{
+  display:block;margin-top:5px;font-size:11px;opacity:.7;letter-spacing:.24em;
+}
+
 /* ---- luukkupari ------------------------------------------------------- */
 .luukut{position:absolute;inset:0;pointer-events:none;transform-style:preserve-3d}
 .luukku{
@@ -293,7 +308,7 @@ footer a{color:#8a7a66}
 <body>
 
   <h1>MUSA <span>ROOMS</span></h1>
-  <p class="ala">Valitse huone</p>
+  <p class="ala">Choose a room<span class="fi">Valitse huone</span></p>
 
   <div class="kaytava">
 
@@ -302,78 +317,85 @@ footer a{color:#8a7a66}
     <div class="ovi" id="jouluovi" hidden>
       <a class="huone joulu" href="joulu/" data-soitin>
         <div class="sisus">
-          <b>Joulu</b>
-          <span>Rees-1000<br>kelat pyörivät</span>
+          <b>Christmas</b>
+          <span>Rees-1000<br>reels turning</span>
+          <span class="fi">Joulu &middot; Rees-1000 &middot; kelat pyörivät</span>
         </div>
         <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
       </a>
-      <p class="ohje">Auki 15.11.&ndash;6.1.</p>
+      <p class="ohje">Open Nov 15 &ndash; Jan 6<span class="fi">Auki 15.11.&ndash;6.1.</span></p>
     </div>
 
     <div class="ovi">
       <a class="huone fifties" href="jukebox/" data-soitin>
         <div class="sisus">
           <b>Fifties</b>
-          <span>JB-2400 jukeboksi<br>KJWhispers — 23 raitaa</span>
+          <span>JB-2400 jukebox<br>KJWhispers &mdash; 23 tracks</span>
+          <span class="fi">Fifties &middot; JB-2400 jukeboksi &middot; KJWhispers — 23 raitaa</span>
         </div>
         <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
       </a>
-      <p class="ohje">Valitse kortti &mdash; koko lista aukeaa napauttamalla</p>
+      <p class="ohje">Pick a card &mdash; tap to open the whole list<span class="fi">Valitse kortti &mdash; koko lista aukeaa napauttamalla</span></p>
     </div>
 
     <div class="ovi">
       <a class="huone house" href="house/" data-soitin>
         <div class="sisus">
           <b>House</b>
-          <span>Vocal, deep, soulful<br>auringonlasku ja vinyyli</span>
+          <span>Vocal, deep, soulful<br>sunset and vinyl</span>
+          <span class="fi">House &middot; Vocal, deep, soulful &middot; auringonlasku ja vinyyli</span>
         </div>
         <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
       </a>
-      <p class="ohje">STREAM selaa, PHONO pudottaa neulan</p>
+      <p class="ohje">STREAM browses, PHONO drops the needle<span class="fi">STREAM selaa, PHONO pudottaa neulan</span></p>
     </div>
 
     <div class="ovi">
       <a class="huone country" href="country/" data-soitin>
         <div class="sisus">
           <b>Country</b>
-          <span>Viritä asema<br>punaisella neulalla</span>
+          <span>Tune a station<br>with the red needle</span>
+          <span class="fi">Country &middot; Viritä asema &middot; punaisella neulalla</span>
         </div>
         <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
       </a>
-      <p class="ohje">K&auml;&auml;nn&auml; viisaria &mdash; tai avaa asemalista</p>
+      <p class="ohje">Turn the dial &mdash; or open the station list<span class="fi">K&auml;&auml;nn&auml; viisaria &mdash; tai avaa asemalista</span></p>
     </div>
 
     <div class="ovi">
       <a class="huone dekki" href="dekki/" data-soitin>
         <div class="sisus">
-          <b>Dekki</b>
-          <span>Kela, kasetti A ja B<br>power · välimaasto · balladit</span>
+          <b>Deck</b>
+          <span>Reel, cassette A and B<br>power &middot; midfield &middot; ballads</span>
+          <span class="fi">Dekki &middot; Kela, kasetti A ja B &middot; power · välimaasto · balladit</span>
         </div>
         <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
       </a>
-      <p class="ohje">Valitse kela tai kasetti, sitten biisi listasta</p>
+      <p class="ohje">Pick the reel or a cassette, then a track from the list<span class="fi">Valitse kela tai kasetti, sitten biisi listasta</span></p>
     </div>
 
     <div class="ovi">
       <a class="huone lapset" href="leikki/" data-soitin>
         <div class="sisus">
-          <b>Leikkihuone</b>
-          <span>Lastenlaulut<br>toiminta · uni · iloiset</span>
+          <b>Playroom</b>
+          <span>Children's songs<br>action &middot; sleep &middot; cheerful</span>
+          <span class="fi">Leikkihuone &middot; Lastenlaulut &middot; toiminta · uni · iloiset</span>
         </div>
         <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
       </a>
-      <p class="ohje">Kolme ryhm&auml;&auml;: toiminta, uni, iloiset</p>
+      <p class="ohje">Three groups: action, sleep, cheerful<span class="fi">Kolme ryhm&auml;&auml;: toiminta, uni, iloiset</span></p>
     </div>
 
     <div class="ovi">
       <a class="huone highland" href="highland/" data-soitin>
         <div class="sisus">
           <b>Highland</b>
-          <span>Pohjoisen mystiikka<br>käännä valitsinta</span>
+          <span>Mystery of the north<br>turn the selector</span>
+          <span class="fi">Highland &middot; Pohjoisen mystiikka &middot; käännä valitsinta</span>
         </div>
         <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
       </a>
-      <p class="ohje">K&auml;&auml;nn&auml; SELECT-nuppia &mdash; tai avaa biisilista</p>
+      <p class="ohje">Turn the SELECT knob &mdash; or open the track list<span class="fi">K&auml;&auml;nn&auml; SELECT-nuppia &mdash; tai avaa biisilista</span></p>
     </div>
 
     
@@ -382,22 +404,24 @@ footer a{color:#8a7a66}
       <a class="huone techno" href="techno/" data-soitin>
         <div class="sisus">
           <b>Techno</b>
-          <span>Kaksi dekkiä ja mikseri<br>valitse dekin näytöltä</span>
+          <span>Two decks and a mixer<br>load from the deck display</span>
+          <span class="fi">Techno &middot; Kaksi dekkiä ja mikseri &middot; valitse dekin näytöltä</span>
         </div>
         <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
       </a>
-      <p class="ohje">Napauta dekin n&auml;ytt&ouml;&auml; &mdash; sielt&auml; valitaan, ei jogista</p>
+      <p class="ohje">Tap the deck display &mdash; that is where you load, not the jog<span class="fi">Napauta dekin n&auml;ytt&ouml;&auml; &mdash; sielt&auml; valitaan, ei jogista</span></p>
     </div>
 
     <div class="ovi">
       <a class="huone suomi" href="suomi/" data-soitin>
         <div class="sisus">
-          <b>Suomi</b>
-          <span>Valveradio ja kaupunkiasteikko<br>suomenkieliset laulut</span>
+          <b>Finnish</b>
+          <span>Valve radio and a city dial<br>songs in Finnish</span>
+          <span class="fi">Suomi &middot; Valveradio ja kaupunkiasteikko &middot; suomenkieliset laulut</span>
         </div>
         <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
       </a>
-      <p class="ohje">Paina kosketinta &mdash; tai lasia, se avaa laululistan</p>
+      <p class="ohje">Press a key &mdash; or the glass, which opens the song list<span class="fi">Paina kosketinta &mdash; tai lasia, se avaa laululistan</span></p>
     </div>
 
     <!-- Tilaushuone on ainoa ovi jonka takana ei ole soitinta vaan palvelu.
@@ -407,19 +431,20 @@ footer a{color:#8a7a66}
     <div class="ovi">
       <a class="huone tilaus" href="tilaus/" data-soitin>
         <div class="sisus">
-          <b>Tilaushuone</b>
-          <span>Oma laulu omasta tarinasta<br>25&ndash;89 &euro; &middot; tarjous maksutta</span>
+          <b>Custom Songs</b>
+          <span>Your own song from your own story<br>&euro;25&ndash;89 &middot; quote is free</span>
+          <span class="fi">Tilaushuone &middot; Oma laulu omasta tarinasta &middot; 25&ndash;89 &euro; &middot; tarjous maksutta</span>
         </div>
         <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
       </a>
-      <p class="ohje">Kerro tilaisuus ja tarina &mdash; saat kiinte&auml;n hinnan ennen maksua</p>
+      <p class="ohje">Tell me the occasion and the story &mdash; you get a fixed price before paying<span class="fi">Kerro tilaisuus ja tarina &mdash; saat kiinte&auml;n hinnan ennen maksua</span></p>
     </div>
 
   </div>
 
   <footer>© 2026 KJWhispers</footer>
 
-  <script src="soitin.js?v=8e92747f"></script>
+  <script src="soitin.js?v=c7c2f574"></script>
   <script>
     /* Ovet, joiden takana on soitin, avataan paikan päällä. Linkki jää
        ennalleen, joten ilman JS:ää ovi vie soittimeen tavallisena sivuna. */

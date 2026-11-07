@@ -165,10 +165,13 @@ h1{
 #listaNappi:hover{background:linear-gradient(#45505b,#303943)}
 #listaNappi:focus-visible{outline:2px solid #8ba3b0;outline-offset:2px}
 
-/* Jaettu lista huoneen vareihin. */
+/* Jaettu lista ja kuljetus huoneen vareihin. */
 :root{
   --listaTausta:#1a2026; --listaReuna:#55646f;
   --listaTeksti:#dce7ee; --listaKorostus:#8ed0ea;
+  --kuljetusTausta:#2a323a; --kuljetusReuna:#55646f;
+  --kuljetusTeksti:#cfe0ea; --kuljetusYli:#39434d;
+  --kuljetusKorostus:#8ed0ea;
 }
 @media (max-width:400px){
   #paneeli{gap:6px;padding:9px 6px 7px}
@@ -264,14 +267,15 @@ h1{
       </div>
     </div>
     <div id="alarivi">
-      <button type="button" id="listaNappi" aria-haspopup="dialog">Tracks</button>
+      <div id="kuljetus"></div>
       <div id="nyt">select a track</div>
+      <button type="button" id="listaNappi" aria-haspopup="dialog">Tracks</button>
     </div>
   </div>
 
 </div>
 
-<script src="../soitin.js?v=8e92747f"></script>
+<script src="../soitin.js?v=c7c2f574"></script>
 <script>
 'use strict';
 var $ = function (id){ return document.getElementById(id); };
@@ -606,6 +610,26 @@ function merkitseSelaus(){
   });
 })();
 
+/* Kuljetusnapit. SELECT-nuppi valitsee, mutta siita ei saa taukoa eika
+   hyppya - ne ovat asioita joita kavija odottaa jokaiselta soittimelta. */
+(function kytkeKuljetus(){
+  if (!window.Kuljetus) return;
+  window.Kuljetus.kytke({
+    kohde: 'kuljetus',
+    nimet: { ryhma: 'Transport' },
+    kaytossa: function (){ return BIISIT.length > 0; },
+    soiko: function (){ return soi; },
+    soita: function (){
+      if (kohta < 0){ soita(osoitin); return; }
+      el.play().then(function (){ soi = true; paivitaTeksti(); })
+               .catch(function (){});
+    },
+    tauko: function (){ el.pause(); soi = false; paivitaTeksti(); },
+    edellinen: function (){ soita(kohta < 0 ? 0 : kohta - 1); },
+    seuraava: function (){ soita(kohta < 0 ? 0 : kohta + 1); }
+  });
+})();
+
 /* Lista nupin rinnalle. Nuppi nayttaa yhden raidan kerrallaan, eika
    kolmeakymmenta raitaa loyda kaantamalla. */
 (function kytkeLista(){
@@ -649,7 +673,7 @@ requestAnimationFrame(askel);
 
 (function haeKokoelma(){
   if (location.protocol === 'file:') return;
-  fetch('kokoelma.json?v=63ca4b0a', { cache: 'no-cache' })
+  fetch('kokoelma.json?v=c6570aca', { cache: 'no-cache' })
     .then(function (r){ return r.ok ? r.json() : null; })
     .then(function (d){
       if (!d || !Array.isArray(d.raidat)) return;

@@ -77,11 +77,15 @@ h1{
 #kaista{
   margin-left:auto;display:flex;gap:4px;flex:0 0 auto;
 }
-/* Jaettu biisilista huoneen vareihin. */
+/* Jaettu biisilista ja kuljetus huoneen vareihin. */
 :root{
   --listaTausta:#1c130b; --listaReuna:#6a4a28;
   --listaTeksti:#e7d3b4; --listaKorostus:#f0b45c;
+  --kuljetusTausta:#2e1d0f; --kuljetusReuna:#6a4a28;
+  --kuljetusTeksti:#e7d3b4; --kuljetusYli:#3c2714;
+  --kuljetusKorostus:#f0b45c;
 }
+#kuljetus{display:flex;justify-content:center;width:100%;padding:8px 4px 0}
 #kaista button{
   font-weight:700;font-size:12px;line-height:1;letter-spacing:.12em;color:#cbb08a;
   background:linear-gradient(180deg,#3a2415,#241708);
@@ -133,13 +137,14 @@ h1{
     <div id="kaista">
       <button type="button" data-kaista="fm" aria-pressed="true">FM</button>
       <button type="button" data-kaista="am" aria-pressed="false">AM</button>
-      <button type="button" id="listaNappi" aria-haspopup="dialog">List</button>
+      <button type="button" id="listaNappi" aria-haspopup="dialog">Tracks</button>
     </div>
   </div>
+  <div id="kuljetus"></div>
   <div id="nyt">tune in a station</div>
 </div>
 
-<script src="../soitin.js?v=8e92747f"></script>
+<script src="../soitin.js?v=c7c2f574"></script>
 <script>
 'use strict';
 var $ = function (id){ return document.getElementById(id); };
@@ -758,6 +763,48 @@ function listaAsemat(){
   });
   return ulos;
 }
+
+/* Kuljetusnapit.
+ *
+ * Radiossa "edellinen" ja "seuraava" tarkoittavat viereista asemaa, ja
+ * viisari liukuu sinne niin kuin biisin loputtuakin - hyppy ei saa
+ * nayttaa eri laitteelta kuin se mita radio tekee itsekseen. Tauko ei
+ * virita pois: asema pysyy lukossa ja jatkuu samasta kohdasta. */
+function naapuriAsema(suunta){
+  var lista = asemat();
+  if (!lista.length) return null;
+  var i = soiva ? lista.indexOf(soiva) : -1;
+  if (i < 0){
+    /* Ei lukittuna: siirrytaan lahimpaan, jotta nappi tekee jotain
+       jarkevaa myos kohinan keskella. */
+    return lahin(taajuus).asema || lista[0];
+  }
+  return lista[(i + suunta + lista.length) % lista.length];
+}
+
+function hyppaa(suunta){
+  var a = naapuriAsema(suunta);
+  if (!a) return;
+  liuku = { mista: taajuus, minne: a.taajuus, t: 0 };
+}
+
+(function kytkeKuljetus(){
+  if (!window.Kuljetus) return;
+  window.Kuljetus.kytke({
+    kohde: 'kuljetus',
+    nimet: { ryhma: 'Transport' },
+    kaytossa: function (){ return asemat().length > 0; },
+    soiko: function (){ return soi; },
+    soita: function (){
+      if (!soiva){ hyppaa(0); return; }
+      el.play().then(function (){ soi = true; paivitaTeksti(); })
+               .catch(function (){});
+    },
+    tauko: function (){ el.pause(); soi = false; paivitaTeksti(); },
+    edellinen: function (){ hyppaa(-1); },
+    seuraava: function (){ hyppaa(1); }
+  });
+})();
 
 (function kytkeLista(){
   var nappi = $('listaNappi');

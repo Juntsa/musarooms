@@ -286,6 +286,13 @@ h1{
   flex:0 0 auto;text-align:center;min-height:16px;
   font-size:11px;color:var(--himmea);
 }
+#kuljetus{display:flex;justify-content:center;padding:10px 0 2px}
+/* Jaetun kuljetuksen varit huoneen omiin. */
+:root{
+  --kuljetusTausta:#2a211a; --kuljetusReuna:#6b543a;
+  --kuljetusTeksti:#e8d7bc; --kuljetusYli:#372c22;
+  --kuljetusKorostus:#ffbe4a;
+}
 </style>
 <meta name="description" content="Suomenkieliset laulut putkiradiossa. Paina kosketinta tai avaa laululista lasista.">
 <link rel="canonical" href="https://musarooms.com/suomi/">
@@ -348,10 +355,11 @@ h1{
   </div>
 
   <div id="koskettimet" role="group" aria-label="Laulut"></div>
+  <div id="kuljetus"></div>
   <div id="rivi">ei lauluja</div>
 </div>
 
-<script src="../soitin.js?v=8e92747f"></script>
+<script src="../soitin.js?v=c7c2f574"></script>
 <script>
 'use strict';
 var $ = function (id){ return document.getElementById(id); };
@@ -735,6 +743,27 @@ document.addEventListener('keydown', function (e){
 });
 
 /* ====================  lataus  ======================================= */
+
+/* Kuljetusnapit. Koskettimet valitsevat laulun, mutta taukoa ja hyppya
+   ei saanut mistaan. Tama huone pysyy suomeksi, joten myos napeilla on
+   suomenkieliset nimet - ne ovat ruudunlukijan ainoa vihje. */
+(function kytkeKuljetus(){
+  if (!window.Kuljetus) return;
+  window.Kuljetus.kytke({
+    kohde: 'kuljetus',
+    nimet: { ryhma: 'Soitto', edel: 'Edellinen laulu', soita: 'Soita',
+             tauko: 'Tauko', seur: 'Seuraava laulu' },
+    kaytossa: function (){ return LAULUT.length > 0; },
+    soiko: function (){ return soi; },
+    soita: function (){
+      if (kohta < 0){ soita(0); return; }
+      el.play().catch(function (){});
+    },
+    tauko: pysayta,
+    edellinen: function (){ soita(kohta < 0 ? 0 : kohta - 1); },
+    seuraava: function (){ soita(kohta < 0 ? 0 : kohta + 1); }
+  });
+})();
 
 (function hae(){
   piirraAsteikko();

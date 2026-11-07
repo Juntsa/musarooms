@@ -177,6 +177,13 @@ h1{
   padding-top:6px;min-height:19px;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
+#kuljetus{display:flex;justify-content:center;padding-top:10px}
+/* Jaetun kuljetuksen varit huoneen omiin. */
+:root{
+  --kuljetusTausta:#2b2420; --kuljetusReuna:#5c4f44;
+  --kuljetusTeksti:#e4d8c8; --kuljetusYli:#3a312b;
+  --kuljetusKorostus:#f0b45c;
+}
 @media (max-width:400px){
   #tasoPuoli{flex-basis:32%}
   #lahteet button{min-width:54px;letter-spacing:.08em}
@@ -261,11 +268,12 @@ h1{
       <button type="button" data-lahde="tape" disabled aria-pressed="false">
         <span class="led"></span>TAPE</button>
     </div>
+    <div id="kuljetus"></div>
     <div id="nyt">select a track</div>
   </div>
 </div>
 
-<script src="../soitin.js?v=8e92747f"></script>
+<script src="../soitin.js?v=c7c2f574"></script>
 <script>
 'use strict';
 var $ = function (id){ return document.getElementById(id); };
@@ -661,6 +669,28 @@ requestAnimationFrame(askel);
 /* ==================================================================
  * Kokoelma palvelimelta
  * ================================================================== */
+
+/* Kuljetusnapit. STREAM-lista valitsee, mutta taukoa ja hyppya ei ollut
+   mistaan: kerran aloitettu kokoelma soi loppuun tai ei lainkaan. */
+(function kytkeKuljetus(){
+  if (!window.Kuljetus) return;
+  window.Kuljetus.kytke({
+    kohde: 'kuljetus',
+    nimet: { ryhma: 'Transport' },
+    kaytossa: function (){ return BIISIT.length > 0; },
+    soiko: function (){ return soi; },
+    soita: function (){
+      if (kohta < 0){ valitse(0, true); return; }
+      el.play().then(function (){ soi = true; piirraLista(); paivitaTeksti(); })
+               .catch(function (){});
+    },
+    tauko: function (){
+      el.pause(); soi = false; piirraLista(); paivitaTeksti();
+    },
+    edellinen: function (){ valitse(kohta < 0 ? 0 : kohta - 1, true); },
+    seuraava: function (){ valitse(kohta < 0 ? 0 : kohta + 1, true); }
+  });
+})();
 
 (function haeKokoelma(){
   piirraLista();
