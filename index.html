@@ -109,6 +109,25 @@ h1 span{color:var(--amber)}
   color:rgba(255,246,233,.58);
   border-top:1px solid rgba(255,246,233,.16);
 }
+
+/* Mansikkaovi: kolme kielta allekkain ja oma painike. Ovi ei ole enaa
+   linkki vaan laatikko - painike hoitaa siirtyman, jotta kavija nakee
+   ensin MISSA laulut ovat ja vasta sitten paattaa meneeko. */
+.sisus .kieli{margin-top:3px;font-size:11.5px;color:rgba(255,246,233,.62)}
+.sisus .siirry{
+  display:inline-block;margin-top:11px;padding:8px 14px;
+  border:1px solid rgba(255,246,233,.5);border-radius:999px;
+  background:rgba(0,0,0,.3);
+  color:#fff6e9;text-decoration:none;
+  font:600 12px/1 "Segoe UI",system-ui,sans-serif;letter-spacing:.06em;
+  text-shadow:0 1px 9px rgba(0,0,0,.95);
+}
+.sisus .siirry:hover{background:rgba(255,246,233,.16)}
+.sisus .siirry:focus-visible{outline:2px solid #fff6e9;outline-offset:3px}
+/* Ovi on laatikko, ei linkki: kohdistus tulee tabindexista. */
+.huone.lapset{cursor:default}
+.huone.lapset:focus-within .vasen{transform:rotateY(-84deg);filter:brightness(.5)}
+.huone.lapset:focus-within .oikea{transform:rotateY(84deg);filter:brightness(.7)}
 .ohje .fi{
   display:block;margin-top:3px;font-size:11px;opacity:.68;
 }
@@ -172,8 +191,9 @@ h1 span{color:var(--amber)}
 @media (hover:none){
   .vasen{transform:rotateY(-6deg);filter:brightness(.88)}
   .oikea{transform:rotateY(6deg);filter:brightness(.94)}
-  .sisus b,.sisus span{opacity:0;transition:opacity .3s ease .15s}
-  .huone.auki .sisus b,.huone.auki .sisus span{opacity:1}
+  .sisus b,.sisus span,.sisus .siirry{opacity:0;transition:opacity .3s ease .15s}
+  .huone.auki .sisus b,.huone.auki .sisus span,
+  .huone.auki .sisus .siirry{opacity:1}
 }
 
 /* ---- huoneiden luukut ja sisävalot ------------------------------------ */
@@ -375,16 +395,19 @@ footer a{color:#8a7a66}
     </div>
 
     <div class="ovi">
-      <a class="huone lapset" href="https://mansikkakyla.fi/" target="_blank"
-         rel="noopener" aria-label="Mansikkakyl&auml; &mdash; opens in a new tab">
+      <div class="huone lapset" tabindex="0" role="group"
+           aria-label="Mansikkakyl&auml;">
         <div class="sisus">
-          <b>Mansikkakyl&auml; &#8599;</b>
-          <span>Children&rsquo;s songs live at mansikkakyla.fi<br>stories, songs and the advent calendar</span>
-          <span class="fi">Lastenlaulut ovat Mansikkakyl&auml;ss&auml; &middot; sadut, laulut ja joulukalenteri</span>
+          <b>Mansikkakyl&auml;</b>
+          <span lang="en">Children&rsquo;s songs are at Mansikkakyl&auml;</span>
+          <span lang="fi" class="kieli">Lastenlaulut ovat Mansikkakyl&auml;ss&auml;</span>
+          <span lang="es" class="kieli">Las canciones infantiles est&aacute;n en Mansikkakyl&auml;</span>
+          <a class="siirry" href="https://mansikkakyla.fi/" target="_blank"
+             rel="noopener">mansikkakyla.fi &#8599;</a>
         </div>
         <div class="luukut"><span class="luukku vasen"></span><span class="luukku oikea"></span></div>
-      </a>
-      <p class="ohje">Opens mansikkakyla.fi in a new tab<span class="fi">Avaa mansikkakyla.fi uuteen v&auml;lilehteen</span></p>
+      </div>
+      <p class="ohje">Opens in a new tab<span class="fi">Avautuu uuteen v&auml;lilehteen</span></p>
     </div>
 
     <div class="ovi">
@@ -450,6 +473,24 @@ footer a{color:#8a7a66}
     /* Ovet, joiden takana on soitin, avataan paikan päällä. Linkki jää
        ennalleen, joten ilman JS:ää ovi vie soittimeen tavallisena sivuna. */
     if (window.Huone) Huone.kytke();
+
+    /* Mansikkaovi ei ole soitinhuone eika linkki, joten Huone.kytke ei
+       koske siihen. Kosketusnaytolla se tarvitsee silti napautuksen
+       auetakseen - muuten kolme kielta ja painike jaavat luukkujen
+       taakse eika mikaan kerro mihin ovi vie. */
+    (function (){
+      var ovi = document.querySelector('.huone.lapset');
+      if (!ovi) return;
+      ovi.addEventListener('click', function (e){
+        if (e.target.closest('.siirry')) return;   /* painike vie perille */
+        ovi.classList.toggle('auki');
+      });
+      ovi.addEventListener('keydown', function (e){
+        if (e.key === 'Enter' || e.key === ' '){
+          e.preventDefault(); ovi.classList.toggle('auki');
+        }
+      });
+    })();
   </script>
 
 <script>
