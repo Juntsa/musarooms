@@ -673,7 +673,7 @@ requestAnimationFrame(askel);
 
 (function haeKokoelma(){
   if (location.protocol === 'file:') return;
-  fetch('kokoelma.json?v=6f75aeae', { cache: 'no-cache' })
+  fetch('kokoelma.json?v=2bea85ab', { cache: 'no-cache' })
     .then(function (r){ return r.ok ? r.json() : null; })
     .then(function (d){
       if (!d || !Array.isArray(d.raidat)) return;

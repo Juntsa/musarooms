@@ -2,6 +2,20 @@
   "nimi": "Northern Roots",
   "raidat": [
     {
+      "nimi": "A Licht for Ye",
+      "alarivi": "",
+      "kesto": 268.8,
+      "aani": "https://aani.musarooms.com/joulu/joulu-01-a-licht-for-ye.mp3",
+      "bpm": 112.3
+    },
+    {
+      "nimi": "A Wee Dram on Yule Night",
+      "alarivi": "",
+      "kesto": 324.8,
+      "aani": "https://aani.musarooms.com/joulu/joulu-02-a-wee-dram-on-yule-night.mp3",
+      "bpm": 115.7
+    },
+    {
       "nimi": "Angeal o the Black Brae",
       "alarivi": "",
       "kesto": 372.4,
@@ -38,14 +52,14 @@
       "nimi": "Hame Is a Fire Ye Cairry",
       "alarivi": "",
       "kesto": 267.6,
-      "aani": "https://aani.musarooms.com/highland/highland-32-hame-is-a-fire-ye-cairry.mp3",
+      "aani": "https://aani.musarooms.com/joulu/joulu-07-hame-is-a-fire-ye-cairry.mp3",
       "bpm": 113.5
     },
     {
-      "nimi": "Hame o’ the Fire Fox",
+      "nimi": "Hame o’ the Fire Fox - Yule Nicht",
       "alarivi": "",
       "kesto": 277.6,
-      "aani": "https://aani.musarooms.com/highland/highland-33-hame-o-the-fire-fox.mp3",
+      "aani": "https://aani.musarooms.com/joulu/joulu-08-hame-o-the-fire-fox-yule-nicht.mp3",
       "bpm": 120.1
     },
     {
@@ -71,6 +85,13 @@
       "alarivi": "",
       "kesto": 304.8,
       "aani": "https://aani.musarooms.com/highland/highland-10-the-choice-at-the-source.mp3"
+    },
+    {
+      "nimi": "The First Fit - Hogmanay",
+      "alarivi": "",
+      "kesto": 322.8,
+      "aani": "https://aani.musarooms.com/joulu/joulu-05-the-first-fit-hogmanay.mp3",
+      "bpm": 117.7
     },
     {
       "nimi": "The Horn Of North",
@@ -131,6 +152,13 @@
       "kesto": 293.6,
       "aani": "https://aani.musarooms.com/highland/highland-16-the-mountain-awakes-vol-2.mp3",
       "bpm": 129.1
+    },
+    {
+      "nimi": "The Need-Fire - Beltane Mornin’",
+      "alarivi": "",
+      "kesto": 314.8,
+      "aani": "https://aani.musarooms.com/joulu/joulu-06-the-need-fire-beltane-mornin.mp3",
+      "bpm": 112.0
     },
     {
       "nimi": "The River That Remembered",

@@ -458,7 +458,7 @@ function piirra(){
 
 (function hae(){
   if (location.protocol === 'file:'){ piirra(); return; }
-  fetch('kokoelma.json?v=ea3d65c2', { cache: 'no-cache' })
+  fetch('kokoelma.json?v=2fe9b421', { cache: 'no-cache' })
     .then(function (r){ return r.ok ? r.json() : null; })
     .then(function (d){
       BIISIT = (d && Array.isArray(d.raidat)) ? d.raidat : [];
