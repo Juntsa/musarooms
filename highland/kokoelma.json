@@ -9,16 +9,17 @@
     },
     {
       "nimi": "Arctic Fire",
-      "alarivi": "",
+      "alarivi": "Vol 1",
       "kesto": 284.5,
-      "aani": "https://aani.musarooms.com/highland/highland-02-arctic-fire.mp3"
+      "aani": "https://aani.musarooms.com/highland/highland-27-arctic-fire-vol-1.mp3",
+      "bpm": 64.9
     },
     {
       "nimi": "Arctic Fire",
-      "alarivi": "",
+      "alarivi": "Vol 2",
       "kesto": 284.5,
-      "aani": "https://aani.musarooms.com/highland/highland-27-arctic-fire.mp3",
-      "bpm": 129.9
+      "aani": "https://aani.musarooms.com/highland/highland-02-arctic-fire-vol-2.mp3",
+      "bpm": 64.9
     },
     {
       "nimi": "Beneath The Northern Sky",
@@ -32,6 +33,20 @@
       "alarivi": "",
       "kesto": 415.0,
       "aani": "https://aani.musarooms.com/highland/highland-04-frae-angeal-s-lang-tale.mp3"
+    },
+    {
+      "nimi": "Hame Is a Fire Ye Cairry",
+      "alarivi": "",
+      "kesto": 267.6,
+      "aani": "https://aani.musarooms.com/highland/highland-32-hame-is-a-fire-ye-cairry.mp3",
+      "bpm": 113.5
+    },
+    {
+      "nimi": "Hame o’ the Fire Fox",
+      "alarivi": "",
+      "kesto": 277.6,
+      "aani": "https://aani.musarooms.com/highland/highland-33-hame-o-the-fire-fox.mp3",
+      "bpm": 120.1
     },
     {
       "nimi": "Long Road Home",
@@ -80,7 +95,8 @@
       "nimi": "The Keeper's Last Prophecy",
       "alarivi": "Vol 2",
       "kesto": 243.6,
-      "aani": "https://aani.musarooms.com/highland/highland-13-the-keeper-s-last-prophecy-vol-2.mp3"
+      "aani": "https://aani.musarooms.com/highland/highland-13-the-keeper-s-last-prophecy-vol-2.mp3",
+      "bpm": 146.1
     },
     {
       "nimi": "The Licht That Chose the World",
@@ -89,36 +105,39 @@
       "aani": "https://aani.musarooms.com/highland/highland-14-the-licht-that-chose-the-world.mp3"
     },
     {
-      "nimi": "The Light Keeper",
-      "alarivi": "",
+      "nimi": "THE Light Keeper",
+      "alarivi": "Vol 1",
       "kesto": 284.9,
-      "aani": "https://aani.musarooms.com/highland/highland-15-the-light-keeper.mp3"
+      "aani": "https://aani.musarooms.com/highland/highland-25-the-light-keeper-vol-1.mp3",
+      "bpm": 128.1
     },
     {
-      "nimi": "THE Light Keeper",
-      "alarivi": "",
+      "nimi": "The Light Keeper",
+      "alarivi": "Vol 2",
       "kesto": 284.9,
-      "aani": "https://aani.musarooms.com/highland/highland-25-the-light-keeper.mp3",
+      "aani": "https://aani.musarooms.com/highland/highland-15-the-light-keeper-vol-2.mp3",
       "bpm": 128.1
     },
     {
       "nimi": "The Mountain Awakes",
-      "alarivi": "",
+      "alarivi": "Vol 1",
       "kesto": 293.6,
-      "aani": "https://aani.musarooms.com/highland/highland-16-the-mountain-awakes.mp3"
+      "aani": "https://aani.musarooms.com/highland/highland-26-the-mountain-awakes-vol-1.mp3",
+      "bpm": 129.2
     },
     {
       "nimi": "The Mountain Awakes",
-      "alarivi": "",
+      "alarivi": "Vol 2",
       "kesto": 293.6,
-      "aani": "https://aani.musarooms.com/highland/highland-26-the-mountain-awakes.mp3",
-      "bpm": 129.2
+      "aani": "https://aani.musarooms.com/highland/highland-16-the-mountain-awakes-vol-2.mp3",
+      "bpm": 129.1
     },
     {
       "nimi": "The River That Remembered",
       "alarivi": "",
       "kesto": 249.2,
-      "aani": "https://aani.musarooms.com/highland/highland-18-the-river-that-remembered.mp3"
+      "aani": "https://aani.musarooms.com/highland/highland-18-the-river-that-remembered.mp3",
+      "bpm": 70.9
     },
     {
       "nimi": "The Same Way",
@@ -148,22 +167,30 @@
     },
     {
       "nimi": "The Whispering Pines",
-      "alarivi": "",
+      "alarivi": "Vol 1",
       "kesto": 274.9,
-      "aani": "https://aani.musarooms.com/highland/highland-31-the-whispering-pines.mp3",
+      "aani": "https://aani.musarooms.com/highland/highland-31-the-whispering-pines-vol-1.mp3",
       "bpm": 91.9
     },
     {
       "nimi": "Whispering Pines",
-      "alarivi": "",
+      "alarivi": "Vol 2",
       "kesto": 274.9,
-      "aani": "https://aani.musarooms.com/highland/highland-21-whispering-pines.mp3"
+      "aani": "https://aani.musarooms.com/highland/highland-21-whispering-pines-vol-2.mp3",
+      "bpm": 91.9
     },
     {
       "nimi": "Wings Of Emerald Fire",
       "alarivi": "",
       "kesto": 249.7,
       "aani": "https://aani.musarooms.com/highland/highland-22-wings-of-emerald-fire.mp3"
+    },
+    {
+      "nimi": "Ye are my name",
+      "alarivi": "",
+      "kesto": 289.6,
+      "aani": "https://aani.musarooms.com/highland/highland-34-ye-are-my-name.mp3",
+      "bpm": 101.8
     }
   ]
 }

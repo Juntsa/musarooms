@@ -773,7 +773,7 @@ document.addEventListener('keydown', function (e){
   paivitaTeksti();
   requestAnimationFrame(kierros);
   if (location.protocol === 'file:') return;
-  fetch('kokoelma.json?v=248addae', { cache: 'no-cache' })
+  fetch('kokoelma.json?v=9f76bff7', { cache: 'no-cache' })
     .then(function (r){ return r.ok ? r.json() : null; })
     .then(function (d){
       if (!d || !Array.isArray(d.raidat) || !d.raidat.length) return;

@@ -2,9 +2,45 @@
   "nimi": "Joulu",
   "raidat": [
     {
+      "nimi": "A Licht for Ye",
+      "alarivi": "",
+      "kesto": 268.8,
+      "aani": "https://aani.musarooms.com/joulu/joulu-01-a-licht-for-ye.mp3"
+    },
+    {
+      "nimi": "A Wee Dram on Yule Night",
+      "alarivi": "",
+      "kesto": 324.8,
+      "aani": "https://aani.musarooms.com/joulu/joulu-02-a-wee-dram-on-yule-night.mp3"
+    },
+    {
+      "nimi": "A’ I Want This Yule Is Ma Wee Dowg",
+      "alarivi": "",
+      "kesto": 212.4,
+      "aani": "https://aani.musarooms.com/joulu/joulu-03-a-i-want-this-yule-is-ma-wee-dowg.mp3"
+    },
+    {
+      "nimi": "Same Auld Christmas Eve",
+      "alarivi": "",
+      "kesto": 286.8,
+      "aani": "https://aani.musarooms.com/joulu/joulu-04-same-auld-christmas-eve.mp3"
+    },
+    {
+      "nimi": "The First Fit",
+      "alarivi": "",
+      "kesto": 322.8,
+      "aani": "https://aani.musarooms.com/joulu/joulu-05-the-first-fit.mp3"
+    },
+    {
+      "nimi": "The Need-Fire",
+      "alarivi": "",
+      "kesto": 314.8,
+      "aani": "https://aani.musarooms.com/joulu/joulu-06-the-need-fire.mp3"
+    },
+    {
       "nimi": "Christmas Love",
       "alarivi": "",
-      "kesto": 248.4,
+      "kesto": 249.5,
       "aani": "https://aani.musarooms.com/dekki/dekki-12-christmas-love.mp3"
     },
     {
