@@ -566,7 +566,7 @@ a.dl:hover{border-color:var(--green)}
         {
           "@type": "MusicRecording",
           "position": 34,
-          "name": "The Girl The Wind Remembers - Phoebe Stone",
+          "name": "The Girl The Wind Remembers - Phoepe Stone",
           "byArtist": {
             "@type": "MusicGroup",
             "name": "KJWhispers"
@@ -1500,7 +1500,7 @@ async function dbInfo(note){
   tila('dbInfo', note ? (base?base+'<br>':'')+note : base);
 }
 /* ---- huoneen oma setti --------------------------------------------
-   Julkaistulla sivulla `setti.json?v=74690bff` on laitteen vieressä ja kertoo mitkä
+   Julkaistulla sivulla `setti.json?v=a5089c54` on laitteen vieressä ja kertoo mitkä
    raidat kuuluvat mihinkin kuljettimeen. Osoitteet osoittavat suoraan
    objektivarastoon, eikä raitoja haeta muistiin: EL[k].src ottaa
    verkko-osoitteen sellaisenaan, ja laite striimaa. Kolmen setin
@@ -1514,7 +1514,7 @@ async function lataaSetti(){
   if (location.protocol==='file:') return 0;
   let d=null;
   try{
-    const r=await fetch('setti.json?v=74690bff',{cache:'no-cache'});
+    const r=await fetch('setti.json?v=a5089c54',{cache:'no-cache'});
     if (!r.ok) return 0;
     d=await r.json();
   }catch(e){ return 0; }
