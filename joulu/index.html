@@ -174,7 +174,7 @@ footer{margin-top:40px;text-align:center;color:#6f5c44;font-size:11.5px;letter-s
       "@id": "https://musarooms.com/joulu/#soittolista",
       "name": "Christmas — Rees-1000",
       "url": "https://musarooms.com/joulu/",
-      "numTracks": 14,
+      "numTracks": 17,
       "byArtist": {
         "@id": "https://musarooms.com/#kjwhispers"
       },
@@ -212,6 +212,16 @@ footer{margin-top:40px;text-align:center;color:#6f5c44;font-size:11.5px;letter-s
         {
           "@type": "MusicRecording",
           "position": 4,
+          "name": "Christmas Eve",
+          "byArtist": {
+            "@type": "MusicGroup",
+            "name": "KJWhispers"
+          },
+          "duration": "PT3M18S"
+        },
+        {
+          "@type": "MusicRecording",
+          "position": 5,
           "name": "Hame Is a Fire Ye Cairry",
           "byArtist": {
             "@type": "MusicGroup",
@@ -221,7 +231,7 @@ footer{margin-top:40px;text-align:center;color:#6f5c44;font-size:11.5px;letter-s
         },
         {
           "@type": "MusicRecording",
-          "position": 5,
+          "position": 6,
           "name": "Hame o’ the Fire Fox - Yule Nicht",
           "byArtist": {
             "@type": "MusicGroup",
@@ -231,7 +241,17 @@ footer{margin-top:40px;text-align:center;color:#6f5c44;font-size:11.5px;letter-s
         },
         {
           "@type": "MusicRecording",
-          "position": 6,
+          "position": 7,
+          "name": "Jouluna en muuta toivo",
+          "byArtist": {
+            "@type": "MusicGroup",
+            "name": "KJWhispers"
+          },
+          "duration": "PT2M55S"
+        },
+        {
+          "@type": "MusicRecording",
+          "position": 8,
           "name": "Kirje sinulle",
           "byArtist": {
             "@type": "MusicGroup",
@@ -241,7 +261,17 @@ footer{margin-top:40px;text-align:center;color:#6f5c44;font-size:11.5px;letter-s
         },
         {
           "@type": "MusicRecording",
-          "position": 7,
+          "position": 9,
+          "name": "Lapsuuteni joulu",
+          "byArtist": {
+            "@type": "MusicGroup",
+            "name": "KJWhispers"
+          },
+          "duration": "PT2M52S"
+        },
+        {
+          "@type": "MusicRecording",
+          "position": 10,
           "name": "Näin tänään niin huomenna",
           "byArtist": {
             "@type": "MusicGroup",
@@ -251,7 +281,7 @@ footer{margin-top:40px;text-align:center;color:#6f5c44;font-size:11.5px;letter-s
         },
         {
           "@type": "MusicRecording",
-          "position": 8,
+          "position": 11,
           "name": "Same Auld Christmas Eve in Lapland",
           "byArtist": {
             "@type": "MusicGroup",
@@ -261,7 +291,7 @@ footer{margin-top:40px;text-align:center;color:#6f5c44;font-size:11.5px;letter-s
         },
         {
           "@type": "MusicRecording",
-          "position": 9,
+          "position": 12,
           "name": "The First Fit - Hogmanay",
           "byArtist": {
             "@type": "MusicGroup",
@@ -271,7 +301,7 @@ footer{margin-top:40px;text-align:center;color:#6f5c44;font-size:11.5px;letter-s
         },
         {
           "@type": "MusicRecording",
-          "position": 10,
+          "position": 13,
           "name": "The Need-Fire - Beltane Mornin’",
           "byArtist": {
             "@type": "MusicGroup",
@@ -281,7 +311,7 @@ footer{margin-top:40px;text-align:center;color:#6f5c44;font-size:11.5px;letter-s
         },
         {
           "@type": "MusicRecording",
-          "position": 11,
+          "position": 14,
           "name": "Una luz en el corredor",
           "byArtist": {
             "@type": "MusicGroup",
@@ -291,7 +321,7 @@ footer{margin-top:40px;text-align:center;color:#6f5c44;font-size:11.5px;letter-s
         },
         {
           "@type": "MusicRecording",
-          "position": 12,
+          "position": 15,
           "name": "Christmas Love",
           "byArtist": {
             "@type": "MusicGroup",
@@ -301,7 +331,7 @@ footer{margin-top:40px;text-align:center;color:#6f5c44;font-size:11.5px;letter-s
         },
         {
           "@type": "MusicRecording",
-          "position": 13,
+          "position": 16,
           "name": "All I want for Christmas is My Dog",
           "byArtist": {
             "@type": "MusicGroup",
@@ -311,7 +341,7 @@ footer{margin-top:40px;text-align:center;color:#6f5c44;font-size:11.5px;letter-s
         },
         {
           "@type": "MusicRecording",
-          "position": 14,
+          "position": 17,
           "name": "All I want for Christmas is My Dog - Original",
           "byArtist": {
             "@type": "MusicGroup",
@@ -643,7 +673,7 @@ function piirra(){
 
 (function hae(){
   if (location.protocol === 'file:'){ piirra(); return; }
-  fetch('kokoelma.json?v=2fe9b421', { cache: 'no-cache' })
+  fetch('kokoelma.json?v=152131c4', { cache: 'no-cache' })
     .then(function (r){ return r.ok ? r.json() : null; })
     .then(function (d){
       BIISIT = (d && Array.isArray(d.raidat)) ? d.raidat : [];

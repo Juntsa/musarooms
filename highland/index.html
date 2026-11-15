@@ -419,7 +419,7 @@ h1{
             "@type": "MusicGroup",
             "name": "KJWhispers"
           },
-          "duration": "PT4M33S"
+          "duration": "PT4M48S"
         },
         {
           "@type": "MusicRecording",
@@ -1062,7 +1062,7 @@ requestAnimationFrame(askel);
 
 (function haeKokoelma(){
   if (location.protocol === 'file:') return;
-  fetch('kokoelma.json?v=2bea85ab', { cache: 'no-cache' })
+  fetch('kokoelma.json?v=cf304c44', { cache: 'no-cache' })
     .then(function (r){ return r.ok ? r.json() : null; })
     .then(function (d){
       if (!d || !Array.isArray(d.raidat)) return;

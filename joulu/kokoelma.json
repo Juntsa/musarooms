@@ -23,6 +23,13 @@
       "bpm": 132.3
     },
     {
+      "nimi": "Christmas Eve",
+      "alarivi": "",
+      "kesto": 198.0,
+      "aani": "https://aani.musarooms.com/joulu/joulu-14-christmas-eve.mp3",
+      "bpm": 125.6
+    },
+    {
       "nimi": "Hame Is a Fire Ye Cairry",
       "alarivi": "",
       "kesto": 267.6,
@@ -37,11 +44,25 @@
       "bpm": 120.1
     },
     {
+      "nimi": "Jouluna en muuta toivo",
+      "alarivi": "",
+      "kesto": 175.2,
+      "aani": "https://aani.musarooms.com/joulu/joulu-12-jouluna-en-muuta-toivo.mp3",
+      "bpm": 127.9
+    },
+    {
       "nimi": "Kirje sinulle",
       "alarivi": "",
       "kesto": 284.1,
       "aani": "https://aani.musarooms.com/joulu/joulu-09-kirje-sinulle.mp3",
       "bpm": 115.5
+    },
+    {
+      "nimi": "Lapsuuteni joulu",
+      "alarivi": "",
+      "kesto": 171.6,
+      "aani": "https://aani.musarooms.com/joulu/joulu-13-lapsuuteni-joulu.mp3",
+      "bpm": 107.7
     },
     {
       "nimi": "Näin tänään niin huomenna",
