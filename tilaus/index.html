@@ -65,6 +65,24 @@ h1{
   margin:12px 0 0;font:italic 18px/1.5 Georgia,"Times New Roman",serif;
   color:var(--mes);
 }
+/* Kielivalitsin. Pienenä ja otsikon alla: se on apuväline eikä sivun
+   aihe, mutta sen pitää näkyä heti — puolikielinen sivu on sekava vasta
+   siinä vaiheessa kun kävijä ei löydä omaa kieltään. */
+.kielet{
+  display:flex;justify-content:center;gap:8px;margin:18px 0 0;flex-wrap:wrap;
+}
+.kielinappi{
+  padding:7px 14px;min-height:36px;
+  border:1px solid var(--raja);border-radius:999px;
+  background:rgba(255,255,255,.015);color:var(--dim);
+  font:inherit;font-size:13px;letter-spacing:.04em;cursor:pointer;
+}
+.kielinappi:hover{border-color:var(--mes);color:var(--kerma)}
+.kielinappi.valittu{
+  border-color:var(--mes);color:var(--kerma);background:rgba(217,169,95,.12);
+}
+.kielet[hidden]{display:none}
+
 .viiva{
   width:132px;height:1px;margin:26px auto;border:0;
   background:linear-gradient(90deg,transparent,var(--mes),transparent);
@@ -412,25 +430,26 @@ footer a{color:#8a7a66}
 <div class="kuori">
 
   <header>
-    <a class="takaisin" href="../">&larr; Back to the lobby</a>
+    <a class="takaisin" href="../" data-t="takaisin" data-t-aria="takaisinAria">&larr; Back to the lobby</a>
     <p class="merkki">KJWhispers</p>
-    <h1>Custom Songs</h1>
-    <p class="iskulause">Your story. Your song.</p>
+    <h1 data-t="otsikko">Custom Songs</h1>
+    <p class="iskulause" data-t="iskulause">Your story. Your song.</p>
+    <nav class="kielet" id="kielet" aria-label="Language"></nav>
   </header>
 
   <hr class="viiva">
 
   <div class="lupaus">
-    <p>Tell me which moment matters. You get a quote for a song of your own
+    <p data-t="lupausJohto">Tell me which moment matters. You get a quote for a song of your own
        &mdash; with no commitment.</p>
-    <p class="hinta">Personal songs <b>&euro;25&ndash;89</b></p>
-    <small>Asking and quoting are free. You see the final price and what the
+    <p class="hinta"><span data-t="lupausHinta">Personal songs</span> <b>&euro;25&ndash;89</b></p>
+    <small data-t="lupausEhto">Asking and quoting are free. You see the final price and what the
       work includes before you pay anything.</small>
   </div>
 
   <section id="esimerkit" hidden>
-    <h2>Listen to examples</h2>
-    <p class="johdanto">A short excerpt of each. These are finished songs, and
+    <h2 data-t="naytteetOtsikko">Listen to examples</h2>
+    <p class="johdanto" data-t="naytteetJohto">A short excerpt of each. These are finished songs, and
       they show the kind of work a commission produces.</p>
     <div class="naytteet" id="naytteet"></div>
     <p class="naytevirhe" id="naytevirhe" hidden></p>
@@ -439,47 +458,47 @@ footer a{color:#8a7a66}
   <!-- Videonäyte avautuu omaan kehykseensä. Kortti on neliö, video
        pystykuva: neliöön pakotettuna siitä näkyisi kolmannes. -->
   <div id="videokehys" hidden>
-    <button type="button" id="suljeVideo" aria-label="Close video">&times;</button>
+    <button type="button" id="suljeVideo" data-t-aria="sulje" aria-label="Close video">&times;</button>
     <video id="naytevideo" playsinline controls preload="none"></video>
     <p id="videonimi"></p>
   </div>
 
   <section>
-    <h2>How it works</h2>
+    <h2 data-t="mitenOtsikko">How it works</h2>
     <ol class="polku">
-      <li><b>You tell me what you want.</b> A short form: the occasion, the
-          story, the style and the schedule. A few minutes is enough.</li>
-      <li><b>You get a fixed quote.</b> It states the price, the delivery
+      <li><b data-t="miten1Otsikko">You tell me what you want.</b> <span data-t="miten1">A short form: the occasion, the
+          story, the style and the schedule. A few minutes is enough.</span></li>
+      <li><b data-t="miten2Otsikko">You get a fixed quote.</b> <span data-t="miten2">It states the price, the delivery
           date, which files you get and how many rounds of revisions are
-          included.</li>
-      <li><b>You accept and pay.</b> Not before this point. If the quote does
-          not suit you, that is where it ends.</li>
-      <li><b>You get the song.</b> A download link and a QR code that opens
+          included.</span></li>
+      <li><b data-t="miten3Otsikko">You accept and pay.</b> <span data-t="miten3">Not before this point. If the quote does
+          not suit you, that is where it ends.</span></li>
+      <li><b data-t="miten4Otsikko">You get the song.</b> <span data-t="miten4">A download link and a QR code that opens
           its own listening page. The QR code is part of the basic delivery
-          and is not charged separately.</li>
+          and is not charged separately.</span></li>
     </ol>
   </section>
 
   <section>
-    <h2>Tell me what you want</h2>
-    <p class="johdanto">A few questions first. We work out the details
+    <h2 data-t="lomakeOtsikko">Tell me what you want</h2>
+    <p class="johdanto" data-t="lomakeJohto">A few questions first. We work out the details
       together afterwards.</p>
 
     <form id="lomake" novalidate>
 
       <fieldset>
-        <legend><span class="nro">1.</span>What is the occasion?</legend>
+        <legend><span class="nro">1.</span><span data-t="kysymys1">What is the occasion?</span></legend>
         <div class="sirut" id="tilaisuus"></div>
       </fieldset>
 
       <fieldset>
-        <legend><span class="nro">2.</span>What should the song say?</legend>
-        <p class="vihje">Who the song is for, which memories or words should
+        <legend><span class="nro">2.</span><span data-t="kysymys2">What should the song say?</span></legend>
+        <p class="vihje" data-t="kysymys2Ohje">Who the song is for, which memories or words should
           go into it, the funny details. This is the most important part of
           the song &mdash; the more you tell me, the more personal it
           becomes.</p>
         <label class="kentta">
-          <textarea id="tarina" maxlength="1200" aria-label="The story of the song"
+          <textarea id="tarina" maxlength="1200" data-t-aria="tarinaAria" data-t-ph="tarinaVihje" aria-label="The story of the song"
             aria-describedby="laskuri"
             placeholder="For example: Aino is turning 50 and has tended her
 garden her whole life. She is known for talking
@@ -490,53 +509,45 @@ to her plants..."></textarea>
       </fieldset>
 
       <fieldset>
-        <legend><span class="nro">3.</span>What kind of musical style?</legend>
-        <p class="vihje">Pick one or several. If you are not sure, pick
+        <legend><span class="nro">3.</span><span data-t="kysymys3">What kind of musical style?</span></legend>
+        <p class="vihje" data-t="kysymys3Ohje">Pick one or several. If you are not sure, pick
           &rdquo;you choose&rdquo;.</p>
         <div class="sirut" id="tyyli"></div>
       </fieldset>
 
       <fieldset>
-        <legend><span class="nro">4.</span>Which language, and who sings?</legend>
-        <p class="vihje">A bilingual song works too &mdash; we then agree
+        <legend><span class="nro">4.</span><span data-t="kysymys4">Which language, and who sings?</span></legend>
+        <p class="vihje" data-t="kysymys4Ohje">A bilingual song works too &mdash; we then agree
           which parts are in which language.</p>
         <div class="sirut" id="kieli"></div>
         <label class="kentta" style="margin-top:16px">
-          <span>Singing voice</span>
-          <select id="aani">
-            <option value="">You choose</option>
-            <option>Female solo</option>
-            <option>Male solo</option>
-            <option>Duet</option>
-            <option>Girls&rsquo; group</option>
-            <option>Boys&rsquo; group</option>
-            <option>Mixed group</option>
-          </select>
+          <span data-t="aani">Singing voice</span>
+          <select id="aani"></select>
         </label>
       </fieldset>
 
       <fieldset>
-        <legend><span class="nro">5.</span>When do you need it?</legend>
+        <legend><span class="nro">5.</span><span data-t="kysymys5">When do you need it?</span></legend>
         <label class="kentta">
-          <span>Preferred delivery date</span>
+          <span data-t="paiva">Preferred delivery date</span>
           <input type="date" id="paiva">
         </label>
         <label class="ruutu">
           <input type="checkbox" id="kiire">
-          <span>Urgent &mdash; say in the quote whether it is possible and
+          <span data-t="kiire">Urgent &mdash; say in the quote whether it is possible and
             what it costs</span>
         </label>
       </fieldset>
 
       <fieldset>
-        <legend>Your contact details</legend>
+        <legend data-t="yhteys">Your contact details</legend>
         <div class="kentat2">
           <label class="kentta">
-            <span>Name</span>
+            <span data-t="nimi">Name</span>
             <input type="text" id="nimi" autocomplete="name">
           </label>
           <label class="kentta">
-            <span>Email</span>
+            <span data-t="sposti">Email</span>
             <input type="email" id="sposti" autocomplete="email"
                    inputmode="email">
           </label>
@@ -544,7 +555,7 @@ to her plants..."></textarea>
         <p class="virhe" id="virhe-yhteys"></p>
         <label class="ruutu">
           <input type="checkbox" id="lupa">
-          <span>My request may be processed in order to prepare a quote.
+          <span data-t="lupa">My request may be processed in order to prepare a quote.
             The information is not used for anything else and is not passed
             on to anyone.</span>
         </label>
@@ -552,13 +563,13 @@ to her plants..."></textarea>
       </fieldset>
 
       <div class="napit">
-        <button type="submit" class="paa">Request a free quote</button>
-        <button type="button" class="sivu" id="kopioi">Copy the text</button>
+        <button type="submit" class="paa" data-t="laheta">Request a free quote</button>
+        <button type="button" class="sivu" id="kopioi" data-t="kopioi">Copy the text</button>
       </div>
 
       <p class="kuittaus" id="kuittaus" hidden></p>
 
-      <p class="eiviela">
+      <p class="eiviela" data-t-html="eiSitoumusta">
         Sending your request <b>is not an order yet</b> and does not commit
         you to anything. The button opens your own email program with the
         message ready &mdash; you see it before sending and can still edit
@@ -568,7 +579,7 @@ to her plants..."></textarea>
     </form>
   </section>
 
-  <p class="rehellisyys">
+  <p class="rehellisyys" data-t="alaviite">
     The songs are made as original works: original lyrics, original
     arrangement and modern music tools, AI among them. We do not copy a known
     artist&rsquo;s voice or a known track; we make the requested style as our
@@ -585,23 +596,61 @@ to her plants..."></textarea>
 
 <audio id="el" preload="none" playsinline></audio>
 
+<script src="tekstit.js?v=1"></script>
 <script>
 (function (){
   'use strict';
 
   var POSTI = 'juntsa62@iki.fi';
 
-  /* ---- valinnat ------------------------------------------------------
-     Listat ovat täällä yhtenä paikkana, jotta uuden tilaisuuden tai
-     kielen lisääminen on yksi rivi eikä HTML-kaivuuta. */
-  var TILAISUUDET = ['Birthday','Wedding',
-    'Anniversary','For a friend','Thank you','In memory',
-    'A pet','For a child','Business or event','Something else'];
-  var TYYLIT = ['Pop','Ballad','Country','Rock','Jazz / soul','House',
-    'Techno','Latin','Highland / northern','K-pop','C-pop','J-pop',
-    'Children\u2019s song','You choose'];
-  var KIELET = ['Finnish','English','Swedish','Spanish','Mandarin Chinese',
-    'Cantonese','Japanese','Korean','Another language'];
+  /* ---- kieli ----------------------------------------------------------
+     Kaikki näkyvä teksti on tekstit.js:ssä, kolme kieltä allekkain.
+     Täällä on vain koneisto, joka valitsee kielen ja piirtää sivun sillä.
+
+     Jos tekstit.js ei lataudu, sivu jää siihen englantiin joka on HTML:ssä
+     valmiina — rikki se ei mene, ja kielivalitsin jää piiloon. */
+  var MR = window.MRTekstit || null;
+  var TUETUT = MR ? MR.KIELET : ['en'];
+
+  function aloituskieli(){
+    var u = (location.search.match(/[?&]kieli=([a-z]{2})/) || [])[1];
+    if (TUETUT.indexOf(u) >= 0) return u;
+    try { var m = localStorage.getItem('mr-kieli');
+          if (TUETUT.indexOf(m) >= 0) return m; } catch (e){}
+    var selain = (navigator.language || 'en').slice(0, 2).toLowerCase();
+    return TUETUT.indexOf(selain) >= 0 ? selain : 'en';
+  }
+  var KIELI = aloituskieli();
+
+  var POSTIMERKKI = /\{posti\}/g;
+  function t(avain){
+    if (!MR) return '';
+    return MR.valitse(MR.T[avain], KIELI).replace(POSTIMERKKI, POSTI);
+  }
+  function tlista(nimi){
+    if (!MR) return [];
+    return MR.T[nimi].map(function (r){ return MR.valitse(r, KIELI); });
+  }
+
+  /* Staattiset tekstit: data-t teksti, data-t-html merkinnän kanssa
+     (yksi lause sisältää <b>-korostuksen), data-t-ph ja data-t-aria
+     attribuutteihin. */
+  function asetaTekstit(){
+    if (!MR) return;
+    document.documentElement.lang = KIELI;
+    [['data-t','textContent'], ['data-t-html','innerHTML']].forEach(function (par){
+      var lista = document.querySelectorAll('[' + par[0] + ']');
+      Array.prototype.forEach.call(lista, function (el){
+        el[par[1]] = t(el.getAttribute(par[0]));
+      });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-t-ph]'), function (el){
+      el.placeholder = t(el.getAttribute('data-t-ph'));
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-t-aria]'), function (el){
+      el.setAttribute('aria-label', t(el.getAttribute('data-t-aria')));
+    });
+  }
 
   function teksti(s){           /* &auml; -> ä, ilman innerHTML:ää */
     var d = document.createElement('textarea');
@@ -609,25 +658,83 @@ to her plants..."></textarea>
     return d.value;
   }
 
+  /* Sirut piirretään uudelleen kieltä vaihdettaessa. Valinnat säilyvät,
+     koska ne muistetaan järjestysnumerona eikä tekstinä: 'Häät' ja
+     'Wedding' ovat sama valinta, vaikka merkkijono vaihtuu. */
   function sirut(kohde, nimet, tyyppi, ryhma){
     var sailio = document.getElementById(kohde);
+    var valitut = [];
+    Array.prototype.forEach.call(sailio.querySelectorAll('input'), function (i, k){
+      if (i.checked) valitut.push(k);
+    });
+    sailio.textContent = '';
     nimet.forEach(function (nimi, i){
-      var arvo = teksti(nimi);
       var l = document.createElement('label');
       l.className = 'siru';
       var i2 = document.createElement('input');
-      i2.type = tyyppi; i2.name = ryhma; i2.value = arvo;
+      i2.type = tyyppi; i2.name = ryhma; i2.value = nimi;
       i2.id = ryhma + '-' + i;
+      if (valitut.indexOf(i) >= 0) i2.checked = true;
       var s = document.createElement('span');
-      s.textContent = arvo;                       /* teksti, ei merkintä */
+      s.textContent = nimi;                       /* teksti, ei merkintä */
       l.appendChild(i2); l.appendChild(s);
       sailio.appendChild(l);
     });
   }
 
-  sirut('tilaisuus', TILAISUUDET, 'radio', 'tilaisuus');
-  sirut('tyyli', TYYLIT, 'checkbox', 'tyyli');
-  sirut('kieli', KIELET, 'checkbox', 'kieli');
+  function aanivalikko(){
+    var v = document.getElementById('aani');
+    var oli = v.selectedIndex;
+    v.textContent = '';
+    tlista('sAani').forEach(function (nimi, i){
+      var o = document.createElement('option');
+      o.textContent = nimi;
+      if (i === 0) o.value = '';                  /* 'valitse puolestani' */
+      v.appendChild(o);
+    });
+    if (oli > 0) v.selectedIndex = oli;
+  }
+
+  function piirraValinnat(){
+    sirut('tilaisuus', tlista('sTilaisuus'), 'radio', 'tilaisuus');
+    sirut('tyyli', tlista('sTyyli'), 'checkbox', 'tyyli');
+    sirut('kieli', tlista('sKieli'), 'checkbox', 'kieli');
+    aanivalikko();
+  }
+
+  /* Kielivalitsin. Piilossa jos tekstit.js ei latautunut: nappi joka ei
+     tee mitään on huonompi kuin ei nappia. */
+  var NIMET = { fi: 'Suomi', en: 'English', es: 'Español' };
+  function piirraKielivalitsin(){
+    var n = document.getElementById('kielet');
+    if (!MR){ n.hidden = true; return; }
+    n.textContent = '';
+    TUETUT.forEach(function (k){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'kielinappi' + (k === KIELI ? ' valittu' : '');
+      b.lang = k;
+      b.textContent = NIMET[k] || k;
+      b.setAttribute('aria-pressed', k === KIELI ? 'true' : 'false');
+      b.addEventListener('click', function (){ vaihdaKieli(k); });
+      n.appendChild(b);
+    });
+  }
+
+  function vaihdaKieli(k){
+    if (k === KIELI) return;
+    KIELI = k;
+    try { localStorage.setItem('mr-kieli', k); } catch (e){}
+    asetaTekstit();
+    piirraValinnat();
+    piirraKielivalitsin();
+    piirraNaytteet();
+    laske();
+  }
+
+  asetaTekstit();
+  piirraValinnat();
+  piirraKielivalitsin();
 
   document.getElementById('vuosi').textContent = new Date().getFullYear();
 
@@ -678,8 +785,7 @@ to her plants..."></textarea>
     seis();
     if (kortti) kortti.classList.add('rikki');
     var v = document.getElementById('naytevirhe');
-    v.textContent = '\u201d' + nimi + '\u201d would not play. The audio file '
-                  + 'could not be loaded \u2014 the other samples still work.';
+    v.textContent = t('naytevirhe').replace('{nimi}', nimi);
     v.hidden = false;
   });
 
@@ -691,7 +797,7 @@ to her plants..."></textarea>
     nappi.type = 'button';
     nappi.className = 'soita';
     nappi.setAttribute('aria-pressed', 'false');
-    nappi.setAttribute('aria-label', 'Kuuntele katkelma: ' + n.nimi);
+    nappi.setAttribute('aria-label', t('kuunteleKatkelma') + n.nimi);
 
     if (n.kansi){
       var kuva = document.createElement('img');
@@ -724,11 +830,11 @@ to her plants..."></textarea>
     nimirivi.appendChild(merkki); nimirivi.appendChild(nimi);
     var kaytto = document.createElement('span');
     kaytto.className = 'kaytto';
-    kaytto.textContent = n.tarkoitus || '';
+    kaytto.textContent = kentta(n.tarkoitus);
     var meta = document.createElement('span');
     meta.className = 'meta';
-    meta.textContent = [n.genre, n.kieli, n.kesto ? mmss(n.kesto) : '',
-                        n.video ? 'video' : '']
+    meta.textContent = [kentta(n.genre), laulunKieli(n.kieli),
+                        n.kesto ? mmss(n.kesto) : '', n.video ? 'video' : '']
                         .filter(Boolean).join(' · ');
 
     var alku = n.alku || 0;
@@ -776,14 +882,38 @@ to her plants..."></textarea>
     return d;
   }
 
+  /* Näytteiden kentät voivat olla joko pelkkä merkkijono (vanha muoto,
+     sama teksti joka kielellä) tai {fi,en,es}. Kumpikin kelpaa, joten
+     naytteet.json voi olla kesken käännetty eikä sivu hajoa. */
+  function kentta(arvo){
+    if (!arvo) return '';
+    if (typeof arvo === 'string') return arvo;
+    return MR ? MR.valitse(arvo, KIELI) : (arvo.en || '');
+  }
+  /* Laulun kieli on kielikoodi ('fi'), jotta merkintä kääntyy sivun
+     mukana. Vanha muoto oli kirjoitettu nimi ('Suomi') — se kelpaa yhä
+     sellaisenaan. */
+  function laulunKieli(arvo){
+    if (!arvo) return '';
+    if (MR && MR.T.nKieli[arvo]) return MR.valitse(MR.T.nKieli[arvo], KIELI);
+    return kentta(arvo);
+  }
+
+  var NAYTTEET = [];
+  function piirraNaytteet(){
+    if (!NAYTTEET.length) return;     /* osio pysyy piilossa */
+    seis();
+    var sailio = document.getElementById('naytteet');
+    sailio.textContent = '';
+    NAYTTEET.forEach(function (n){ sailio.appendChild(kortti(n)); });
+    document.getElementById('esimerkit').hidden = false;
+  }
+
   fetch('naytteet.json?v=17796620').then(function (r){
     return r.ok ? r.json() : null;
   }).then(function (d){
-    var lista = (d && d.naytteet) || [];
-    if (!lista.length) return;        /* osio pysyy piilossa */
-    var sailio = document.getElementById('naytteet');
-    lista.forEach(function (n){ sailio.appendChild(kortti(n)); });
-    document.getElementById('esimerkit').hidden = false;
+    NAYTTEET = (d && d.naytteet) || [];
+    piirraNaytteet();
   }).catch(function (){});
 
   /* ---- videonäyte ------------------------------------------------------
@@ -796,7 +926,7 @@ to her plants..."></textarea>
   function avaaVideo(n){
     seis();                                  /* ääninäyte hiljenee */
     document.getElementById('videonimi').textContent =
-      n.nimi + ' · ' + (n.kieli || '');
+      n.nimi + ' · ' + laulunKieli(n.kieli);
     if (video.getAttribute('src') !== n.video){
       video.setAttribute('src', n.video);
       if (n.kansi) video.setAttribute('poster', n.kansi);
@@ -823,7 +953,7 @@ to her plants..."></textarea>
   video.addEventListener('error', function (){
     suljeVideo();
     var v = document.getElementById('naytevirhe');
-    v.textContent = 'The video could not be loaded. The other samples still work.';
+    v.textContent = t('videovirhe');
     v.hidden = false;
   });
 
@@ -849,17 +979,20 @@ to her plants..."></textarea>
   }
 
   function viesti(a){
+    /* Viesti kirjoitetaan sivun kielellä: asiakas lukee sen ennen
+       lähettämistä ja muokkaa sitä omin sanoin, joten sen pitää olla
+       hänen kielellään eikä vastaanottajan. */
     var r = [];
-    r.push('Quote request \u2014 KJWhispers Custom Songs');
+    r.push(t('postiOtsikko'));
     r.push('');
-    r.push('Occasion: ' + (a.tilaisuus || '(not selected)'));
-    r.push('Style: ' + (a.tyyli.length ? a.tyyli.join(', ') : '(you choose)'));
-    r.push('Language: ' + (a.kieli.length ? a.kieli.join(', ') : '(you choose)'));
-    r.push('Singing voice: ' + (a.aani || '(you choose)'));
-    r.push('Preferred delivery date: ' + (a.paiva || '(no hurry)') +
-           (a.kiire ? '  \u2014 URGENT' : ''));
+    r.push(t('postiTilaisuus') + (a.tilaisuus || t('eiValittu')));
+    r.push(t('postiTyyli') + (a.tyyli.length ? a.tyyli.join(', ') : t('sinaValitset')));
+    r.push(t('postiKieli') + (a.kieli.length ? a.kieli.join(', ') : t('sinaValitset')));
+    r.push(t('postiAani') + (a.aani || t('sinaValitset')));
+    r.push(t('postiPaiva') + (a.paiva || t('eiKiire')) +
+           (a.kiire ? '  ' + t('kiireMerkinta') : ''));
     r.push('');
-    r.push('Story:');
+    r.push(t('postiTarina'));
     r.push(a.tarina);
     r.push('');
     r.push('---');
@@ -874,17 +1007,15 @@ to her plants..."></textarea>
     nayta('virhe-tarina'); nayta('virhe-yhteys'); nayta('virhe-lupa');
     var eka = null;
     if (a.tarina.length < 15){
-      nayta('virhe-tarina', 'Tell me in a few more sentences what the song ' +
-            'should be about \u2014 without that I cannot make a quote.');
+      nayta('virhe-tarina', t('virheTarina'));
       eka = eka || tarina;
     }
     if (!a.nimi || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(a.sposti)){
-      nayta('virhe-yhteys', 'I need your name and a working email address ' +
-            'so that I can reply.');
+      nayta('virhe-yhteys', t('virheYhteys'));
       eka = eka || document.getElementById(a.nimi ? 'sposti' : 'nimi');
     }
     if (!document.getElementById('lupa').checked){
-      nayta('virhe-lupa', 'Tick the permission box so I can process your request.');
+      nayta('virhe-lupa', t('virheLupa'));
       eka = eka || document.getElementById('lupa');
     }
     if (eka){ eka.focus(); eka.scrollIntoView({ block: 'center' }); }
@@ -901,7 +1032,7 @@ to her plants..."></textarea>
     e.preventDefault();
     var a = arvot();
     if (!kelpaa(a)) return;
-    var otsikko = 'Quote request: ' + (a.tilaisuus || 'a song of my own') +
+    var otsikko = t('postiPyynto') + (a.tilaisuus || t('postiOmaLaulu')) +
                   (a.nimi ? ' — ' + a.nimi : '');
     var url = 'mailto:' + POSTI +
               '?subject=' + encodeURIComponent(otsikko) +
@@ -909,21 +1040,17 @@ to her plants..."></textarea>
     /* Hyvin pitkä tarina ei mahdu mailto-osoitteeseen kaikissa
        sähköpostiohjelmissa. Silloin kopiointi on ainoa rehellinen tie. */
     if (url.length > 1900){
-      kopioiTeksti(viesti(a),
-        'Your story is too long to fit straight into an email link. ' +
-        'I copied it to the clipboard \u2014 paste it into a message to ' + POSTI + '.');
+      kopioiTeksti(viesti(a), t('liianPitka'));
       return;
     }
-    kuittaa('Opening your email program. The message is ready \u2014 read it and press ' +
-            'send. I usually reply within a couple of days.');
+    kuittaa(t('avataanPosti'));
     window.location.href = url;
   });
 
   function kopioiTeksti(t, sanoma){
     var valmis = function (){ kuittaa(sanoma); };
     var eiOnnistu = function (){
-      kuittaa('Copying did not work in this browser. Select the text ' +
-              'by hand or send a message to ' + POSTI + '.');
+      kuittaa(t('kopiointiEiOnnistu'));
     };
     if (navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(t).then(valmis, eiOnnistu);
@@ -943,9 +1070,7 @@ to her plants..."></textarea>
 
   document.getElementById('kopioi').addEventListener('click', function (){
     var a = arvot();
-    kopioiTeksti(viesti(a),
-      'The text is on the clipboard. Paste it into an email, a message or ' +
-      'wherever you like \u2014 the address is ' + POSTI + '.');
+    kopioiTeksti(viesti(a), t('leikepoydalla'));
   });
 
 })();

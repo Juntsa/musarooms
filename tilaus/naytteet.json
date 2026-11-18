@@ -1,59 +1,99 @@
 {
-  "naytteet": [
-    {
-      "nimi": "Koulutie",
-      "tarkoitus": "Lapselle · koulun alku",
-      "genre": "Lastenlaulu",
-      "kieli": "Suomi",
-      "kesto": 220.0,
-      "alku": 35,
-      "katkelma": 25,
-      "aani": "https://aani.musarooms.com/naytteet/naytteet-02-koulutie.mp3",
-      "kansi": "https://aani.musarooms.com/naytteet/naytteet-02-koulutie.jpg"
-    },
-    {
-      "nimi": "Superpoika",
-      "tarkoitus": "Lapselle · oma sankari",
-      "genre": "Lastenlaulu",
-      "kieli": "Suomi",
-      "kesto": 213.3,
-      "alku": 35,
-      "katkelma": 25,
-      "aani": "https://aani.musarooms.com/naytteet/naytteet-04-superpoika.mp3",
-      "kansi": "https://aani.musarooms.com/naytteet/naytteet-04-superpoika.jpg"
-    },
-    {
-      "nimi": "Ye Are My Hame",
-      "tarkoitus": "Häät",
-      "genre": "Highland ballad",
-      "kieli": "Englanti",
-      "kesto": 265.0,
-      "alku": 35,
-      "katkelma": 25,
-      "aani": "https://aani.musarooms.com/naytteet/naytteet-05-ye-are-my-hame.mp3",
-      "kansi": "https://aani.musarooms.com/naytteet/naytteet-05-ye-are-my-hame.jpg"
-    },
-    {
-      "nimi": "Super Woman Trucker",
-      "tarkoitus": "Huumori · ammatti",
-      "genre": "Country rock",
-      "kieli": "Englanti",
-      "kesto": 258.0,
-      "alku": 35,
-      "katkelma": 25,
-      "aani": "https://aani.musarooms.com/naytteet/naytteet-03-super-woman-trucker.mp3",
-      "kansi": "https://aani.musarooms.com/naytteet/naytteet-03-super-woman-trucker.jpg"
-    },
-    {
-      "nimi": "Happy Birthday My Friend",
-      "tarkoitus": "Ystävälle · syntymäpäivä",
-      "genre": "Country",
-      "kieli": "Englanti",
-      "kesto": 227.6,
-      "alku": 35,
-      "katkelma": 25,
-      "aani": "https://aani.musarooms.com/naytteet/naytteet-01-happy-birthday-my-friend.mp3",
-      "kansi": "https://aani.musarooms.com/naytteet/naytteet-01-happy-birthday-my-friend.jpg"
-    }
-  ]
+ "naytteet": [
+  {
+   "nimi": "Koulutie",
+   "tarkoitus": {
+    "fi": "Lapselle · koulun alku",
+    "en": "For a child · starting school",
+    "es": ""
+   },
+   "genre": {
+    "fi": "Lastenlaulu",
+    "en": "Children’s song",
+    "es": ""
+   },
+   "kieli": "fi",
+   "kesto": 220.0,
+   "alku": 35,
+   "katkelma": 25,
+   "aani": "https://aani.musarooms.com/naytteet/naytteet-02-koulutie.mp3",
+   "kansi": "https://aani.musarooms.com/naytteet/naytteet-02-koulutie.jpg"
+  },
+  {
+   "nimi": "Superpoika",
+   "tarkoitus": {
+    "fi": "Lapselle · oma sankari",
+    "en": "For a child · their own hero",
+    "es": ""
+   },
+   "genre": {
+    "fi": "Lastenlaulu",
+    "en": "Children’s song",
+    "es": ""
+   },
+   "kieli": "fi",
+   "kesto": 213.3,
+   "alku": 35,
+   "katkelma": 25,
+   "aani": "https://aani.musarooms.com/naytteet/naytteet-04-superpoika.mp3",
+   "kansi": "https://aani.musarooms.com/naytteet/naytteet-04-superpoika.jpg"
+  },
+  {
+   "nimi": "Ye Are My Hame",
+   "tarkoitus": {
+    "fi": "Häät",
+    "en": "Wedding",
+    "es": ""
+   },
+   "genre": {
+    "fi": "Highland-balladi",
+    "en": "Highland ballad",
+    "es": ""
+   },
+   "kieli": "en",
+   "kesto": 265.0,
+   "alku": 35,
+   "katkelma": 25,
+   "aani": "https://aani.musarooms.com/naytteet/naytteet-05-ye-are-my-hame.mp3",
+   "kansi": "https://aani.musarooms.com/naytteet/naytteet-05-ye-are-my-hame.jpg"
+  },
+  {
+   "nimi": "Super Woman Trucker",
+   "tarkoitus": {
+    "fi": "Huumori · ammatti",
+    "en": "Humour · a line of work",
+    "es": ""
+   },
+   "genre": {
+    "fi": "Country rock",
+    "en": "Country rock",
+    "es": ""
+   },
+   "kieli": "en",
+   "kesto": 258.0,
+   "alku": 35,
+   "katkelma": 25,
+   "aani": "https://aani.musarooms.com/naytteet/naytteet-03-super-woman-trucker.mp3",
+   "kansi": "https://aani.musarooms.com/naytteet/naytteet-03-super-woman-trucker.jpg"
+  },
+  {
+   "nimi": "Happy Birthday My Friend",
+   "tarkoitus": {
+    "fi": "Ystävälle · syntymäpäivä",
+    "en": "For a friend · birthday",
+    "es": ""
+   },
+   "genre": {
+    "fi": "Country",
+    "en": "Country",
+    "es": ""
+   },
+   "kieli": "en",
+   "kesto": 227.6,
+   "alku": 35,
+   "katkelma": 25,
+   "aani": "https://aani.musarooms.com/naytteet/naytteet-01-happy-birthday-my-friend.mp3",
+   "kansi": "https://aani.musarooms.com/naytteet/naytteet-01-happy-birthday-my-friend.jpg"
+  }
+ ]
 }
