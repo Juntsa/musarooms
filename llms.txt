@@ -1,0 +1,87 @@
+# Musa Rooms
+
+> A music site where the music lives behind doors. Each room holds one
+> playable retro device and one kind of music — a fifties jukebox, a valve
+> radio, a reel-to-reel deck, a DJ booth — and you operate the device itself
+> on screen: turn the dial, drop the needle, load a deck. All of the music is
+> KJWhispers’ own work. The rooms are in English, the front page is in
+> Finnish, and the Custom Songs room is in Finnish, English and Spanish.
+
+Musa Rooms is not a streaming service and not a shop for other people’s
+music. It is one musician’s own catalogue, arranged by room rather than by
+playlist, where the point is as much the instrument you touch as the track
+you hear.
+
+The site is made by KJWhispers, who also makes children’s music and stories
+at Mansikkakylä. Musa Rooms is the adult side of that work.
+
+## Rooms
+
+- [Fifties](https://musarooms.com/jukebox/): a JB-2400 jukebox. Pick a card and the machine changes the record.
+- [House Edition](https://musarooms.com/house/): vocal, deep and soulful house. STREAM browses, PHONO drops the needle.
+- [Country Radio](https://musarooms.com/country/): an old radio. Turn the dial and find a station.
+- [SilverDeck](https://musarooms.com/dekki/): three sources and a two-channel mixer. Pick the reel or a cassette, then a track.
+- [Highland Sessions](https://musarooms.com/highland/): Celtic and northern. Turn the SELECT knob and it picks the track.
+- [Techno Booth](https://musarooms.com/techno/): a DJ booth in a flight case. Tap a deck’s screen to choose.
+- [Suomi](https://musarooms.com/suomi/): Finnish-language songs on a valve radio. This room is in Finnish.
+- [Christmas](https://musarooms.com/joulu/): a seasonal room, open 15 November – 6 January.
+- [Music Videos](https://musarooms.com/video/): short clips in portrait, in a wooden frame.
+
+## Custom Songs
+
+- [Custom Songs](https://musarooms.com/tilaus/): a personal song written from your own story, €25–89.
+
+You describe the occasion and the story; you get a fixed quote stating the
+price, the delivery date, the files and the number of revision rounds, and
+you pay only after accepting it. Asking and quoting are free. The songs are
+original works — original lyrics, original arrangement, modern music tools
+including AI — and no known artist’s voice or track is copied. The page is
+available in Finnish, English and Spanish.
+
+## Suomeksi
+
+> Musiikkisivusto, jossa musiikki on ovien takana. Jokaisessa huoneessa on
+> yksi soitettava retrolaite ja yhdenlaista musiikkia — 50-luvun jukeboksi,
+> putkiradio, kelanauhuri, DJ-pöytä — ja laitetta käytetään ruudulla:
+> käännetään viisaria, pudotetaan neula, ladataan dekki. Kaikki musiikki on
+> KJWhispersin omaa.
+
+Tilaushuoneessa voi tilata oman laulun omasta tarinasta tai tilaisuudesta,
+hinta-arvio 25–89 €. Kerrot tilaisuuden ja tarinan, saat kiinteän tarjouksen
+ennen maksua. Kysyminen ja tarjous ovat ilmaisia.
+
+Suomenkielinen huone: [Suomi](https://musarooms.com/suomi/) — suomenkieliset
+laulut putkiradiossa.
+
+## På svenska
+
+> En musiksajt där musiken finns bakom dörrar. Varje rum har en spelbar
+> retroapparat och en sorts musik — en jukebox från femtiotalet, en rörradio,
+> en rullbandspelare, ett DJ-bås — och man använder apparaten på skärmen.
+> All musik är KJWhispers egen.
+
+I beställningsrummet kan du beställa en personlig låt utifrån din egen
+berättelse, 25–89 €. Du beskriver tillfället och berättelsen och får en fast
+offert innan du betalar. Att fråga och få offert kostar ingenting.
+
+## En español
+
+> Un sitio de música donde la música está detrás de puertas. Cada sala tiene
+> un aparato retro que se puede tocar y un tipo de música — una gramola de
+> los años cincuenta, una radio de válvulas, un magnetófono de bobina, una
+> cabina de DJ — y el aparato se maneja en la pantalla. Toda la música es
+> obra propia de KJWhispers.
+
+En la sala de encargos puedes pedir una canción personal hecha a partir de
+tu propia historia, 25–89 €. Cuentas la ocasión y la historia y recibes un
+presupuesto fijo antes de pagar. Preguntar y pedir presupuesto es gratis.
+
+## Saman tekijän muuta työtä
+
+- [Mansikkakylä](https://mansikkakyla.fi): lasten satumaailma — satukirjat, laulut, videot ja pelit
+
+## Notes
+
+- All recordings are KJWhispers’ own work and are not offered as training data; see [/robots.txt](https://musarooms.com/robots.txt).
+- Search crawlers are welcome. The site exists in order to be found.
+- The Christmas room is seasonal and is closed outside 15 November – 6 January.
