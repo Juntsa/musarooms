@@ -625,7 +625,7 @@ to her plants..."></textarea>
 
 <audio id="el" preload="none" playsinline></audio>
 
-<script src="tekstit.js?v=2"></script>
+<script src="tekstit.js?v=3"></script>
 <script>
 (function (){
   'use strict';
@@ -674,17 +674,26 @@ to her plants..."></textarea>
        Osoitteessa kulkeva kieli poistaa arvauksen. */
     var kl = document.getElementById('korttiLinkki');
     if (kl) kl.href = 'kortti/?kieli=' + KIELI;
+    /* Tyhjää EI kirjoiteta päälle.
+       Merkkauksessa oleva englanti on varmuus sen varalta, ettei tekstit.js
+       lataudu. Mutta jos se latautui VANHANA — selaimen välimuistista, tai
+       avain lisättiin unohtaen nostaa ?v= — haku ei osu, t() palauttaa
+       tyhjän, ja varmuus pyyhkiytyisi pois. Sivulle jäisi tyhjä otsikko
+       eikä mikään kertoisi miksi. Niin kävi 19.11.2026. */
     [['data-t','textContent'], ['data-t-html','innerHTML']].forEach(function (par){
       var lista = document.querySelectorAll('[' + par[0] + ']');
       Array.prototype.forEach.call(lista, function (el){
-        el[par[1]] = t(el.getAttribute(par[0]));
+        var arvo = t(el.getAttribute(par[0]));
+        if (arvo) el[par[1]] = arvo;
       });
     });
     Array.prototype.forEach.call(document.querySelectorAll('[data-t-ph]'), function (el){
-      el.placeholder = t(el.getAttribute('data-t-ph'));
+      var arvo = t(el.getAttribute('data-t-ph'));
+      if (arvo) el.placeholder = arvo;
     });
     Array.prototype.forEach.call(document.querySelectorAll('[data-t-aria]'), function (el){
-      el.setAttribute('aria-label', t(el.getAttribute('data-t-aria')));
+      var arvo = t(el.getAttribute('data-t-aria'));
+      if (arvo) el.setAttribute('aria-label', arvo);
     });
   }
 

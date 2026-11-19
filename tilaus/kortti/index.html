@@ -185,9 +185,17 @@ const VALINNAT = {
 function asetaTekstit() {
   if (!MR) return;
   document.documentElement.lang = KIELI;
-  for (const el of document.querySelectorAll('[data-t]')) el.textContent = t(el.dataset.t);
-  for (const el of document.querySelectorAll('[data-t-ph]')) el.placeholder = t(el.dataset.tPh);
-  for (const el of document.querySelectorAll('[data-t-aria]')) el.setAttribute('aria-label', t(el.dataset.tAria));
+  /* Tyhjää EI kirjoiteta päälle. Merkkauksessa oleva suomi on varmuus sen
+     varalta, ettei tekstit.js lataudu. Jos se latautuu VANHANA — selaimen
+     välimuistista tai avain lisättiin nostamatta versiota — haku ei osu ja
+     varmuus pyyhkiytyisi pois: sivulle jäisi tyhjä otsikko eikä mikään
+     kertoisi miksi. */
+  const aseta = (el, kentta, avain) => { const v = t(avain); if (v) el[kentta] = v; };
+  for (const el of document.querySelectorAll('[data-t]')) aseta(el, 'textContent', el.dataset.t);
+  for (const el of document.querySelectorAll('[data-t-ph]')) aseta(el, 'placeholder', el.dataset.tPh);
+  for (const el of document.querySelectorAll('[data-t-aria]')) {
+    const v = t(el.dataset.tAria); if (v) el.setAttribute('aria-label', v);
+  }
   for (const el of document.querySelectorAll('[data-tl]')) {
     const [lista, avain] = el.dataset.tl.split(':');
     el.textContent = tl(lista, avain) || el.textContent;
