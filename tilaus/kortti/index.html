@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="fi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>MusaRooms – kortti- ja vihkosuunnittelija</title>
+<style>
+:root {
+  color-scheme: dark;
+  /* Neljä ensimmäistä ovat sivuston omat tunnusvärit (ks. musarooms.com
+     etusivun :root). Ne pidetään täsmälleen samoina, jotta sivulta
+     toiselle siirtyvä ei näe sävyeroa, joka näyttäisi vahingolta.
+     Loput ovat tämän sivun omaa syvyyttä eivätkä esiinny muualla. */
+  --bg: #0a0908;
+  --ink: #e8ded0;
+  --muted: #9a8b78;
+  --accent: #ff9a1f;
+  --header: #25170e;
+  --panel: #1b1511;
+  --surface: #261c15;
+  --line: #76533a;
+  --gold: #ffcb8a;
+  --selected: #3a2416;
+  --on-accent: #221207;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 1rem/1.55 system-ui, sans-serif; }
+header { padding: 32px 16px; border-bottom: 1px solid var(--line); background: linear-gradient(140deg, var(--header), var(--bg)); }
+.wrap, main, footer { max-width: 1160px; margin-inline: auto; }
+/* Paluulinkki on sama kuvio kuin muissa huoneissa: ilman sitä jaetusta
+   linkistä tuleva asiakas on umpikujassa, koska sivulla ei ole navigointia. */
+.takaisin { display: inline-block; margin-bottom: 18px; padding: 9px 14px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); text-decoration: none; font-size: 13px; letter-spacing: .06em; min-height: 44px; line-height: 26px; }
+.takaisin:hover { border-color: var(--gold); color: var(--ink); }
+.eyebrow { text-transform: uppercase; letter-spacing: .24em; font-weight: 800; }
+.eyebrow span { color: var(--accent); }
+h1 { font-size: clamp(1.8rem, 4vw, 3rem); line-height: 1.1; margin: 12px 0; }
+h2 { font-size: 1.2rem; margin: 0 0 12px; }
+p { margin: 0 0 12px; }
+header p { max-width: 64ch; color: var(--muted); margin: 0; }
+main { padding: 24px 16px 32px; }
+.two, .grid, .format-options, .actions { display: grid; }
+.two { grid-template-columns: minmax(0, 1.04fr) minmax(0, .96fr); gap: 20px; align-items: start; }
+.grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 12px; }
+.panel { min-width: 0; padding: 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); }
+.field { min-width: 0; margin-bottom: 16px; }
+.field label, legend { display: block; margin-bottom: 6px; font-weight: 700; }
+.field :is(select, input, textarea) { width: 100%; min-height: 44px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font: inherit; color: var(--ink); }
+.field textarea { min-height: 84px; resize: vertical; }
+::placeholder { color: var(--muted); }
+:focus-visible, .format-item input:focus-visible + .format-face { outline: 2px solid var(--gold); outline-offset: 3px; }
+.format-picker { padding: 0; border: 0; min-inline-size: 0; margin: 0 0 16px; }
+.format-options { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.format-item { position: relative; cursor: pointer; }
+.format-item input { position: absolute; opacity: 0; inline-size: 1px; block-size: 1px; }
+.format-face { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 114px; padding: 8px 4px; border: 2px solid var(--line); border-radius: 10px; background: var(--surface); text-align: center; font-size: .88rem; }
+.format-face small { color: var(--muted); }
+.shape { width: 30px; height: 42px; margin-bottom: 6px; border: 2px solid var(--gold); border-radius: 3px; }
+.shape.large { width: 36px; height: 50px; }
+.shape.square { width: 36px; height: 36px; }
+.shape.landscape { width: 42px; height: 30px; }
+.shape.spread { width: 54px; height: 38px; position: relative; }
+.shape.spread::after { content: ''; position: absolute; inset: 0 50% 0 auto; border-left: 1px dashed var(--gold); }
+.format-item input:checked + .format-face { border-color: var(--accent); background: var(--selected); color: var(--gold); }
+.format-item:hover .format-face { border-color: var(--gold); }
+.format-info, .format-warning { margin: 8px 0 0; }
+details, .type-opt { padding: 12px; margin: 0 0 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+summary { cursor: pointer; font-weight: 700; padding-block: 10px; }
+details[open] summary { margin-bottom: 12px; }
+.toggle { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 700; cursor: pointer; }
+.toggle input { flex: none; width: 20px; height: 20px; margin: 0; accent-color: var(--accent); }
+#messageField { padding-top: 10px; border-top: 1px solid var(--line); }
+.hint, .small, .format-warning, footer { color: var(--muted); font-size: .875rem; }
+.size, .status, a { color: var(--gold); }
+.size { font-size: .875rem; font-weight: 700; margin-bottom: 8px; }
+.code { white-space: pre-wrap; overflow-wrap: anywhere; font: .875rem/1.6 ui-monospace, Consolas, monospace; background: var(--bg); border: 1px solid var(--line); padding: 14px; border-radius: 8px; max-height: 350px; overflow: auto; }
+.actions { gap: 8px; margin: 12px 0; }
+button { min-height: 44px; padding: 10px 12px; font: inherit; font-weight: 750; background: var(--accent); color: var(--on-accent); border: 1px solid var(--accent); border-radius: 8px; cursor: pointer; }
+button.alt { background: var(--surface); color: var(--ink); border-color: var(--line); }
+button:hover:not(:disabled) { border-color: var(--gold); filter: brightness(1.12); }
+button:disabled { opacity: .6; cursor: default; }
+.status { font-size: .875rem; }
+.status:not(:empty) { margin-bottom: 10px; }
+.separator { border: 0; border-top: 1px solid var(--line); margin: 20px 0; }
+footer { padding: 0 16px 28px; }
+@media (max-width: 820px) { .two { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 520px) {
+  header { padding-block: 24px; }
+  main { padding-block-start: 16px; }
+  .grid { grid-template-columns: minmax(0, 1fr); }
+  .format-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .panel { padding: 15px; }
+}
+</style>
+</head><body>
+<header><div class="wrap"><a class="takaisin" href="../">&larr; Takaisin Tilaushuoneeseen</a><div class="eyebrow">Musa <span>Rooms</span></div><h1>Kortti- ja vihkosuunnittelija</h1><p>Valitse kuvan ilme ja kopioi valmis kuvakehote ChatGPT:hen maksutonta kokeilua varten.</p></div></header>
+<main><div class="two"><section class="panel"><h2>1. Valitse kuvan ilme</h2><div class="grid"><div class="field"><label for="purpose">Tilaisuus</label><select id="purpose"><option>Syntymäpäivä</option><option>Häät</option><option>Kiitos</option><option>Valmistujaiset</option><option>Vauvan syntymä</option><option>Ystävänpäivä</option><option>Muistaminen</option><option>Joulu</option><option>Oma juhla</option></select></div></div>
+<fieldset class="format-picker"><legend>Koko ja kuvasuhde</legend>
+<div class="format-options">
+<label class="format-item"><input type="radio" name="formatChoice" value="a6" checked><span class="format-face"><span class="shape"></span><strong>A6 pysty</strong><small>105 × 148 mm</small><small>≈ 5:7</small></span></label>
+<label class="format-item"><input type="radio" name="formatChoice" value="a5"><span class="format-face"><span class="shape large"></span><strong>A5 pysty</strong><small>148 × 210 mm</small><small>≈ 5:7</small></span></label>
+<label class="format-item"><input type="radio" name="formatChoice" value="square"><span class="format-face"><span class="shape square"></span><strong>Neliö</strong><small>130 × 130 mm</small><small>1:1</small></span></label>
+<label class="format-item"><input type="radio" name="formatChoice" value="a6wide"><span class="format-face"><span class="shape landscape"></span><strong>A6 vaaka</strong><small>148 × 105 mm</small><small>≈ 7:5</small></span></label>
+<label class="format-item"><input type="radio" name="formatChoice" value="spread"><span class="format-face"><span class="shape spread"></span><strong>A5-aukeama</strong><small>296 × 210 mm</small><small>≈ 7:5</small></span></label>
+</div>
+<div class="format-info hint" id="formatInfo" aria-live="polite"></div>
+<p class="format-warning">Valinta määrittää kuvakehotteen muodon; ChatGPT:n tuottaman kuvan tarkka pikselikoko tarkistetaan vasta viimeistelyssä.</p>
+</fieldset>
+<div class="field"><label for="product">Tuote</label><select id="product"></select></div>
+<div class="field"><label for="style">Kuvitustekniikka</label><select id="style"><option value="watercolor">Käsinmaalattu vesiväri</option><option value="gouache">Guassikuvitus</option><option value="paper">Kerrostettu paperileikkaus</option><option value="storybook">Lämmin satukirjakuvitus</option><option value="editorial">Tyylikäs tunnelmavalokuva</option><option value="letterpress">Kohopainoa jäljittelevä grafiikka</option></select></div>
+<div class="field"><label for="subject">Mitä kuvassa tapahtuu?</label><textarea id="subject" maxlength="380" placeholder="Esim. kesäinen järvenrantaterassi, kaksi kristallilasia ja luonnonkukkakimppu">Kesäinen suomalainen järvenrantaterassi, kaksi kristallilasia ja pieni luonnonkukkakimppu</textarea><div class="hint">Kerro konkreettisesti myös harrastuksesta, lemmikistä tai juhlan erityisestä yksityiskohdasta.</div></div>
+<details><summary>Lisäasetukset</summary>
+<div class="grid"><div class="field"><label for="setting">Ympäristö</label><select id="setting"><option value="lakeside">Suomalainen järvimaisema</option><option value="garden">Puutarha</option><option value="forest">Pohjoismainen metsä</option><option value="studio">Rauhallinen paperitausta</option><option value="city">Kaupungin kahvila</option><option value="tuscany">Toscanan maisema</option></select></div><div class="field"><label for="composition">Sommittelu ja tekstin paikka</label><select id="composition"><option value="top">Tyhjää tilaa ylhäällä</option><option value="center">Tyhjää tilaa keskellä</option><option value="bottom">Tyhjää tilaa alhaalla</option><option value="left">Tyhjää tilaa vasemmalla</option><option value="full">Koko sivun kuvitus, ei tekstialuetta</option></select></div></div>
+<div class="field"><label for="light">Valaistus ja tunnelma</label><select id="light"><option value="golden">Lämmin ilta-aurinko</option><option value="soft">Pehmeä luonnonvalo</option><option value="morning">Raikas pohjoinen aamu</option><option value="candle">Kynttilänvalo</option><option value="moody">Hillitty elokuvallinen valo</option></select></div>
+
+
+<div class="field"><label for="palette">Väripaletti</label><select id="palette"><option value="ivory_sage">Kermanvalkoinen · salvia · puuteriroosa · kulta</option><option value="amber_green">Meripihka · metsänvihreä · kermanvalkoinen</option><option value="blue_silver">Yönsininen · hopea · hento vaaleansininen</option><option value="rose_gold">Puuteriroosa · samppanja · kulta</option><option value="berry">Mansikanpunainen · valkoinen · lehtivihreä</option><option value="earth">Terrakotta · beige · oliivinvihreä</option></select></div>
+<div class="field"><label for="texture">Materiaali ja tekstuuri</label><select id="texture"><option value="paper">Puuvillainen akvarellipaperi</option><option value="linen">Pellavatekstuuri</option><option value="smooth">Sileä mattapinta</option><option value="foil">Hillitty kultafolion näköinen yksityiskohta</option><option value="grain">Hieno 35 mm filmirae</option></select></div>
+
+<div class="field"><label for="focus">Terävyys ja optiikka</label><select id="focus"><option value="auto">Automaattinen tekniikan mukaan</option><option value="crisp">Terävä koko kuvassa</option><option value="depth">50 mm, pehmeä taustan epäterävyys</option></select></div></details>
+<section class="type-opt"><label class="toggle"><input type="checkbox" id="textToggle" aria-controls="messageField"> Lisää teksti kokeilukuvaan</label><p class="hint">Oletuksena kuvaluonnokseen varataan tilaa tekstille. Lopullinen teksti taitetaan erikseen PDF:ään.</p>
+<div id="messageField" hidden>
+<div class="grid"><div class="field"><label for="message1">Teksti · rivi 1 <small id="count1">0/15</small></label><input id="message1" value="Onnea!" placeholder="Esim. Onnea!"></div><div class="field"><label for="message2">Teksti · rivi 2 (valinnainen) <small id="count2">0/15</small></label><input id="message2" value="" placeholder="Esim. 50 vuotta"></div></div>
+<div class="grid"><div class="field"><label for="fontStyle">Kirjasintyyli</label><select id="fontStyle"><option value="elegant">Elegantti antiikva</option><option value="hand">Käsinkirjoitettu</option><option value="modern">Moderni selkeä</option><option value="playful">Leikkisä</option></select></div><div class="field"><label for="textPlace">Tekstin sijainti</label><select id="textPlace"><option value="top">Ylhäällä</option><option value="center">Keskellä</option><option value="bottom">Alhaalla</option></select></div></div>
+<p class="hint">Enintään 15 merkkiä rivillä, välilyönnit mukaan lukien. Täsmällinen fontti ja virheetön teksti varmistetaan vasta maksullisen PDF:n taitossa.</p>
+</div></section>
+</section>
+<section class="panel"><h2>2. Valmis kuvakehote</h2><p class="small">Kehote päivittyy valintojesi mukaan. Kuvan tarkka pikselikoko voi poiketa kehotteessa pyydetystä.</p><div id="size" class="size"></div><div class="code" id="prompt" tabindex="0" role="region" aria-label="Kuvakehote"></div><div class="actions"><button id="copyOpen">Kopioi kehote ja avaa ChatGPT</button><button id="copyOnly" class="alt">Kopioi kehote</button></div><div id="status" class="status" role="status"></div><p class="small">Liitä kopioitu kehote itse ChatGPT:n viestikenttään ja lähetä se siellä. <a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">Avaa ChatGPT uuteen välilehteen</a>. ChatGPT:n käyttörajat voivat vaikuttaa kokeiluun.</p><hr class="separator"><h2>3. Yksi korjauskehotteen luonnos</h2><p class="small">Kun olet nähnyt luonnoksen ChatGPT:ssä, voit kirjoittaa tähän yhden muutostoiveen. Liitä korjaus samaan ChatGPT-keskusteluun.</p><div class="field"><label for="revision">Mitä muuttaisit?</label><textarea id="revision" maxlength="400" placeholder="Esim. Vaihda tausta salviansävyiseksi ja siirrä kukkakimppu alemmaksi."></textarea></div><div class="actions"><button id="makeRevision" class="alt">Luo korjauskehote</button><button id="copyRevision" class="alt" hidden>Kopioi korjauskehote</button></div><div id="revisionPrompt" class="code" tabindex="0" role="region" aria-label="Korjauskehote" hidden></div><div id="revisionStatus" class="status" role="status"></div><p class="small">Voit luoda tässä lomakkeessa yhden korjauskehotteen sivun avaamista kohti. ChatGPT:n käyttörajat ovat erilliset.</p><hr class="separator"><h2>4. Maksullinen lopputuote</h2><p class="small">Tämä on ilmainen suunnitteluluonnos. Viimeistelty kortti tai vihkonen toimitetaan maksullisena PDF-tuotteena. Vahvistat ja sovit mahdollisen painotilauksen suoraan painotalon kanssa.</p></section></div></main>
+<footer>Valinnat pysyvät tällä sivulla. Kokeilu ei luo kuvaa tässä palvelussa, käytä maksullista API:a tai kysy ChatGPT-tunnuksia. Kirjoita kehotteeseen vain tietoja, jotka haluat itse jakaa ChatGPT:ssä.</footer>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const dictionaries={
+styles:{watercolor:'hand-painted watercolor on cold-press cotton paper, translucent layered washes',gouache:'hand-painted gouache illustration with matte opaque pigments and delicate brush texture',paper:'layered handmade paper-cut artwork with finely crafted paper edges and gentle dimensional shadows',storybook:'warm illustrated children’s storybook art with nuanced painted surfaces and coherent character design',editorial:'editorial lifestyle photography with natural light and considered photographic composition',letterpress:'minimalist letterpress-inspired graphic art with tactility and restrained decorative details'},
+settings:{lakeside:'a quiet Finnish lakeside with birch trees',garden:'a welcoming garden with seasonal flowers',forest:'a peaceful Nordic woodland',studio:'a softly textured warm ivory studio background',city:'a charming European city café',tuscany:'a sunlit Tuscan countryside setting'},
+compositions:{top:'Reserve a broad clean open area in the upper third for future typography. Keep the main subject below this area.',center:'Build the visual subject as a gentle frame around a generous, quiet open center for future typography.',bottom:'Reserve a calm lower third for future typography. Place the principal subject higher.',left:'Reserve a generous uncluttered open area on the left for future typography. Keep the subject to the right.',full:'Use a balanced full-page illustration with no dedicated typography zone.'},
+lights:{golden:'warm low-angle golden-hour sunlight with long soft shadows',soft:'soft diffused natural daylight with gentle shadows',morning:'bright, fresh Nordic morning light',candle:'warm intimate candlelight with soft reflected highlights',moody:'restrained cinematic lighting with subtle atmospheric depth'},
+palettes:{ivory_sage:'warm ivory, sage green, blush pink and restrained champagne-gold accents',amber_green:'amber gold, deep forest green and soft ivory',blue_silver:'midnight blue, silver and cool pale blue',rose_gold:'blush pink, champagne and warm gold',berry:'strawberry red, warm white and leafy green',earth:'terracotta, sand beige and olive green'},
+textures:{paper:'subtle cold-press cotton-paper surface',linen:'delicate natural linen texture',smooth:'smooth refined matte surface',foil:'a few restrained gold-foil-like accents as visual illustration, not a claim of real metallic printing',grain:'fine natural 35mm film grain'},
+focuses:{auto:'','crisp':'Crisp controlled detail throughout the composition.','depth':'A natural 50mm-lens perspective, shallow depth of field and soft creamy background bokeh.'},
+purposes:{'Syntymäpäivä':'a personal birthday celebration','Häät':'a wedding celebration','Kiitos':'a heartfelt thank-you','Valmistujaiset':'a graduation celebration','Vauvan syntymä':'the arrival of a newborn','Ystävänpäivä':'a friendship celebration','Muistaminen':'a gentle remembrance','Joulu':'a Nordic Christmas greeting','Oma juhla':'a meaningful personal celebration'}};
+const formats = {
+  a6: { label: 'A6 pysty', width: 105, height: 148, ratio: '105:148 (approximately 5:7)', products: ['card'] },
+  a5: { label: 'A5 pysty', width: 148, height: 210, ratio: '148:210 (approximately 5:7)', products: ['card', 'booklet'] },
+  square: { label: 'Neliö', width: 130, height: 130, ratio: '1:1', products: ['card', 'booklet'] },
+  a6wide: { label: 'A6 vaaka', width: 148, height: 105, ratio: '148:105 (approximately 7:5)', products: ['card'] },
+  spread: { label: 'A5-aukeama', width: 296, height: 210, ratio: '296:210 (approximately 7:5)', products: ['booklet'] }
+};
+const products = { card: 'Kortti', booklet: 'Vihkonen' };
+const fonts = { elegant: 'refined classic serif letterforms', hand: 'graceful hand-lettered script', modern: 'clean modern sans-serif letterforms', playful: 'friendly rounded playful hand-lettering' };
+const positions = { top: 'upper open space', center: 'central open space', bottom: 'lower open space' };
+const chatUrl = 'https://chatgpt.com/';
+const val = id => $(id).value;
+const formatKey = () => document.querySelector('input[name="formatChoice"]:checked').value;
+const segments = typeof Intl.Segmenter === 'function' ? new Intl.Segmenter('fi') : null;
+
+function updateProducts() {
+  const available = formats[formatKey()].products;
+  const previous = val('product');
+  $('product').replaceChildren(...available.map(key => new Option(products[key], key)));
+  if (available.includes(previous)) $('product').value = previous;
+}
+
+function updateTextCounter(id, counter) {
+  const input = $(id);
+  const characters = segments ? Array.from(segments.segment(input.value), item => item.segment) : Array.from(input.value);
+  if (characters.length > 15) input.value = characters.slice(0, 15).join('');
+  $(counter).textContent = Math.min(characters.length, 15) + '/15';
+}
+
+function build() {
+  const d = dictionaries;
+  const key = formatKey();
+  const format = formats[key];
+  const { label, width, height, ratio } = format;
+  const style = val('style');
+  const words = $('textToggle').checked ? [val('message1'), val('message2')].filter(word => word.trim()) : [];
+  const printTarget = key === 'spread' ? 'a two-page A5 booklet spread' : val('product') === 'card' ? 'a greeting card front' : 'a booklet cover';
+  const lines = [
+    `Create a single flat, original artwork for ${d.purposes[val('purpose')]} intended for ${printTarget}. Use a width-to-height aspect ratio of ${ratio} for a finished print size of ${width} × ${height} mm.`,
+    `Visual medium: ${d.styles[style]}.`,
+    `Main subject and story: ${val('subject').trim() || 'an elegant, personal celebratory arrangement'}. Interpret the subject description as guidance for the artwork, not lettering to render.`,
+    `Environment: ${d.settings[val('setting')]}.`
+  ];
+  if (key === 'spread') lines.push('Maintain visual continuity across the center fold and keep important elements clear of the fold.');
+  const composition = val('composition');
+  const placement = val('textPlace');
+  if (words.length) {
+    lines.push(`Composition: ${d.compositions[placement]}`);
+    if (composition !== placement) lines.push('Retain the selected visual balance where compatible: ' + d.compositions[composition]);
+  } else {
+    lines.push(`Composition: ${d.compositions[composition]}`);
+    if (composition === 'full') lines.push('Keep the edges calm so typography can be arranged separately in the final PDF layout.');
+  }
+  lines.push(
+    `Lighting and mood: ${d.lights[val('light')]}.`,
+    `Color palette: ${d.palettes[val('palette')]}.`,
+    `Materials and surface character: ${d.textures[val('texture')]}.`,
+    d.focuses[val('focus')] || (style === 'editorial'
+      ? 'Photographic depth with a clearly focused subject and softly receding background.'
+      : 'Crisp, deliberate illustration detail, suitable for clear print reproduction.')
+  );
+  if (words.length) {
+    const greeting = words.map(word => '“' + word + '”').join('\n');
+    lines.push(`For this concept preview, render the following exact Finnish greeting, one line per quoted line. Preserve spelling, accents, spaces and line breaks. The surrounding quotation marks are delimiters.\n${greeting}\nTypography: ${fonts[val('fontStyle')]}. Place the greeting in the ${positions[placement]} with comfortable margins. Add no other lettering. The final print typography will be typeset separately.`);
+  } else {
+    lines.push('Create the artwork without lettering or a QR code. Leave space for the greeting and QR code to be added during PDF layout.');
+  }
+  lines.push('Extend nonessential background artwork to the edges for print trimming and keep important details comfortably inset. Produce flat artwork without a printed card, product mockup or visible trim marks.');
+  const pixels = dimension => Math.ceil((dimension + 6) / 25.4 * 300);
+  $('size').textContent = `${label} · ${products[val('product')]} · ${width} × ${height} mm`;
+  $('formatInfo').textContent = `Painoaineiston tavoite 300 ppi:n tarkkuudella, 3 mm:n leikkuuvaralla: ${pixels(width)} × ${pixels(height)} px.`;
+  const prompt = lines.join('\n\n');
+  $('prompt').textContent = prompt;
+  return prompt;
+}
+
+document.querySelectorAll('input[name="formatChoice"]').forEach(radio => {
+  radio.addEventListener('change', () => { updateProducts(); build(); });
+});
+const fields = ['purpose', 'product', 'style', 'subject', 'setting', 'composition', 'light', 'palette', 'texture', 'focus', 'fontStyle', 'textPlace'];
+for (const id of fields) $(id).addEventListener('input', build);
+for (const [id, counter] of [['message1', 'count1'], ['message2', 'count2']]) {
+  const update = () => { updateTextCounter(id, counter); build(); };
+  $(id).addEventListener('input', event => { if (!event.isComposing) update(); });
+  $(id).addEventListener('compositionend', update);
+  updateTextCounter(id, counter);
+}
+$('textToggle').addEventListener('change', () => {
+  $('messageField').hidden = !$('textToggle').checked;
+  build();
+});
+
+async function copy(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    const previousFocus = document.activeElement;
+    const buffer = document.createElement('textarea');
+    buffer.value = text;
+    buffer.readOnly = true;
+    buffer.style.cssText = 'position:fixed;inset:0 auto auto 0;opacity:0;pointer-events:none';
+    document.body.append(buffer);
+    buffer.select();
+    try {
+      return document.execCommand('copy');
+    } catch {
+      return false;
+    } finally {
+      buffer.remove();
+      previousFocus?.focus({ preventScroll: true });
+    }
+  }
+}
+
+const copyFailed = 'Kopiointi estyi. Valitse kehote ja kopioi se käsin.';
+$('copyOnly').addEventListener('click', async () => {
+  $('status').textContent = await copy(build()) ? 'Kehote kopioitu.' : copyFailed;
+});
+$('copyOpen').addEventListener('click', async () => {
+  const copying = copy(build());
+  const tab = window.open('about:blank', '_blank');
+  if (tab) {
+    tab.opener = null;
+    tab.location.replace(chatUrl);
+  }
+  const copied = await copying;
+  const copyStatus = copied ? 'Kehote kopioitu.' : copyFailed;
+  const openStatus = tab
+    ? 'ChatGPT avattiin uuteen välilehteen.'
+    : 'Selain esti uuden välilehden. Käytä alla olevaa ChatGPT-linkkiä.';
+  $('status').textContent = `${copyStatus} ${openStatus}`;
+});
+
+let revisedText = '';
+$('makeRevision').addEventListener('click', () => {
+  if (revisedText) return;
+  const wish = val('revision').trim();
+  if (!wish) {
+    $('revisionStatus').textContent = 'Kirjoita ensin korjaustoive.';
+    $('revision').focus();
+    return;
+  }
+  revisedText = `Edit the image generated earlier in this conversation. Apply this change: ${wish}\n\nPreserve the original composition, framing, placement, aspect ratio, print target, medium, lighting, palette and any approved typography or reserved space wherever the requested edit allows. Keep all other visual details intact. Generate the revised flat artwork.`;
+  $('revisionPrompt').textContent = revisedText;
+  $('revisionPrompt').hidden = false;
+  $('copyRevision').hidden = false;
+  $('makeRevision').disabled = true;
+  $('revision').readOnly = true;
+  $('revisionStatus').textContent = 'Korjauskehote luotu. Kopioi se samaan ChatGPT-keskusteluun.';
+  $('copyRevision').focus();
+});
+$('copyRevision').addEventListener('click', async () => {
+  $('revisionStatus').textContent = await copy(revisedText) ? 'Korjauskehote kopioitu.' : copyFailed;
+});
+
+updateProducts();
+$('messageField').hidden = !$('textToggle').checked;
+build();
+</script></body></html>
