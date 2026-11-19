@@ -312,8 +312,8 @@ function build() {
   lines.push('Extend nonessential background artwork to the edges for print trimming and keep important details comfortably inset. Produce flat artwork without a printed card, product mockup or visible trim marks.');
   const pixels = dimension => Math.ceil((dimension + 6) / 25.4 * 300);
   $('size').textContent = `${muotoNimi(key)} · ${tuoteNimi(val('product'))} · ${width} × ${height} mm`;
-  $('formatInfo').textContent = (t('painoRivi') || 'Painoaineiston tavoite 300 ppi:n tarkkuudella, 3 mm:n leikkuuvaralla: {leveys} × {korkeus} px.')
-    .replace('{leveys}', pixels(width)).replace('{korkeus}', pixels(height));
+  $('formatInfo').textContent = (t('painoRivi') || 'Painoaineiston tavoite 300 ppi:n tarkkuudella, 3 mm:n leikkuuvaralla: {w} × {h} px.')
+    .replace('{w}', pixels(width)).replace('{h}', pixels(height));
   const prompt = lines.join('\n\n');
   /* Jos jokin sanakirjahaku ei osu, JavaScript ei valita vaan kirjoittaa
      kehotteeseen sanan "undefined". Asiakas lähettäisi sen ChatGPT:lle

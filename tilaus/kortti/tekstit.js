@@ -110,11 +110,13 @@
     mRivi2:          { fi: "Teksti · rivi 2 (valinnainen)",
                        en: "Text · line 2 (optional)",
                        es: "" },
+    /* Esimerkin pitää mahtua omaan 15 merkin rajaansa: "Congratulations!"
+       on 16 merkkiä, joten se olisi esimerkki jota ei voi kirjoittaa. */
     phRivi1:         { fi: "Esim. Onnea!",
-                       en: "E.g. Onnea!",
+                       en: "E.g. Congrats!",
                        es: "" },
     phRivi2:         { fi: "Esim. 50 vuotta",
-                       en: "E.g. 50 vuotta",
+                       en: "E.g. 50 years",
                        es: "" },
     mKirjasin:       { fi: "Kirjasintyyli",
                        en: "Lettering style",
@@ -216,9 +218,13 @@
                        es: "" },
 
     /* ── painoaineiston rivi ─────────────────────────────────────
-       {leveys} ja {korkeus} korvataan luvuilla. Pidä paikkamerkit. */
-    painoRivi:       { fi: "Painoaineiston tavoite 300 ppi:n tarkkuudella, 3 mm:n leikkuuvaralla: {leveys} × {korkeus} px.",
-                       en: "Target print file at 300 ppi with 3 mm bleed: {leveys} × {korkeus} px.",
+       {w} ja {h} EIVÄT ole käännettävää tekstiä: ne korvataan luvuilla
+       ajon aikana. Pidä ne sellaisenaan joka kielessä. Nimet olivat ensin
+       {leveys} ja {korkeus}, mutta englanninkielisessä lauseessa ne
+       näyttivät kääntämättä jääneiltä sanoilta — lyhyt ja kieletön merkki
+       on selvästi paikkamerkki eikä unohdus. */
+    painoRivi:       { fi: "Painoaineiston tavoite 300 ppi:n tarkkuudella, 3 mm:n leikkuuvaralla: {w} × {h} px.",
+                       en: "Target print file at 300 ppi with 3 mm bleed: {w} × {h} px.",
                        es: "" },
 
     /* ══ valintalistat ═══════════════════════════════════════════
