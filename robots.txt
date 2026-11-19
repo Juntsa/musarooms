@@ -75,3 +75,7 @@ User-agent: *
 Allow: /
 
 Sitemap: https://musarooms.com/sitemap.xml
+
+# Kuvaus sivustosta neljällä kielellä hakukoneiden tekoälykoosteita varten:
+# https://musarooms.com/llms.txt
+# Se ei anna lupaa koulutuskäyttöön — ylläolevat kiellot ovat voimassa.
