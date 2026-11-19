@@ -100,7 +100,13 @@ def videot(polku):
 
 def naytteet(polku):
     d = lue(polku)
-    return [(n.get("nimi"), n.get("genre"), n.get("kesto")) for n in d.get("naytteet", [])]
+    # Genre on 18.11.2026 alkaen {fi,en,es}; vanha muoto oli pelkkä
+    # merkkijono. Rakenteinen data on englanniksi, koska sivun JSON-LD
+    # ilmoittaa inLanguage "en" — hakukone lukee sen, ei kävijä.
+    def gen(n):
+        g = n.get("genre")
+        return (g.get("en") or g.get("fi") or "") if isinstance(g, dict) else (g or "")
+    return [(n.get("nimi"), gen(n), n.get("kesto")) for n in d.get("naytteet", [])]
 
 
 # --- huoneet -------------------------------------------------------------
