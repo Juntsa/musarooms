@@ -169,6 +169,20 @@
                        fi: "Laulut tehdään omina teoksina: omat sanat, oma sovitus ja nykyaikaiset musiikkityökalut, tekoäly niiden joukossa. Emme kopioi tunnetun artistin ääntä emmekä tunnettua kappaletta, vaan teemme pyydetyn tyylin omana työnämme. Kaupallisesta käytöstä, mainonnasta ja laajemmasta levityksestä sovitaan aina erikseen.",
                        es: "" },
 
+    /* ── sisarpalvelu: kortti- ja vihkosuunnittelija ─────────────
+       Tämä ei ole laulu vaan painotuote. Sanamuoto pitää sen erillään:
+       "besides songs" / "laulujen lisäksi", ettei kävijä luule tilaavansa
+       laulua. Suunnittelija itse on maksuton; maksullinen on vasta PDF. */
+    korttiOtsikko:   { en: "Cards and booklets",
+                       fi: "Kortit ja vihkoset",
+                       es: "" },
+    korttiTeksti:    { en: "Besides songs, you can have a printed card or booklet with artwork of your own. Try the free designer: choose the size and the mood, and you get a finished image prompt to use wherever you like.",
+                       fi: "Laulujen lisäksi voit saada painetun kortin tai vihkosen omalla kuvituksella. Kokeile maksutonta suunnittelijaa: valitse koko ja tunnelma, niin saat valmiin kuvakehotteen jota voit käyttää missä haluat.",
+                       es: "" },
+    korttiLinkki:    { en: "Open the card and booklet designer",
+                       fi: "Avaa kortti- ja vihkosuunnittelija",
+                       es: "" },
+
     /* ── virheet ja ilmoitukset ──────────────────────────────── */
     virheTarina:     { en: "Tell me in a few more sentences what the song should be about — without that I cannot make a quote.",
                        fi: "Kerro vielä parilla lauseella mistä laulun pitäisi kertoa — ilman sitä en voi tehdä tarjousta.",

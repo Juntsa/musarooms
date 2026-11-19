@@ -156,8 +156,11 @@ function aloituskieli() {
   if (TUETUT.includes(u)) return u;
   try { const m = localStorage.getItem('mr-kieli');
         if (TUETUT.includes(m)) return m; } catch { /* yksityinen ikkuna */ }
-  const selain = (navigator.language || 'fi').slice(0, 2).toLowerCase();
-  return TUETUT.includes(selain) ? selain : 'fi';
+  /* Varakieli on englanti, sama kuin Tilaushuoneessa. Jos ne eroaisivat,
+     kävijä jonka selain on esim. saksa näkisi Tilaushuoneen englanniksi ja
+     tämän sivun suomeksi — sama käynti, kaksi kieltä. */
+  const selain = (navigator.language || 'en').slice(0, 2).toLowerCase();
+  return TUETUT.includes(selain) ? selain : 'en';
 }
 let KIELI = aloituskieli();
 

@@ -89,6 +89,20 @@ h1{
 }
 
 /* ---- lupauslaatikko --------------------------------------------------- */
+/* Sisarpalvelun vinkki: samaa sukua kuin .lupaus mutta hillitympi —
+   se ei saa kilpailla tilauslomakkeen kanssa huomiosta. */
+.kortti-vinkki{
+  border:1px solid var(--raja);border-radius:12px;
+  padding:20px;background:rgba(255,255,255,.015);
+}
+.kortti-vinkki h2{margin-top:0}
+.kortti-linkki{
+  display:inline-block;margin-top:4px;padding:10px 16px;
+  border:1px solid var(--mes);border-radius:999px;
+  color:var(--mes);text-decoration:none;
+  min-height:44px;line-height:24px;
+}
+.kortti-linkki:hover{background:rgba(217,169,95,.12);color:var(--kerma)}
 .lupaus{
   background:linear-gradient(180deg,var(--puu2),var(--puu));
   border:1px solid var(--raja);border-radius:12px;
@@ -583,6 +597,17 @@ to her plants..."></textarea>
     </form>
   </section>
 
+  <!-- Sisarpalvelu, ei laulu. Sijoitettu lomakkeen JÄLKEEN tahallaan:
+       linkki pois tilauslomakkeelta juuri ennen lomaketta veisi kävijän
+       väärään suuntaan juuri siinä kohtaa, jossa hän on päättämässä. -->
+  <section class="kortti-vinkki">
+    <h2 data-t="korttiOtsikko">Cards and booklets</h2>
+    <p data-t="korttiTeksti">Besides songs, you can have a printed card or booklet with
+      artwork of your own. Try the free designer: choose the size and the mood, and
+      you get a finished image prompt to use wherever you like.</p>
+    <p><a class="kortti-linkki" id="korttiLinkki" href="kortti/" data-t="korttiLinkki">Open the card and booklet designer</a></p>
+  </section>
+
   <p class="rehellisyys" data-t="alaviite">
     The songs are made as original works: original lyrics, original
     arrangement and modern music tools, AI among them. We do not copy a known
@@ -600,7 +625,7 @@ to her plants..."></textarea>
 
 <audio id="el" preload="none" playsinline></audio>
 
-<script src="tekstit.js?v=1"></script>
+<script src="tekstit.js?v=2"></script>
 <script>
 (function (){
   'use strict';
@@ -642,6 +667,13 @@ to her plants..."></textarea>
   function asetaTekstit(){
     if (!MR) return;
     document.documentElement.lang = KIELI;
+    /* Korttisivu lukee saman muistipaikan ('mr-kieli'), joten kieli kulkisi
+       yleensä ilman tätäkin. Mutta jos kävijä ei ole painanut kielinappia,
+       muistipaikka on tyhjä ja molemmat sivut arvaavat selaimen kielestä
+       erikseen — silloin kävijä voi päätyä eri kielelle kuin missä oli.
+       Osoitteessa kulkeva kieli poistaa arvauksen. */
+    var kl = document.getElementById('korttiLinkki');
+    if (kl) kl.href = 'kortti/?kieli=' + KIELI;
     [['data-t','textContent'], ['data-t-html','innerHTML']].forEach(function (par){
       var lista = document.querySelectorAll('[' + par[0] + ']');
       Array.prototype.forEach.call(lista, function (el){
