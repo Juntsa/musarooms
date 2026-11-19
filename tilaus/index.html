@@ -148,14 +148,18 @@ h2{
    tällä sivulla myyntiargumentti — se saa olla ehjä. Napautus toimii
    koko kortilla, joten mitään ei menetetä. */
 .nimirivi{display:flex;align-items:center;gap:9px;min-width:0}
-.merkki{
+/* Soittomerkki naytekortissa. Oma nimensa, koska .merkki on sivun
+   ylaosan KJWhispers-sanamerkki. Molemmat olivat .merkki, sama
+   spesifisyys, ja jalkimmainen voitti: sanamerkki sai 28 px:n ympyran
+   tyylit ja teksti valui ulos reunasta. */
+.soittomerkki{
   flex:0 0 auto;width:28px;height:28px;
   border-radius:50%;display:flex;align-items:center;justify-content:center;
   border:1px solid rgba(217,169,95,.45);
   background:rgba(217,169,95,.08);color:var(--mes);font-size:11px;
 }
-.nayte:hover .merkki{background:rgba(217,169,95,.2)}
-.soita[aria-pressed="true"] ~ .nimirivi .merkki{
+.nayte:hover .soittomerkki{background:rgba(217,169,95,.2)}
+.soita[aria-pressed="true"] ~ .nimirivi .soittomerkki{
   background:var(--mes);color:#20150b;border-color:var(--mes)}
 .palkki{
   position:absolute;left:0;right:0;bottom:0;height:3px;
@@ -821,7 +825,7 @@ to her plants..."></textarea>
     var nimirivi = document.createElement('span');
     nimirivi.className = 'nimirivi';
     var merkki = document.createElement('span');
-    merkki.className = 'merkki';
+    merkki.className = 'soittomerkki';
     merkki.setAttribute('aria-hidden', 'true');   /* nimi on jo napissa */
     merkki.textContent = '▶';
     var nimi = document.createElement('span');
