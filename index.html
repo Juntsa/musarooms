@@ -88,6 +88,12 @@ h1 span{color:var(--amber)}
 .sisus::before{            /* lattialle lankeava valo */
   content:"";position:absolute;left:12%;right:12%;bottom:0;height:34%;
   background:radial-gradient(60% 100% at 50% 100%,rgba(255,255,255,.22),transparent 70%);
+  /* Koriste ei saa napata klikkausta. Tämä peittää oven alaosan, ja juuri
+     siinä on Mansikkakylä-oven mansikkakyla.fi-painike — se oli kuollut
+     siitä asti kun ovet rakennettiin. Muissa ovissa vika ei näkynyt, koska
+     ne ovat itse <a>-elementtejä ja klikkaus kuplii niihin; Mansikkakylä on
+     <div> ja erillinen painike, koska se vie toiselle sivustolle. */
+  pointer-events:none;
 }
 .sisus b{
   position:relative;display:block;
