@@ -5,8 +5,9 @@
 # niiden kuuluu päätyä kenenkään harjoitusaineistoon.
 #
 # Tämä on kohtelias pyyntö, ei este. Ryömijä joka ei lue tätä tiedostoa
-# ei myöskään tottele sitä. Varsinainen esto tehdään Cloudflaressa, ja
-# se vaatii että liikenne kulkee sen läpi.
+# ei myöskään tottele sitä. Varsinainen esto vaatisi että liikenne kulkee
+# Cloudflaren läpi; nyt se menee suoraan GitHubiin, joten tätä tiedostoa
+# ei valvo mikään. Se on tietoinen valinta: lyhyempi ketju on varmempi.
 
 # --- hakukoneet ja käyttäjän pyytämät haut: vapaa pääsy
 User-agent: Googlebot
